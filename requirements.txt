@@ -1,4 +1,13 @@
 asgiref==3.7.2
+cfgv==3.3.1
+distlib==0.3.6
 Django==4.2.3
 django-render-block==0.9.2
+filelock==3.12.2
+identify==2.5.24
+nodeenv==1.8.0
+platformdirs==3.8.0
+pre-commit==3.3.3
+PyYAML==6.0
 sqlparse==0.4.4
+virtualenv==20.23.1
