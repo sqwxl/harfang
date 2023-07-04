@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+{% block body %}
+  <h1>News Items</h1>
+
+  {% if page_obj.paginator.count == 0 %}
+    <p>No news items are available.</p>
+  {% else %}
+
+    {% block page-and-paging-controls %}
+      <ul>
+        {% for news_item in page_obj %}
+          <li><a href="{% url 'newsapp:article' news_item.id %}">{{ news_item.title }}</a></li>
+        {% endfor %}
+      </ul>
+
+      {% if page_obj.has_next %}
+        <p id="paging-area">
+          <a
+            href="#"
+            hx-get="?page={{ page_obj.next_page_number }}"
+            hx-vals='{"use-block": "page-and-paging-controls"}'
+            hx-target="#paging-area"
+            hx-swap="outerHTML"
+          >Load More</a>
+        </p>
+      {% else %}
+        <p>That's all!</p>
+      {% endif %}
+    {% endblock %}
+  {% endif %}
+
+{% endblock %}
