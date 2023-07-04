@@ -133,5 +133,6 @@ STATICFILES_FINDERS = (
     "compressor.finders.CompressorFinder",
 )
 STATIC_ROOT = BASE_DIR / "_static"
+MEDIA_ROOT = BASE_DIR / "_media"
 
 COMPRESS_ENABLED = True
