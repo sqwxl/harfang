@@ -19,7 +19,9 @@ class Command(BaseCommand):
     @transaction.atomic
     def handle(self, *args, **options):
         self.stdout.write("Deleting existing data")
-        models = [NewsItem, NewsSite, User]
+        # Delete all users except the superuser
+        User.objects.all().exclude(is_superuser=True).delete()
+        models = [NewsItem, NewsSite]
         for model in models:
             model.objects.all().delete()
 

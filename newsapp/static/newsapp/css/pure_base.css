@@ -60,12 +60,59 @@ a:visited {
     color: var(--purple);
 }
 
-nav a, nav a:visited, nae a:hover {
+nav a, nav a:visited, nav a:hover {
     color: var(--fg);
 }
 
-nav .pure-menu-link:hover {
+.pure-menu-horizontal {
+    align-items: center;
+}
+
+.pure-menu-link {
+    color: var(--fg);
+}
+
+.pure-menu-link:hover {
     background-color: var(--bg1);
+}
+
+.logo {
+    font-size: 1.2em;
+    color: var(--red_d) !important;
+}
+
+main {
+    margin: 0 auto;
+    max-width: 100ch;
+}
+
+.card {
+    margin: .5em;
+    padding: .5em;
+}
+
+.card > a {
+    color: var(--fg);
+    text-decoration: none;
+}
+
+.card:hover {
+    background-color: var(--bg1);
+}
+
+.card-title {
+    font-size: 1.2em;
+    font-weight: bold;
+    margin-bottom: 0.25em;
+    text-decoration: none;
+}
+
+.card-date {
+
+}
+
+form > div, form > input {
+    margin-bottom: 1em;
 }
 
 .errorlist {
@@ -77,9 +124,18 @@ nav .pure-menu-link:hover {
     font-size: 0.8em;
 }
 
-form > div, form > input {
-    margin-bottom: 1em;
+figure  {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
 }
+
+.main-text {
+    font-size: 1.2em;
+    line-height: 1.5em;
+}
+
 
 footer {
     position: relative;

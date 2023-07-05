@@ -1,31 +1,39 @@
 {% extends "newsapp/base-page.html" %}
 
 {% block main %}
-  <h1>News Items</h1>
+  <section class="news-items">
+    <h1>News Items</h1>
 
-  {% if page_obj.paginator.count == 0 %}
-    <p>No news items are available.</p>
-  {% else %}
-    {% block page-and-paging-controls %}
-      <ul>
+    {% if page_obj.paginator.count == 0 %}
+      <p>No news items are available.</p>
+    {% else %}
+
+      {% block page-and-paging-controls %}
         {% for news_item in page_obj %}
-          <li><a href="{% url 'newsapp:article' news_item.id %}">{{ news_item.title }}</a></li>
+          <div class="card" >
+            <a href="{% url 'newsapp:article' news_item.id %}" preload="mouseover">
+              <div class="card-title">{{ news_item.title|title }}</div>
+              <div><span>{{ news_item.news_site.name }}</span> &#x2022; <span>{{ news_item.pub_date|date }}</span></div>
+            </a>
+          </div>
         {% endfor %}
-      </ul>
 
-      {% if page_obj.has_next %}
-        <p id="paging-area">
-          <a
-            href="#"
-            hx-get="?page={{ page_obj.next_page_number }}"
-            hx-vals='{"use-block": "page-and-paging-controls"}'
-            hx-target="#paging-area"
-            hx-swap="outerHTML"
-          >Load More</a>
-        </p>
-      {% else %}
-        <p>That's all!</p>
-      {% endif %}
-    {% endblock %}
-  {% endif %}
+        {% if page_obj.has_next %}
+          <p id="paging-area">
+            <a
+              href="#"
+              hx-get="?page={{ page_obj.next_page_number }}"
+              hx-vals='{"use_block": "page-and-paging-controls"}'
+              hx-target="#paging-area"
+              hx-swap="outerHTML"
+              style="display: block; text-align: center;"
+            >Load More</a>
+          </p>
+        {% else %}
+          <p>That's all!</p>
+        {% endif %}
+      {% endblock %}
+
+    {% endif %}
+  </section>
 {% endblock %}

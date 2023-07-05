@@ -1,4 +1,4 @@
-from django.contrib.auth import authenticate
+from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.forms import AuthenticationForm, PasswordResetForm, UserCreationForm
 from django.core.paginator import Paginator
 from django.http import HttpResponseRedirect
@@ -20,7 +20,7 @@ def index(request):
         request,
         "newsapp/index.html",
         {
-            "page_obj": get_page_by_request(request, NewsItem.objects.all()),
+            "page_obj": get_page_by_request(request, NewsItem.objects.all().order_by("-pub_date")),
         },
     )
 
@@ -39,7 +39,7 @@ def about(request):
     return TemplateResponse(request, "newsapp/about.html")
 
 
-def login(request):
+def login_view(request):
     if request.method == "POST":
         if "register" in request.POST:
             form = UserCreationForm(request.POST)
@@ -55,6 +55,7 @@ def login(request):
         if form.is_valid():
             user = authenticate(request, username=form.cleaned_data["username"], password=form.cleaned_data["password"])
             if user is not None:
+                login(request, user)
                 return HttpResponseRedirect(reverse("newsapp:index"))
             else:
                 form.add_error(None, "Invalid username or password")
@@ -71,7 +72,7 @@ def login(request):
     )
 
 
-def logout(request):
+def logout_view(request):
     logout(request)
     return HttpResponseRedirect(reverse("newsapp:index"))
 

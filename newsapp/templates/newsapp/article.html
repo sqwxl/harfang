@@ -3,13 +3,19 @@
 {% block main %}
     <article>
         <section>
-            <h2>{{ article.title }}</h2>
-            {% if article.subtitle %}<h3>{{ article.subtitle }}</h3>{% endif %}
+            <h1>{{ article.title|title }}</h1>
+            {% if article.subtitle %}<h2>{{ article.subtitle }}</h2>{% endif %}
             <p>published on {{ article.pub_date }} by {{ article.author }}</p>
             <p><a href={{ article.url }}>view original article on {{ article.news_site.name }}</a></p>
         </section>
         <section>
-            {{ article.content }}
+            <figure>
+                <img src="{{ article.image_url }}" alt="{{ article.title }}">
+                <figcaption>{{ article.image_caption }}</figcaption>
+            </figure>
+        </section>
+        <section class="main-text">
+            {% lorem 5 p %}
         </section>
         <article>
 {% endblock %}

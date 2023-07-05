@@ -1,5 +1,8 @@
+import random
+
 import factory
 from django.contrib.auth.models import User
+from django.utils import timezone
 from factory.django import DjangoModelFactory
 
 from newsapp.models import NewsItem, NewsSite
@@ -29,9 +32,11 @@ class NewsItemFactory(DjangoModelFactory):
     title = factory.Faker("sentence")
     subtitle = factory.Faker("sentence")
     author = factory.Faker("name")
-    pub_date = factory.Faker("date")
-    content = factory.Faker("text")
-    image_url = f"https://picsum.photos/{factory.Faker('random_int', min=200, max=400)}/{factory.Faker('random_int', min=200, max=400)}"
+    pub_date = factory.Faker("date_time", tzinfo=timezone.get_current_timezone())
+    content = factory.Faker("paragraph", nb_sentences=10, variable_nb_sentences=True)
+    image_url = factory.LazyFunction(
+        lambda: f"https://picsum.photos/{random.randint(200, 400)}/{random.randint(200, 400)}"
+    )
     image_caption = factory.Faker("sentence")
     url = factory.Faker("url")
     news_site = factory.SubFactory(NewsSiteFactory)
