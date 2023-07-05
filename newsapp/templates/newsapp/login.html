@@ -1,0 +1,19 @@
+{% extends "newsapp/base-page.html" %}
+
+{% block main %}
+    <h1>Login</h1>
+    <form action="{% url 'newsapp:login' %}" method="post">
+        {% csrf_token %}
+        {{ login_form.as_div }}
+        <input type="submit" value="Login">
+    </form>
+    <a href="{% url 'newsapp:forgot' %}">Forgot your password?</a>
+
+    <h1>Register</h1>
+    <form action="{% url 'newsapp:login' %}" method="post">
+        {% csrf_token %}
+        <input type="hidden" name="register" value="true">
+        {{ register_form.as_div }}
+        <input type="submit" value="Register">
+    </form>
+{% endblock %}

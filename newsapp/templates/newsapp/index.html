@@ -1,4 +1,4 @@
-{% extends "newsapp/base.html" %}
+{% extends "newsapp/base-page.html" %}
 
 {% block main %}
   <h1>News Items</h1>
@@ -6,7 +6,6 @@
   {% if page_obj.paginator.count == 0 %}
     <p>No news items are available.</p>
   {% else %}
-
     {% block page-and-paging-controls %}
       <ul>
         {% for news_item in page_obj %}
@@ -29,5 +28,4 @@
       {% endif %}
     {% endblock %}
   {% endif %}
-
 {% endblock %}

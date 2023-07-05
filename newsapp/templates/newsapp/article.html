@@ -1,9 +1,15 @@
-{% extends "newsapp/base.html" %}
+{% extends "newsapp/base-page.html" %}
 
-{% block body %}
+{% block main %}
     <article>
-        <h1>{{ article.title }}</h1>
-        <p>{{ article.content }}</p>
-        <p>Published by {{ article.author }} on {{ article.pub_date }}</p>
+        <section>
+            <h2>{{ article.title }}</h2>
+            {% if article.subtitle %}<h3>{{ article.subtitle }}</h3>{% endif %}
+            <p>published on {{ article.pub_date }} by {{ article.author }}</p>
+            <p><a href={{ article.url }}>view original article on {{ article.news_site.name }}</a></p>
+        </section>
+        <section>
+            {{ article.content }}
+        </section>
         <article>
 {% endblock %}

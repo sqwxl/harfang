@@ -2,45 +2,15 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <title>󱢇 Communist News</title>
+    <title>☭ Communist News</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/purecss@3.0.0/build/pure-min.css" integrity="sha384-X38yfunGUhNzHpBaEBsWLO+A0HDYOQi8ufWDkZ0k9e0eXz/tH3II7uKZ9msv++Ls" crossorigin="anonymous">
     <link rel="stylesheet" href="{% static 'newsapp/css/pure_base.css' %}">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <script defer src="{% static 'newsapp/js/htmx.min.js' %}"></script>
+    <script defer src="{% static 'newsapp/js/preload.js' %}"></script>
     {% block extrahead %}{% endblock %}
   </head>
-  <body hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'>
-    <header>
-      {% if messages %}
-        <ul class="messagelist">
-          {% for message in messages %}
-            <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>
-              {{ message }}
-            </li>
-          {% endfor %}
-        </ul>
-      {% endif %}
-    </header>
-    <nav>
-      <span>󱢇</span>
-      <ul>
-        <li><a href="{% url 'newsapp:home' %}">Home</a></li>
-        <li><a href="{% url 'newsapp:news' %}">News</a></li>
-        <li><a href="{% url 'newsapp:about' %}">About</a></li>
-        {% if user.is_authenticated %}
-          <li><a href="{% url 'newsapp:logout' %}">Logout</a></li>
-        {% else %}
-          <li><a href="{% url 'newsapp:login' %}">Login</a></li>
-        {% endif %}
-      </ul>
-    </nav>
-    <main>
-      {% block main %}{% endblock %}
-    </main>
-    <aside>
-    </aside>
-    <footer>
-      <p>Workers of the world, unite!</p>
-    </footer>
+  <body hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}' hx-ext="preload">
+    {% block body %}{% endblock %}
   </body>
 </html>

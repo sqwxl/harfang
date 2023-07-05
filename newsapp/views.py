@@ -1,5 +1,9 @@
+from django.contrib.auth import authenticate
+from django.contrib.auth.forms import AuthenticationForm, PasswordResetForm, UserCreationForm
 from django.core.paginator import Paginator
+from django.http import HttpResponseRedirect
 from django.template.response import TemplateResponse
+from django.urls import reverse
 
 from newsapp.models import NewsItem
 
@@ -29,3 +33,51 @@ def article(request, pk):
             "article": NewsItem.objects.get(pk=pk),
         },
     )
+
+
+def about(request):
+    return TemplateResponse(request, "newsapp/about.html")
+
+
+def login(request):
+    if request.method == "POST":
+        if "register" in request.POST:
+            form = UserCreationForm(request.POST)
+            if form.is_valid():
+                form.save()
+                return HttpResponseRedirect(reverse("newsapp:index"))
+            else:
+                return TemplateResponse(
+                    request, "newsapp/login.html", {"login_form": AuthenticationForm(), "register_form": form}
+                )
+
+        form = AuthenticationForm(request, data=request.POST)
+        if form.is_valid():
+            user = authenticate(request, username=form.cleaned_data["username"], password=form.cleaned_data["password"])
+            if user is not None:
+                return HttpResponseRedirect(reverse("newsapp:index"))
+            else:
+                form.add_error(None, "Invalid username or password")
+                return TemplateResponse(
+                    request, "newsapp/login.html", {"login_form": form, "register_form": UserCreationForm()}
+                )
+        else:
+            return TemplateResponse(
+                request, "newsapp/login.html", {"login_form": form, "register_form": UserCreationForm()}
+            )
+
+    return TemplateResponse(
+        request, "newsapp/login.html", {"login_form": AuthenticationForm(), "register_form": UserCreationForm()}
+    )
+
+
+def logout(request):
+    logout(request)
+    return HttpResponseRedirect(reverse("newsapp:index"))
+
+
+def forgot(request):
+    if request.method == "POST":
+        # todo
+        ...
+    return TemplateResponse(request, "newsapp/forgot.html", {"form": PasswordResetForm()})

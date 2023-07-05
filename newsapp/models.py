@@ -25,9 +25,9 @@ class NewsItem(models.Model):
     author = models.CharField(max_length=200, default="Anonymous")
     pub_date = models.DateTimeField("date published", validators=[validate_not_future])
     content = models.TextField()
-    image = models.ImageField(upload_to="images/%Y/%m/%d/", blank=True)
+    image_url = models.CharField(max_length=400, blank=True)
     image_caption = models.CharField(max_length=200, blank=True)
-    source_url = models.CharField(max_length=200)
+    url = models.CharField(max_length=200)
     news_site = models.ForeignKey("NewsSite", on_delete=models.CASCADE)
 
     def __str__(self):
@@ -45,6 +45,28 @@ def make_fake_news_sites(count):
                 name=fake.company(),
                 url=fake.url(),
                 rss_url=fake.url(),
+            )
+        )
+    return created
+
+
+def make_fake_news_items(count):
+    from faker import Faker
+
+    fake = Faker()
+    created = []
+    for _ in range(count):
+        created.append(
+            NewsItem.objects.create(
+                title=fake.sentence(),
+                subtitle=fake.sentence(),
+                author=fake.name(),
+                pub_date=fake.date_time_this_year(),
+                content=fake.text(),
+                image=fake.image_url(),
+                image_caption=fake.sentence(),
+                url=fake.url(),
+                news_site=NewsSite.objects.order_by("?").first(),
             )
         )
     return created
