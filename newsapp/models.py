@@ -21,11 +21,13 @@ def validate_not_future(date_value):
 
 class NewsItem(models.Model):
     title = models.CharField(max_length=200)
-    author = models.CharField(max_length=200, default="Unknown")
+    subtitle = models.CharField(max_length=200, blank=True)
+    author = models.CharField(max_length=200, default="Anonymous")
+    pub_date = models.DateTimeField("date published", validators=[validate_not_future])
+    content = models.TextField()
+    image = models.ImageField(upload_to="images/%Y/%m/%d/", blank=True)
+    image_caption = models.CharField(max_length=200, blank=True)
     source_url = models.CharField(max_length=200)
-    date = models.DateTimeField("date published", validators=[validate_not_future])
-    text = models.TextField()
-    short = models.TextField()
     news_site = models.ForeignKey("NewsSite", on_delete=models.CASCADE)
 
     def __str__(self):
