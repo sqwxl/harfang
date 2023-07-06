@@ -1,0 +1,85 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    @apply box-border font-humanist antialiased;
+  }
+
+  *, *::before, *::after {
+    box-sizing: inherit;
+  }
+
+  h1 {
+    @apply text-5xl my-6;
+  }
+
+  h2 {
+    @apply text-4xl my-5;
+  }
+
+  h3 {
+    @apply text-3xl my-4;
+  }
+
+  h4 {
+    @apply text-2xl my-3;
+  }
+
+  h5 {
+    @apply text-xl my-2;
+  }
+
+  h6 {
+    @apply text-lg my-2;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-bold;
+  }
+
+  a {
+    @apply text-blue_d
+  }
+
+  a:hover {
+    @apply text-blue
+  }
+
+  a:visited {
+    @apply text-purple
+  }
+
+  nav a, nav a:visited, nav a:hover {
+    @apply text-fg
+  }
+
+  figure {
+    @apply flex flex-col items-center my-4;
+  }
+
+  figure img {
+    @apply mb-4;
+  }
+
+  input {
+    @apply rounded mt-2 mb-4 px-2 py-1 bg-fg text-bg;
+  }
+
+  input[type="submit"] {
+    @apply bg-red_d hover:bg-blue px-4 py-2 rounded;
+  }
+
+  footer {
+    @apply  relative bottom-0 inset-x-0 flex justify-around items-center mt-4 py-10 texs-sm
+  }
+}
+
+.errorlist {
+  @apply text-red;
+}
+
+.helptext {
+  @apply text-fg4 text-sm;
+}

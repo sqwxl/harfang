@@ -1,12 +1,15 @@
-<nav class="pure-menu pure-menu-horizontal">
-  <a href="{% url 'newsapp:index' %}" class="pure-menu-heading pure-menu-link logo">☭</a>
-  <ul class="pure-menu-list" hx-boost="true" preload="mouseover">
-    <li class="pure-menu-item"><a href="{% url 'newsapp:index' %}" class="pure-menu-link">Home</a></li>
-    <li class="pure-menu-item"><a href="{% url 'newsapp:about' %}" class="pure-menu-link">About</a></li>
+<nav class="w-full whitespace-nowrap">
+  <a
+    href="{% url 'newsapp:index' %}"
+    class="relative inline-block align-middle h-full py-2 px-4 text-2xl no-underline text-red_d hover:text-red_d visited:text-red_d"
+  >☭</a>
+  <ul class="relative inline-block" hx-boost="true" preload="mouseover">
+    <li class="relative inline-block align-middle h-full"><a href="{% url 'newsapp:index' %}" class="block py-2 px-4 no-underline">Home</a></li>
+    <li class="relative inline-block align-middle h-full"><a href="{% url 'newsapp:about' %}" class="block py-2 px-4 no-underline">About</a></li>
     {% if user.is_authenticated %}
-      <li class="pure-menu-item"><a href="{% url 'newsapp:logout' %}" class="pure-menu-link">Logout</a></li>
+      <li class="relative inline-block align-middle h-full"><a href="{% url 'newsapp:logout' %}" class="block py-2 px-4 no-underline">Logout</a></li>
     {% else %}
-      <li class="pure-menu-item"><a href="{% url 'newsapp:login' %}" class="pure-menu-link">Login</a></li>
+      <li class="relative inline-block align-middle h-full"><a href="{% url 'newsapp:login' %}" class="block py-2 px-4 no-underline">Login</a></li>
     {% endif %}
   </ul>
 </nav>

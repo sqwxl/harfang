@@ -35,6 +35,16 @@ def article(request, pk):
     )
 
 
+def comments(request, pk):
+    return TemplateResponse(
+        request,
+        "newsapp/comments.html",
+        {
+            "article": NewsItem.objects.get(pk=pk),
+        },
+    )
+
+
 def about(request):
     return TemplateResponse(request, "newsapp/about.html")
 

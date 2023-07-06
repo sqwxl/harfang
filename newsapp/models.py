@@ -24,11 +24,23 @@ class NewsItem(models.Model):
     subtitle = models.CharField(max_length=200, blank=True)
     author = models.CharField(max_length=200, default="Anonymous")
     pub_date = models.DateTimeField("date published", validators=[validate_not_future])
-    content = models.TextField()
+    text_content = models.TextField()
     image_url = models.CharField(max_length=400, blank=True)
     image_caption = models.CharField(max_length=200, blank=True)
     url = models.CharField(max_length=200)
     news_site = models.ForeignKey("NewsSite", on_delete=models.CASCADE)
+    comment_count = models.IntegerField(default=0)
 
     def __str__(self):
         return self.title
+
+
+class Comment(models.Model):
+    news_item = models.ForeignKey("NewsItem", on_delete=models.CASCADE)
+    user = models.ForeignKey("auth.User", on_delete=models.CASCADE)
+    text_content = models.TextField()
+    pub_date = models.DateTimeField("date published", auto_now_add=True)
+    parent = models.ForeignKey("self", on_delete=models.CASCADE, null=True, blank=True)
+
+    def __str__(self):
+        return self.text_content

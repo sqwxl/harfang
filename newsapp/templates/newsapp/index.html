@@ -1,7 +1,8 @@
 {% extends "newsapp/base-page.html" %}
+{% load static %}
 
 {% block main %}
-  <section class="news-items">
+  <section>
     <h1>News Items</h1>
 
     {% if page_obj.paginator.count == 0 %}
@@ -10,11 +11,31 @@
 
       {% block page-and-paging-controls %}
         {% for news_item in page_obj %}
-          <div class="card" >
-            <a href="{% url 'newsapp:article' news_item.id %}" preload="mouseover">
-              <div class="card-title">{{ news_item.title|title }}</div>
-              <div><span>{{ news_item.news_site.name }}</span> &#x2022; <span>{{ news_item.pub_date|date }}</span></div>
-            </a>
+          <div class="m-2 h-16 flex items-stretch" >
+            <div class="flex w-full py-2 justify-between items-stretch">
+              <a
+                class="flex flex-col justify-between items-stretch text-fg visited:text-fg hover:text-fg1 no-underline"
+                href="{% url 'newsapp:article' news_item.id %}"
+                preload="mouseover"
+              >
+                <div class="text-lg font-bold">{{ news_item.title|title }}</div>
+                <div>
+                  <span>{{ news_item.news_site.name }}</span> &#x2022; <span>{{ news_item.pub_date|timesince }}</span>
+                </div>
+              </a>
+              <a
+                class="flex flex-col justify-between items-center text-fg visited:text-fg hover:text-fg1 no-underline"
+                href="{% url 'newsapp:comments' news_item.id %}"
+                preload="mouseover"
+              >
+                <img
+                  class="w-5"
+                  src="{% static 'newsapp/images/comment.svg' %}"
+                  alt="Comments"
+                />
+                <div>{{ news_item.comment_count }}</div>
+              </a>
+            </div>
           </div>
         {% endfor %}
 
@@ -26,7 +47,7 @@
               hx-vals='{"use_block": "page-and-paging-controls"}'
               hx-target="#paging-area"
               hx-swap="outerHTML"
-              style="display: block; text-align: center;"
+              class="block text-center"
             >Load More</a>
           </p>
         {% else %}
