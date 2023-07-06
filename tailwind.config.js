@@ -3,7 +3,30 @@ module.exports = {
   content: ["./newsapp/templates/**/*.html"],
   theme: {
     fontFamily: {
-      'humanist': ['Avenir', 'Montserrat', 'Corbel', 'URW Gothic', 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji']
+      'sans': [
+        'Avenir',
+        'Montserrat',
+        'Corbel',
+        'URW Gothic',
+        'sans-serif',
+        'Apple Color Emoji',
+        'Segoe UI Emoji',
+        'Segoe UI Symbol',
+        'Noto Color Emoji',
+      ],
+      'serif': [
+        'Didot',
+        'Bodoni MT',
+        'Noto Serif Display',
+        'URW Palladio L',
+        'P052',
+        'Sylfaen',
+        'serif',
+        'Apple Color Emoji',
+        'Segoe UI Emoji',
+        'Segoe UI Symbol',
+        'Noto Color Emoji',
+      ]
     },
     colors: {
     'red':        '#fb4934',

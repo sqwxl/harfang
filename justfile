@@ -1,5 +1,5 @@
 serve:
-  pythonh manage.py migrate
+  python manage.py migrate
   python manage.py runserver
 
 css:

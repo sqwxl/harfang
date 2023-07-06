@@ -4,7 +4,7 @@
 
 @layer base {
   html {
-    @apply box-border font-humanist antialiased;
+    @apply box-border font-serif antialiased;
   }
 
   *, *::before, *::after {
