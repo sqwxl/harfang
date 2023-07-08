@@ -12,8 +12,19 @@ Harmonic, HN, Reddit, communistnews
 
 install [just](https://github.com/casey/just)
 
-`just setup`
-`just populate # to create mock data`
-`just serve # runs the dev server`
-and, if your editing styles, in another terminal:
-`just css # runs the tailwind binary to watch for changes & update the output.css`
+
+```shell
+# install requirements
+just setup
+# create mock data
+just populate 
+# run the dev server
+just serve 
+```
+
+if you're editing styles, then, in another terminal:
+
+```shell
+# run tailwind binary to watch for changes & update the output.css
+just css
+```
