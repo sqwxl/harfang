@@ -5,7 +5,7 @@ from django.http import HttpResponseRedirect
 from django.template.response import TemplateResponse
 from django.urls import reverse
 
-from newsapp.models import NewsItem
+from newsapp.models import Comment, CommentForm, NewsItem
 
 from .utils import for_htmx
 
@@ -25,24 +25,59 @@ def index(request):
     )
 
 
+@for_htmx(use_block_from_params=True)
 def article(request, pk):
+    news_item = NewsItem.objects.get(pk=pk)
+    if request.method == "POST":
+        comment_form = CommentForm(request.POST)
+        if comment_form.is_valid():
+            comment = comment_form.save(commit=False)
+            comment.news_item = news_item
+            comment.user = request.user
+            comment.save()
+    else:
+        comment_form = CommentForm()
+
+    comments = Comment.objects.filter(news_item=news_item)
     return TemplateResponse(
         request,
         "newsapp/article.html",
         {
-            "article": NewsItem.objects.get(pk=pk),
+            "article": news_item,
+            "comments": comments,
+            "comment_form": CommentForm(),
         },
     )
 
 
-def comments(request, pk):
+def reply(request, pk):
+    comment = Comment.objects.get(pk=pk)
+    if request.method == "POST":
+        reply = CommentForm(request.POST)
+        if reply.is_valid():
+            reply = reply.save(commit=False)
+            reply.news_item = comment.news_item
+            reply.parent = comment
+            reply.user = request.user
+            reply.save()
+            return HttpResponseRedirect(reverse("newsapp:article", args=(comment.news_item.pk,)))
+    else:
+        reply = CommentForm()
     return TemplateResponse(
         request,
-        "newsapp/comments.html",
+        "newsapp/reply.html",
         {
-            "article": NewsItem.objects.get(pk=pk),
+            "comment": comment,
+            "form": reply,
         },
     )
+
+
+def upvote_comment(request, pk):
+    comment = Comment.objects.get(pk=pk)
+    comment.votes += 1
+    comment.save()
+    # todo
 
 
 def about(request):

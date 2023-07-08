@@ -1,21 +1,43 @@
 {% extends "newsapp/base-page.html" %}
+{% load widget_tweaks %}
 
 {% block main %}
+  <article>
+    <section>
+      <h1>{{ article.title|title }}</h1>
+      {% if article.subtitle %}<h2>{{ article.subtitle }}</h2>{% endif %}
+      <p>published on {{ article.pub_date }} by <b>{{ article.author }}</b></p>
+      <p><a href={{ article.url }}>view original on {{ article.news_site.name }}</a></p>
+    </section>
+    <section>
+      <figure class="my-12">
+        <img src="{{ article.image_url }}" alt="{{ article.title }}">
+        <figcaption>{{ article.image_caption }}</figcaption>
+      </figure>
+    </section>
+    <section>
+      {% lorem 5 p %}
+    </section>
+    <br><br>
+    {% block comments %}
+      <section id="comments">
+        <h3>Comments</h3>
+        {% if user.is_authenticated %}
+          <form>
+            {% csrf_token %}
+            {% render_field comment_form.text class+="w-full" %}
+            <input
+              hx-post="#"
+              hx-trigger="click"
+              hx-vals='{"use_block": "comments"}'
+              hx-target="#comments"
+              type="submit"
+              value="Add Comment"
+            >
+          </form>
+        {% endif %}
+        {% include "newsapp/comment-tree.html" %}
+      </section>
+    {% endblock comments %}
     <article>
-        <section>
-            <h1>{{ article.title|title }}</h1>
-            {% if article.subtitle %}<h2>{{ article.subtitle }}</h2>{% endif %}
-            <p>published on {{ article.pub_date }} by {{ article.author }}</p>
-            <p><a href={{ article.url }}>view original article on {{ article.news_site.name }}</a></p>
-        </section>
-        <section>
-            <figure>
-                <img src="{{ article.image_url }}" alt="{{ article.title }}">
-                <figcaption>{{ article.image_caption }}</figcaption>
-            </figure>
-        </section>
-        <section class="main-text">
-            {% lorem 5 p %}
-        </section>
-        <article>
 {% endblock %}

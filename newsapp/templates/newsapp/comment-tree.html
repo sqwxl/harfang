@@ -1,0 +1,29 @@
+{% load mptt_tags %}
+
+<ul class="list-none p-0 m-0 mt-4">
+  {% recursetree comments %}
+    <li>
+      <div>
+        {% include "newsapp/comment.html" with comment=node %}
+        {% if user.is_authenticated %}
+          <div class="text-sm ml-5">
+            <a href="{% url 'newsapp:reply' node.id %}">reply</a>
+            {% if user == node.user %}
+              |
+              <a href="#todo">edit</a>
+              |
+              <a href="#todo">delete</a>
+            {% endif %}
+          </div>
+        {% endif %}
+        {% if not node.is_leaf_node %}
+          <div id="comment-{{ node.id }}-children" class="ml-2">
+            <ul class="list-none p-0 m-0 mt-4">
+              {{ children }}
+              <ul>
+              </div>
+        {% endif %}
+      </div>
+    </li>
+  {% endrecursetree %}
+</ul>

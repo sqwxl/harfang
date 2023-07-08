@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "django_browser_reload",
     "compressor",
+    "mptt",
     "widget_tweaks",
     "newsapp",
 ]

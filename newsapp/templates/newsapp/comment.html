@@ -1,0 +1,29 @@
+<div class="flex">
+  <div>
+    <a href="#"><div class="votearrow" title="upvote"></div></a>
+  </div>
+  <div class="ml-2">
+    <div class="text-sm">
+      <a href="#">{{ comment.user.username }}</a>
+      |
+      <span class="text-muted">{{ comment.pub_date|timesince }}</span>
+      {% if comment.parent %}
+        |
+        <a href="#{{ comment.parent.id }}">parent</a>
+      {% endif %}
+      {% if comment.get_children|length > 0 %}
+        |
+        <a
+          href="javascript:void(0)"
+          onclick="toggleComment('#comment-{{ comment.id }}-children')"
+          class="no-underline text-muted"
+        >
+          <div id="comment-{{ comment.id }}-children-toggler" class="inline after:content-['[-]']"></div>
+        </a>
+      {% endif %}
+    </div>
+    <div>
+      <div>{{ comment.text }}</div>
+    </div>
+  </div>
+</div>

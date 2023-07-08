@@ -33,7 +33,7 @@ class NewsItemFactory(DjangoModelFactory):
     subtitle = factory.Faker("sentence")
     author = factory.Faker("name")
     pub_date = factory.Faker("date_time", tzinfo=timezone.get_current_timezone())
-    text_content = factory.Faker("paragraph", nb_sentences=10, variable_nb_sentences=True)
+    text = factory.Faker("paragraph", nb_sentences=10, variable_nb_sentences=True)
     image_url = factory.LazyFunction(
         lambda: f"https://picsum.photos/{random.randint(200, 400)}/{random.randint(200, 400)}"
     )
