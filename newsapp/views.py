@@ -1,13 +1,15 @@
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.forms import AuthenticationForm, PasswordResetForm, UserCreationForm
 from django.core.paginator import Paginator
-from django.http import HttpResponseRedirect
+from django.http import HttpRequest, HttpResponseRedirect
 from django.template.response import TemplateResponse
 from django.urls import reverse
+from django.utils import timezone
+from django.views.decorators.http import require_http_methods
 
 from newsapp.models import Comment, CommentForm, NewsItem
 
-from .utils import for_htmx
+from .utils import for_htmx, is_htmx
 
 
 def get_page_by_request(request, queryset, paginate_by=10):
@@ -38,7 +40,7 @@ def article(request, pk):
     else:
         comment_form = CommentForm()
 
-    comments = Comment.objects.filter(news_item=news_item)
+    comments = news_item.comments.all()  # type: ignore
     return TemplateResponse(
         request,
         "newsapp/article.html",
@@ -50,6 +52,7 @@ def article(request, pk):
     )
 
 
+@for_htmx(use_block_from_params=True)
 def reply(request, pk):
     comment = Comment.objects.get(pk=pk)
     if request.method == "POST":
@@ -73,11 +76,53 @@ def reply(request, pk):
     )
 
 
-def upvote_comment(request, pk):
+@require_http_methods(["DELETE"])
+def comment_delete(request: HttpRequest, pk):
     comment = Comment.objects.get(pk=pk)
-    comment.votes += 1
-    comment.save()
-    # todo
+    if request.method == "DELETE":
+        comment.text = "[deleted]"
+        comment.deleted = True
+        comment.deleted_on = timezone.now()
+        comment.deleded_by = request.user
+        comment.save()
+    if is_htmx(request):
+        return TemplateResponse(
+            request,
+            "newsapp/comment.html",
+            {
+                "comment": comment,
+            },
+        )
+    else:
+        return HttpResponseRedirect(reverse("newsapp:article", args=(comment.news_item.pk,)))
+
+
+def comment(request: HttpRequest, pk):
+    comment = Comment.objects.get(pk=pk)
+    if request.method == "POST":
+        form = CommentForm(request.POST, instance=comment)
+        if form.is_valid():
+            comment = form.save(commit=False)
+            comment.save()
+            return HttpResponseRedirect(reverse("newsapp:article", args=(comment.news_item.pk,)))
+    elif request.method == "PUT":
+        form = CommentForm(request.POST, instance=comment)
+        if form.is_valid():
+            comment = form.save(commit=False)
+            comment.edited_on = timezone.now()
+            comment.save()
+            return HttpResponseRedirect(reverse("newsapp:article", args=(comment.news_item.pk,)))
+    elif request.method == "DELETE":
+        return comment_delete(request, pk)
+
+    form = CommentForm(instance=comment)
+    return TemplateResponse(
+        request,
+        "newsapp/comment-edit.html",
+        {
+            "form": form,
+        },
+    )
 
 
 def about(request):

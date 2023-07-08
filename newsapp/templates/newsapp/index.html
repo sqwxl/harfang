@@ -28,7 +28,7 @@
                 src="{% static 'newsapp/images/comment.svg' %}"
                 alt="Comments"
               />
-              <div>{{ news_item.comments.with_tree_fields|length }}</div>
+              <div>{{ news_item.comments.all|length }}</div>
             </div>
           </a>
         {% endfor %}

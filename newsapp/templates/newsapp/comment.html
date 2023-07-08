@@ -1,4 +1,4 @@
-<div class="flex">
+<div id="comment-{{ comment.id }}" class="flex">
   <div>
     <a href="#"><div class="votearrow" title="upvote"></div></a>
   </div>
@@ -6,24 +6,47 @@
     <div class="text-sm">
       <a href="#">{{ comment.user.username }}</a>
       |
-      <span class="text-muted">{{ comment.pub_date|timesince }}</span>
+      <span class="text-muted">{{ comment.created_on|timesince }}</span>
       {% if comment.parent %}
         |
         <a href="#{{ comment.parent.id }}">parent</a>
       {% endif %}
-      {% if comment.get_children|length > 0 %}
+      {% if in_tree and comment.get_children|length > 0 %}
         |
         <a
           href="javascript:void(0)"
-          onclick="toggleComment('#comment-{{ comment.id }}-children')"
+          onclick="toggleComment('{{ comment.id }}')"
           class="no-underline text-muted"
         >
-          <div id="comment-{{ comment.id }}-children-toggler" class="inline after:content-['[-]']"></div>
+          <div id="comment-{{ comment.id }}-children-toggler" class="inline after:content-['[_-_]']"></div>
         </a>
       {% endif %}
     </div>
-    <div>
+    <div id="comment-{{ comment.id }}-text">
       <div>{{ comment.text }}</div>
+    </div>
+    <div class="text-sm text-muted ml-5">
+      {% if user.is_authenticated %}
+        <a href="{% url 'newsapp:reply' comment.id %}">reply</a>
+        {% if user == comment.user or user.is_staff %}
+          {% if comment.is_editable %}
+            |
+            <a href="{% url "newsapp:comment" comment.id %}">edit</a>
+            |
+            <a
+              href="#"
+              hx-delete="{% url "newsapp:comment" comment.id %}"
+              hx-target="#comment-{{ comment.id }}"
+              hx-swap="outerHTML"
+            >delete</a>
+          {% endif %}
+        {% endif %}
+      {% endif %}
+      {% if comment.is_deleted %}
+        <span> | deleted {{ comment.deleted_on|timesince }} ago</span>
+      {% elif comment.is_edited %}
+        <span> | edited {{ comment.edited_on|timesince }} ago</span>
+      {% endif %}
     </div>
   </div>
 </div>

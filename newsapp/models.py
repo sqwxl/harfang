@@ -41,15 +41,35 @@ class Comment(MPTTModel):
     user = models.ForeignKey("auth.User", on_delete=models.CASCADE)
     text = models.TextField()
     votes = models.IntegerField(default=0)
-    pub_date = models.DateTimeField("date published", auto_now_add=True)
+    created_on = models.DateTimeField("date published", auto_now_add=True)
+    edited_on = models.DateTimeField(null=True, blank=True)
+    edited_by = models.ForeignKey(
+        "auth.User", on_delete=models.CASCADE, null=True, blank=True, related_name="edited_comments"
+    )
+    deleted_on = models.DateTimeField(null=True, blank=True)
+    deleted_by = models.ForeignKey(
+        "auth.User", on_delete=models.CASCADE, null=True, blank=True, related_name="deleted_comments"
+    )
 
     parent = TreeForeignKey("self", on_delete=models.CASCADE, null=True, blank=True, related_name="replies")
 
     def __str__(self):
         return self.text[:20]
 
+    @property
+    def is_deleted(self):
+        return self.deleted_on is not None
+
+    @property
+    def is_edited(self):
+        return self.edited_on is not None
+
+    @property
+    def is_editable(self):
+        return not self.is_deleted
+
     class MPTTMeta:
-        order_insertion_by = ["-votes", "pub_date"]
+        order_insertion_by = ["-votes", "created_on"]
 
 
 class CommentForm(ModelForm):

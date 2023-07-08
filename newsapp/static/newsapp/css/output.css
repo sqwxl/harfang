@@ -1629,8 +1629,8 @@ footer {
   background-size: 10px;
 }
 
-.after\:content-\[\'\[-\]\'\]::after {
-  --tw-content: '[-]';
+.after\:content-\[\'\[_-_\]\'\]::after {
+  --tw-content: '[ - ]';
   content: var(--tw-content);
 }
 

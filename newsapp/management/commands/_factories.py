@@ -5,7 +5,7 @@ from django.contrib.auth.models import User
 from django.utils import timezone
 from factory.django import DjangoModelFactory
 
-from newsapp.models import NewsItem, NewsSite
+from newsapp.models import Comment, NewsItem, NewsSite
 
 
 class UserFactory(DjangoModelFactory):
@@ -40,3 +40,14 @@ class NewsItemFactory(DjangoModelFactory):
     image_caption = factory.Faker("sentence")
     url = factory.Faker("url")
     news_site = factory.SubFactory(NewsSiteFactory)
+
+
+class CommentFactory(DjangoModelFactory):
+    class Meta:
+        model = Comment
+
+    text = factory.Faker("paragraph", nb_sentences=10, variable_nb_sentences=True)
+    news_item = factory.SubFactory(NewsItemFactory)
+    user = factory.SubFactory(UserFactory)
+    created_on = factory.Faker("date_time", tzinfo=timezone.get_current_timezone())
+    parent = factory.SubFactory("newsapp._factories.CommentFactory")
