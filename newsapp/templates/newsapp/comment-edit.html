@@ -5,13 +5,12 @@
   <h1>Edit comment</h1>
   <form
     action="{% url 'newsapp:comment' comment.id %}"
-    method="put"
+    method="post"
   >
     {% csrf_token %}
     {% render_field form.text class+="w-full" %}
     <div class="flex">
       <input type="submit" value="Save">
-      <input type="button" value="Delete" hx-delete="{% url 'newsapp:comment' comment.id %}">
       <input type="button" value="Cancel" onclick="window.history.back()">
     </div>
   </form>

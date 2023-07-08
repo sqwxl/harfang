@@ -11,34 +11,6 @@
     box-sizing: inherit;
   }
 
-  h1 {
-    @apply text-5xl my-6;
-  }
-
-  h2 {
-    @apply text-4xl my-5;
-  }
-
-  h3 {
-    @apply text-3xl my-4;
-  }
-
-  h4 {
-    @apply text-2xl my-3;
-  }
-
-  h5 {
-    @apply text-xl my-2;
-  }
-
-  h6 {
-    @apply text-lg my-2;
-  }
-
-  h1, h2, h3, h4, h5, h6 {
-    @apply font-bold;
-  }
-
   a {
     @apply text-blue_d
   }
@@ -68,11 +40,11 @@
   }
 
   [type="text"], [type="email"], [type="url"], [type="password"], [type="number"], [type="date"], [type="datetime-local"], [type="month"], [type="search"], [type="tel"], [type="time"], [type="week"], [multiple], textarea, select {
-    @apply rounded mt-2 mb-4 px-2 py-1 bg-fg text-bg;
+    @apply rounded mt-2 mb-4 mx-2 px-2 py-1 bg-fg text-bg;
   }
 
-  [type="submit"] {
-    @apply bg-red_d hover:bg-red px-2 rounded;
+  [type="submit"], [type="button"], button {
+    @apply bg-red_d hover:bg-red mx-2 px-2 rounded;
   }
 
   footer {

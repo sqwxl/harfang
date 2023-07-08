@@ -90,6 +90,7 @@ def comment_delete(request: HttpRequest, pk):
             request,
             "newsapp/comment.html",
             {
+                "in_tree": True,
                 "comment": comment,
             },
         )
@@ -99,13 +100,8 @@ def comment_delete(request: HttpRequest, pk):
 
 def comment(request: HttpRequest, pk):
     comment = Comment.objects.get(pk=pk)
+
     if request.method == "POST":
-        form = CommentForm(request.POST, instance=comment)
-        if form.is_valid():
-            comment = form.save(commit=False)
-            comment.save()
-            return HttpResponseRedirect(reverse("newsapp:article", args=(comment.news_item.pk,)))
-    elif request.method == "PUT":
         form = CommentForm(request.POST, instance=comment)
         if form.is_valid():
             comment = form.save(commit=False)
@@ -120,6 +116,7 @@ def comment(request: HttpRequest, pk):
         request,
         "newsapp/comment-edit.html",
         {
+            "comment": comment,
             "form": form,
         },
     )

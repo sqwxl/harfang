@@ -31,11 +31,11 @@
         {% if user == comment.user or user.is_staff %}
           {% if comment.is_editable %}
             |
-            <a href="{% url "newsapp:comment" comment.id %}">edit</a>
+            <a href="{% url 'newsapp:comment' comment.id %}">edit</a>
             |
             <a
               href="#"
-              hx-delete="{% url "newsapp:comment" comment.id %}"
+              hx-delete="{% url 'newsapp:comment' comment.id %}"
               hx-target="#comment-{{ comment.id }}"
               hx-swap="outerHTML"
             >delete</a>
