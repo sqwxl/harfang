@@ -12,8 +12,9 @@ setup:
   #!/usr/bin/env bash
   if [ ! -d ".venv" ]; then
     python3 -m venv .venv
-  elif [ -z "$VIRTUAL_ENV" ]; then
-    echo "Please activate your virtualenv"
+  fi
+  if [ -z "$VIRTUAL_ENV" ]; then
+    echo "Please activate your virtualenv: i.e. source .venv/bin/activate"
     exit 1
   fi
   pip install -r requirements.txt
