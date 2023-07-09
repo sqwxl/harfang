@@ -1,13 +1,13 @@
 {% load mptt_tags %}
 
-<ul class="list-none p-0 m-0 mt-4">
+<ul x-data class="list-none p-0 m-0 mt-4">
   {% recursetree comments %}
     {% with in_tree=True %}
       <li>
         <div>
           {% include "newsapp/comment.html" with comment=node %}
           {% if not node.is_leaf_node %}
-            <div id="comment-{{ node.id }}-children" class="ml-2">
+            <div x-ref="c{{ node.id }}" class="ml-2">
               <ul class="list-none p-0 m-0 mt-4">
                 {{ children }}
               </ul>

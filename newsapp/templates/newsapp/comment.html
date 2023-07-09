@@ -15,11 +15,11 @@
         |
         <a
           href="javascript:void(0)"
-          onclick="toggleComment('{{ comment.id }}')"
           class="no-underline text-muted"
-        >
-          <div id="comment-{{ comment.id }}-children-toggler" class="inline after:content-['[_-_]']"></div>
-        </a>
+          x-data="{ open: true }"
+          @click="$refs.c{{ comment.id }}.classList.toggle('hidden'); open = !open"
+          x-text="open ? '[ - ]' : '[ + ]'"
+        ></a>
       {% endif %}
     </div>
     <div id="comment-{{ comment.id }}-text">
