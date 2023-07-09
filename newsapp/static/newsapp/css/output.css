@@ -639,10 +639,9 @@ figcaption {
 }
 
 [type="text"], [type="email"], [type="url"], [type="password"], [type="number"], [type="date"], [type="datetime-local"], [type="month"], [type="search"], [type="tel"], [type="time"], [type="week"], [multiple], textarea, select {
-  margin-left: 0.5rem;
-  margin-right: 0.5rem;
   margin-top: 0.5rem;
   margin-bottom: 1rem;
+  margin-right: 0.5rem;
   border-radius: 0.25rem;
   --tw-bg-opacity: 1;
   background-color: rgb(235 219 178 / var(--tw-bg-opacity));
@@ -655,7 +654,6 @@ figcaption {
 }
 
 [type="submit"], [type="button"], button {
-  margin-left: 0.5rem;
   margin-right: 0.5rem;
   border-radius: 0.25rem;
   --tw-bg-opacity: 1;
@@ -667,6 +665,10 @@ figcaption {
 [type="submit"]:hover, [type="button"]:hover, button:hover {
   --tw-bg-opacity: 1;
   background-color: rgb(251 73 52 / var(--tw-bg-opacity));
+}
+
+textarea {
+  width: 100%;
 }
 
 footer {
@@ -1445,10 +1447,6 @@ footer {
   display: inline-block;
 }
 
-.inline {
-  display: inline;
-}
-
 .flex {
   display: flex;
 }
@@ -1567,6 +1565,8 @@ footer {
 }
 
 .errorlist {
+  font-size: 0.875rem;
+  line-height: 1.25rem;
   --tw-text-opacity: 1;
   color: rgb(251 73 52 / var(--tw-text-opacity));
 }
@@ -1585,11 +1585,6 @@ footer {
   margin:     3px 2px 6px;
   background: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAACB0lEQVRYR+2WMU/CQBiGKSEQwsJIGUwMcWE0/ABHN3VSJ+lC6aTyB6x/AHGiTMVNJ3Fz9AcYRhNDCIkDMLIQAjHU9wg1bWl7vbbAwm2kve973ueO63GRLQ9uy/0jO4CdgUAG6vX6EdnEkiR9+N3MgQAURXknjcvl8vHGARqNxiGafi4bF0RRbPuB8G0A6Vscx52QppqmvcHC6cYADOn1ABqa+7LgywAAntHw3JL4BctwwWqBGQDqD9DkC/pjxmZYhl/8zmMpOiwQzABI30SDK4cmT7BQXBuAU3q9IbEAM3uAGHiFYDKA9AoKi27FAfGIZbgJHQDNeRTvImGSAjDBOzmvFjwbgP4aCl97ScZiwROAqqrp6XTap6U37IVJIpHICoIwogF7AoB+GYXuaMUsz++xDGSe66ACkPSz2ayHKmlaMcvzUTwe36dZoAL4TK+zUC24AlSr1WQqler7SK8DjMbjcbZSqUyc7LkCID35Pz8wqre+fou9UGMGWKbvYiIfEGAACzknC44GQkq/YMe5IOF0JKfoyrAFkGU5xvP8TwjpdYDOcDjMoy75YpqGLQAum8VoNKoGVG+aPp/PBVxem1QAkj6TyZDvPfnuhzawDLYWVgysI72eAqEuS6USuU39DxMAKDlsvu+w0xv6tQFQQH1yh1wMEwCak5vta2je7Qud4Vxo6Y/+AL88xCG2f4SEAAAAAElFTkSuQmCC"), linear-gradient(transparent, transparent) no-repeat;
   background-size: 10px;
-}
-
-.after\:content-\[\'\[_-_\]\'\]::after {
-  --tw-content: '[ - ]';
-  content: var(--tw-content);
 }
 
 .visited\:text-fg:visited {

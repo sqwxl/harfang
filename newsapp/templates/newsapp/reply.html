@@ -4,10 +4,7 @@
 {% block main %}
   <h1>Reply to {{ comment.author }}</h1>
   {% include "newsapp/comment.html" %}
-  <form
-    action="{% url 'newsapp:reply' comment.id %}"
-    method="post"
-  >
+  <form action="" method="post">
     {% csrf_token %}
     {% render_field form.text class+="w-full" %}
     <input type="submit" value="Reply">

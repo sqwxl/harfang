@@ -18,4 +18,5 @@ setup:
     exit 1
   fi
   pip install -r requirements.txt
-  python manage.py makemigrations
+  pre-commit install
+  python manage.py migrate

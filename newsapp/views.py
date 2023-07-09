@@ -1,3 +1,5 @@
+from typing import Literal
+
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.forms import AuthenticationForm, PasswordResetForm, UserCreationForm
 from django.core.paginator import Paginator
@@ -7,7 +9,7 @@ from django.urls import reverse
 from django.utils import timezone
 from django.views.decorators.http import require_http_methods
 
-from newsapp.models import Comment, CommentForm, NewsItem
+from newsapp.models import Article, Comment, CommentForm, Post
 
 from .utils import for_htmx, is_htmx
 
@@ -17,61 +19,114 @@ def get_page_by_request(request, queryset, paginate_by=10):
 
 
 @for_htmx(use_block_from_params=True)
-def index(request):
+def news(request):
     return TemplateResponse(
         request,
-        "newsapp/index.html",
+        "newsapp/news.html",
         {
-            "page_obj": get_page_by_request(request, NewsItem.objects.all().order_by("-pub_date")),
+            "page_obj": get_page_by_request(request, Article.objects.all().order_by("-pub_date")),
+        },
+    )
+
+
+@for_htmx(use_block_from_params=True)
+def posts(request):
+    return TemplateResponse(
+        request,
+        "newsapp/posts.html",
+        {
+            "page_obj": get_page_by_request(request, Post.objects.order_by("-created_on", "-votes")),
+        },
+    )
+
+
+def item_view(request, item_type: Literal["article", "post"], pk):
+    if item_type == "article":
+        item = Article.objects.get(pk=pk)
+        template = "newsapp/article.html"
+    else:
+        item = Post.objects.get(pk=pk)
+        template = "newsapp/post.html"
+
+    if request.method == "POST":
+        form = CommentForm(request.POST)
+        if form.is_valid():
+            comment = form.save(commit=False)
+            comment.content_object = item
+            comment.user = request.user
+            comment.save()
+            form = CommentForm()
+    else:
+        form = CommentForm()
+
+    return TemplateResponse(
+        request,
+        template,
+        {
+            "article": item,
+            "post": item,
+            "comments": item.comments.all(),  # type: ignore
+            "comment_form": form,
         },
     )
 
 
 @for_htmx(use_block_from_params=True)
 def article(request, pk):
-    news_item = NewsItem.objects.get(pk=pk)
-    if request.method == "POST":
-        comment_form = CommentForm(request.POST)
-        if comment_form.is_valid():
-            comment = comment_form.save(commit=False)
-            comment.news_item = news_item
-            comment.user = request.user
-            comment.save()
-    else:
-        comment_form = CommentForm()
-
-    comments = news_item.comments.all()  # type: ignore
-    return TemplateResponse(
-        request,
-        "newsapp/article.html",
-        {
-            "article": news_item,
-            "comments": comments,
-            "comment_form": CommentForm(),
-        },
-    )
+    return item_view(request, "article", pk)
 
 
 @for_htmx(use_block_from_params=True)
+def post(request, pk):
+    return item_view(request, "post", pk)
+
+
 def reply(request, pk):
-    comment = Comment.objects.get(pk=pk)
+    parent = Comment.objects.get(pk=pk)
     if request.method == "POST":
         reply = CommentForm(request.POST)
         if reply.is_valid():
             reply = reply.save(commit=False)
-            reply.news_item = comment.news_item
-            reply.parent = comment
+            reply.content_object = parent.content_object
+            reply.parent = parent
             reply.user = request.user
             reply.save()
-            return HttpResponseRedirect(reverse("newsapp:article", args=(comment.news_item.pk,)))
+            viewname = parent.content_object.__class__.__name__.lower()
+            return HttpResponseRedirect(reverse(f"newsapp:{viewname}", args=(parent.post.pk,)))
     else:
         reply = CommentForm()
+
     return TemplateResponse(
         request,
         "newsapp/reply.html",
         {
-            "comment": comment,
+            "comment": parent,
             "form": reply,
+        },
+    )
+
+
+def comment(request: HttpRequest, article_id, comment_id):
+    comment = Comment.objects.get(pk=comment_id)
+    if request.method == "POST":
+        form = CommentForm(request.POST, instance=comment)
+        if form.is_valid():
+            comment = form.save(commit=False)
+            comment.edited_on = timezone.now()
+            comment.edited_by = request.user
+            comment.save()
+            return HttpResponseRedirect(reverse("newsapp:article", args=(article_id,)))
+    elif request.method == "DELETE":
+        return comment_delete(request, comment_id)
+    else:
+        form = CommentForm(instance=comment)
+
+    return TemplateResponse(
+        request,
+        "newsapp/comment-edit.html",
+        {
+            "comment": comment,
+            "form": form,
         },
     )
 
@@ -81,7 +136,6 @@ def comment_delete(request: HttpRequest, pk):
     comment = Comment.objects.get(pk=pk)
     if request.method == "DELETE":
         comment.text = "[deleted]"
-        comment.deleted = True
         comment.deleted_on = timezone.now()
         comment.deleded_by = request.user
         comment.save()
@@ -95,31 +149,9 @@ def comment_delete(request: HttpRequest, pk):
             },
         )
     else:
-        return HttpResponseRedirect(reverse("newsapp:article", args=(comment.news_item.pk,)))
-
-
-def comment(request: HttpRequest, pk):
-    comment = Comment.objects.get(pk=pk)
-
-    if request.method == "POST":
-        form = CommentForm(request.POST, instance=comment)
-        if form.is_valid():
-            comment = form.save(commit=False)
-            comment.edited_on = timezone.now()
-            comment.save()
-            return HttpResponseRedirect(reverse("newsapp:article", args=(comment.news_item.pk,)))
-    elif request.method == "DELETE":
-        return comment_delete(request, pk)
-
-    form = CommentForm(instance=comment)
-    return TemplateResponse(
-        request,
-        "newsapp/comment-edit.html",
-        {
-            "comment": comment,
-            "form": form,
-        },
-    )
+        return HttpResponseRedirect(
+            reverse(f"newsapp:{comment.content_object.__class__.__name__.lower()}", args=(comment.content_object.pk,))
+        )
 
 
 def about(request):
@@ -132,7 +164,7 @@ def login_view(request):
             form = UserCreationForm(request.POST)
             if form.is_valid():
                 form.save()
-                return HttpResponseRedirect(reverse("newsapp:index"))
+                return HttpResponseRedirect(reverse("newsapp:news"))
             else:
                 return TemplateResponse(
                     request, "newsapp/login.html", {"login_form": AuthenticationForm(), "register_form": form}
@@ -143,7 +175,7 @@ def login_view(request):
             user = authenticate(request, username=form.cleaned_data["username"], password=form.cleaned_data["password"])
             if user is not None:
                 login(request, user)
-                return HttpResponseRedirect(reverse("newsapp:index"))
+                return HttpResponseRedirect(reverse("newsapp:news"))
             else:
                 form.add_error(None, "Invalid username or password")
                 return TemplateResponse(
@@ -161,7 +193,7 @@ def login_view(request):
 
 def logout_view(request):
     logout(request)
-    return HttpResponseRedirect(reverse("newsapp:index"))
+    return HttpResponseRedirect(reverse("newsapp:news"))
 
 
 def forgot(request):

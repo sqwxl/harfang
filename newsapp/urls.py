@@ -4,8 +4,10 @@ from . import views
 
 app_name = "newsapp"
 urlpatterns = [
-    path("", views.index, name="index"),
+    path("", views.posts, name="posts"),
+    path("news/", views.news, name="news"),
     path("article/<int:pk>/", views.article, name="article"),
+    path("post/<int:pk>/", views.post, name="post"),
     path("comment/<int:pk>/", views.comment, name="comment"),
     path("reply/<int:pk>/", views.reply, name="reply"),
     path("about/", views.about, name="about"),

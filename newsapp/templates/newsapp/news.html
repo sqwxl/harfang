@@ -3,23 +3,23 @@
 
 {% block main %}
   <section>
-    <h1>News Items</h1>
+    <h1>News Feed</h1>
 
     {% if page_obj.paginator.count == 0 %}
       <p>No news items are available.</p>
     {% else %}
 
       {% block page-and-paging-controls %}
-        {% for news_item in page_obj %}
+        {% for article in page_obj %}
           <a
             class="m-2 h-16 flex justify-between items-stretch text-fg visited:text-fg hover:text-fg1 no-underline"
-            href="{% url 'newsapp:article' news_item.id %}"
+            href="{% url 'newsapp:article' article.id %}"
             preload="mouseover"
           >
             <div class="flex flex-col w-full py-2 justify-between">
-              <div class="text-lg font-bold">{{ news_item.title|title }}</div>
+              <div class="text-lg font-bold">{{ article.title|title }}</div>
               <div>
-                <span>{{ news_item.news_site.name }}</span> &#x2022; <span>{{ news_item.pub_date|timesince }}</span>
+                <span>{{ article.news_site.name }}</span> &#x2022; <span>{{ article.pub_date|timesince }}</span>
               </div>
             </div>
             <div class="not-prose flex flex-col justify-center items-center">
@@ -28,7 +28,7 @@
                 src="{% static 'newsapp/images/comment.svg' %}"
                 alt="Comments"
               />
-              <div>{{ news_item.comments.all|length }}</div>
+              <div>{{ article.comments.all|length }}</div>
             </div>
           </a>
         {% endfor %}

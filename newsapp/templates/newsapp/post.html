@@ -1,29 +1,21 @@
 {% extends "newsapp/base-page.html" %}
-{% load widget_tweaks %}
 
 {% block main %}
-  <article>
+  <post>
     <section>
-      <h1>{{ article.title|title }}</h1>
-      {% if article.subtitle %}<h2>{{ article.subtitle }}</h2>{% endif %}
-      <p>published on {{ article.pub_date }} by <b>{{ article.author }}</b></p>
-      <p><a href={{ article.url }}>view original on {{ article.news_site.name }}</a></p>
+      <h1>{{ post.title|title }}</h1>
+      <p>posted {{ post.pub_date }} ago by <b>{{ post.user.username }}</b></p>
+      <p><a href="post.link">Link</a></p>
     </section>
     <section>
-      <figure class="my-12">
-        <img src="{{ article.image_url }}" alt="{{ article.title }}">
-        <figcaption>{{ article.image_caption }}</figcaption>
-      </figure>
-    </section>
-    <section>
-      {% lorem 5 p %}
+      {{ post.text|linebreaks }}
     </section>
     <br><br>
     {% block comments %}
       <section id="comments">
         <h3>Comments</h3>
         {% if user.is_authenticated %}
-          <form>
+          <form class="not-prose">
             {% csrf_token %}
             {{ comment_form.as_div }}
             <input
@@ -39,5 +31,5 @@
         {% include "newsapp/comment-tree.html" %}
       </section>
     {% endblock comments %}
-    <article>
+    <post>
 {% endblock %}

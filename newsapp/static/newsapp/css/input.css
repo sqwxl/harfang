@@ -40,11 +40,15 @@
   }
 
   [type="text"], [type="email"], [type="url"], [type="password"], [type="number"], [type="date"], [type="datetime-local"], [type="month"], [type="search"], [type="tel"], [type="time"], [type="week"], [multiple], textarea, select {
-    @apply rounded mt-2 mb-4 mx-2 px-2 py-1 bg-fg text-bg;
+    @apply rounded mt-2 mb-4 mr-2 px-2 py-1 bg-fg text-bg;
   }
 
   [type="submit"], [type="button"], button {
-    @apply bg-red_d hover:bg-red mx-2 px-2 rounded;
+    @apply bg-red_d hover:bg-red mr-2 px-2 rounded;
+  }
+
+  textarea {
+    @apply w-full;
   }
 
   footer {
@@ -53,7 +57,7 @@
 }
 
 .errorlist {
-  @apply text-red;
+  @apply text-red text-sm;
 }
 
 .helptext {
