@@ -8,12 +8,21 @@ share button
 
 Harmonic, HN, Reddit, communistnews
 
-Fucking Python3
+Fucking Ubuntu
 
 
 ## quick start
 
-install [just](https://github.com/casey/just)
+install nix:
+```shell
+sh <(curl -L https://nixos.org/nix/install) --no-daemon
+```
+
+install [direnv](https://direnv.net/docs/installation.html#from-system-packages)
+
+install [devenv](https://devenv.sh/getting-started/)
+
+clone the repo and `direnv allow`
 
 
 ```shell
