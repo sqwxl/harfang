@@ -4,8 +4,8 @@
   <post>
     <section>
       <h1>{{ post.title|title }}</h1>
-      <p>posted {{ post.pub_date }} ago by <b>{{ post.user.username }}</b></p>
-      <p><a href="post.link">Link</a></p>
+      <p>posted {{ post.created_on|timesince }} ago by <b>{{ post.user.username }}</b></p>
+      <p><a href="{{ post.url }}" target="_blank" rel="noreferrer">Link</a></p>
     </section>
     <section>
       {{ post.text|linebreaks }}

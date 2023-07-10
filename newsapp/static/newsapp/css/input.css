@@ -40,20 +40,13 @@
   }
 
   [type="text"], [type="email"], [type="url"], [type="password"], [type="number"], [type="date"], [type="datetime-local"], [type="month"], [type="search"], [type="tel"], [type="time"], [type="week"], [multiple], textarea, select {
-    @apply rounded mt-2 mb-4 mr-2 px-2 py-1 bg-fg text-bg;
+    @apply w-full rounded mt-2 mb-4 mr-2 px-2 py-1 bg-fg text-bg;
   }
 
   [type="submit"], [type="button"], button {
     @apply bg-red_d hover:bg-red mr-2 px-2 rounded;
   }
 
-  textarea {
-    @apply w-full;
-  }
-
-  footer {
-    @apply  relative bottom-0 inset-x-0 flex justify-around items-center mt-4 py-10 text-sm
-  }
 }
 
 .errorlist {

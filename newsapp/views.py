@@ -9,7 +9,7 @@ from django.urls import reverse
 from django.utils import timezone
 from django.views.decorators.http import require_http_methods
 
-from newsapp.models import Article, Comment, CommentForm, Post
+from newsapp.models import Article, Comment, CommentForm, Post, PostForm
 
 from .utils import for_htmx, is_htmx
 
@@ -79,6 +79,26 @@ def article(request, pk):
 @for_htmx(use_block_from_params=True)
 def post(request, pk):
     return item_view(request, "post", pk)
+
+
+def post_new(request):
+    if request.method == "POST":
+        form = PostForm(request.POST)
+        if form.is_valid():
+            post = form.save(commit=False)
+            post.user = request.user
+            post.save()
+            return HttpResponseRedirect(reverse("newsapp:post", args=(post.pk,)))
+    else:
+        form = PostForm()
+
+    return TemplateResponse(
+        request,
+        "newsapp/post-new.html",
+        {
+            "form": form,
+        },
+    )
 
 
 def reply(request, pk):

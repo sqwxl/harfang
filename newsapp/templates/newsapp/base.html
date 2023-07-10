@@ -14,7 +14,7 @@
   <body
     hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'
     hx-ext="preload"
-    class="text-fg bg-bg"
+    class="flex flex-col text-fg bg-bg min-h-screen"
   >
     {% block body %}{% endblock %}
   </body>

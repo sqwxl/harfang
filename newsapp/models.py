@@ -84,6 +84,12 @@ class Post(FeedItem):
     comments = GenericRelation("Comment")
 
 
+class PostForm(ModelForm):
+    class Meta:
+        model = Post
+        fields = ["title", "url", "text"]
+
+
 class Comment(MPTTModel):
     content_type = models.ForeignKey(
         ContentType,
