@@ -8,6 +8,7 @@ share button
 
 Harmonic, HN, Reddit, communistnews
 
+Fucking Python3
 
 
 ## quick start
