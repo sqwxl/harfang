@@ -2,6 +2,7 @@ from typing import Literal
 
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.forms import AuthenticationForm, PasswordResetForm, UserCreationForm
+from django.contrib.auth.models import User
 from django.core.paginator import Paginator
 from django.http import HttpRequest, HttpResponseRedirect
 from django.template.response import TemplateResponse
@@ -176,6 +177,24 @@ def comment_delete(request: HttpRequest, pk):
 
 def about(request):
     return TemplateResponse(request, "newsapp/about.html")
+
+
+@for_htmx(use_block_from_params=True)
+def user(request, username, items="posts"):
+    user = User.objects.get(username=username)
+    if items == "posts":
+        objects = Post.objects.filter(user=user).order_by("-created_on", "-votes")
+    else:
+        objects = Comment.objects.filter(user=user).order_by("-created_on")
+    return TemplateResponse(
+        request,
+        "newsapp/user.html",
+        {
+            "user": user,
+            "item_type": items,
+            "page_obj": get_page_by_request(request, objects),
+        },
+    )
 
 
 def login_view(request):

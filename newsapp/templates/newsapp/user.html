@@ -1,0 +1,32 @@
+{% extends "newsapp/base-page.html" %}
+
+{% block main %}
+  <section>
+    <h1>{{ user.username }}</h1>
+    <p>Joined {{ user.date_joined|timesince }} ago</p>
+    <div id="tabs" x-data="{selected: 0}">
+      <div class="flex">
+        <div class="border-b w-1"></div>
+        <a
+          href="javascript:void(0)"
+          @click="selected = 0"
+          class = "border border-fg rounded-t p-1 text-fg no-underline"
+          :class="selected === 0 && 'font-bold border-b-0'"
+        >Posts</a>
+        <div class="border-b w-1"></div>
+        <a
+          href="javascript:void(0)"
+          @click="selected = 1"
+          class = "border border-fg rounded-t p-1 text-fg no-underline"
+          :class="selected === 1 && 'font-bold border-b-0'"
+        >Comments</a>
+        <div class="grow border-b"></div>
+      </div>
+      <div>
+        {% block items %}
+
+        {% endblock %}
+      </div>
+    </div>
+  </section>
+{% endblock %}

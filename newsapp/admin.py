@@ -1,12 +1,25 @@
 from django.contrib import admin
 
-from newsapp.models import Comment
+from newsapp.models import Article, Comment, NewsSite, Post
+
+
+class ArticleAdmin(admin.ModelAdmin):
+    list_display = ["title", "author", "pub_date", "news_site"]
+    list_filter = ["author", "news_site"]
+
+
+class PostAdmin(admin.ModelAdmin):
+    list_display = ["title", "user", "created_on", "flagged"]
+    list_filter = ["user", "flagged"]
 
 
 class CommentAdmin(admin.ModelAdmin):
-    list_display = ("user", "text", "created_on", "edited_on", "deleted_on")
-    list_filter = ("content_type", "user")
-    search_fields = ("user__username", "content_type__title", "text")
+    list_display = ["user", "text", "created_on", "content_object"]
+    list_display_links = ["text"]
+    list_filter = ["user", "flagged"]
 
 
+admin.site.register(NewsSite)
+admin.site.register(Article, ArticleAdmin)
+admin.site.register(Post, PostAdmin)
 admin.site.register(Comment, CommentAdmin)

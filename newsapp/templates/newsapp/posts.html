@@ -3,52 +3,6 @@
 
 {% block main %}
   <section>
-    {% if page_obj.paginator.count == 0 %}
-      <p>No posts are available.</p>
-    {% else %}
-
-      {% block page-and-paging-controls %}
-        {% for post in page_obj %}
-          <a
-            class="mx-2 mb-6 h-14 flex justify-between items-stretch text-fg visited:text-fg hover:text-fg1 no-underline"
-            href="{% url 'newsapp:post' post.id %}"
-            preload="mouseover"
-          >
-            <div class="min-w-0 flex flex-col justify-between">
-              <div
-                class="max-w-sm text-lg font-bold whitespace-nowrap text-ellipsis overflow-hidden"
-              >{{ post.title|title }}</div>
-              <div>
-                <span>{{ post.user.username }}</span> &#x2022; <span>{{ post.created_on|timesince }}</span>
-              </div>
-            </div>
-            <div class="not-prose flex flex-col justify-center items-center">
-              <img
-                class="w-5"
-                src="{% static 'newsapp/images/comment.svg' %}"
-                alt="Comments"
-              />
-              <div>{{ post.comments.all|length }}</div>
-            </div>
-          </a>
-        {% endfor %}
-
-        {% if page_obj.has_next %}
-          <p id="paging-area">
-            <a
-              href="#"
-              hx-get="?page={{ page_obj.next_page_number }}"
-              hx-vals='{"use_block": "page-and-paging-controls"}'
-              hx-target="#paging-area"
-              hx-swap="outerHTML"
-              class="block text-center"
-            >Load More</a>
-          </p>
-        {% else %}
-          <p>That's all!</p>
-        {% endif %}
-      {% endblock %}
-
-    {% endif %}
+    {% include "newsapp/posts-feed.html" %}
   </section>
 {% endblock %}

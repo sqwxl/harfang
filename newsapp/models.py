@@ -101,6 +101,7 @@ class Comment(MPTTModel):
     user = models.ForeignKey("auth.User", on_delete=models.CASCADE, related_name="comments")
     text = models.TextField()
     votes = models.IntegerField(default=0)
+    flagged = models.BooleanField(default=False)
     created_on = models.DateTimeField("date published", auto_now_add=True)
     edited_on = models.DateTimeField(null=True, blank=True)
     edited_by = models.ForeignKey(

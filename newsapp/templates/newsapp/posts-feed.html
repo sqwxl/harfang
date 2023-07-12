@@ -1,0 +1,35 @@
+{% extends "newsapp/base-feed.html" %}
+{% load static %}
+
+{% block no-items %}
+  <p>No posts are available.</p>
+{% endblock %}
+
+{% block item %}
+  {% with page_item as post %}
+
+    <a
+      class="mx-2 mb-6 h-14 flex justify-between items-stretch text-fg visited:text-fg hover:text-fg1 no-underline"
+      href="{% url 'newsapp:post' post.id %}"
+      preload="mouseover"
+    >
+      <div class="min-w-0 flex flex-col justify-between">
+        <div
+          class="max-w-sm text-lg font-bold whitespace-nowrap text-ellipsis overflow-hidden"
+        >{{ post.title|title }}</div>
+        <div>
+          <span>{{ post.user.username }}</span> &#x2022; <span>{{ post.created_on|timesince }}</span>
+        </div>
+      </div>
+      <div class="not-prose flex flex-col justify-center items-center">
+        <img
+          class="w-5"
+          src="{% static 'newsapp/images/comment.svg' %}"
+          alt="Comments"
+        />
+        <div>{{ post.comments.all|length }}</div>
+      </div>
+    </a>
+  {% endwith %}
+{% endblock %}
+

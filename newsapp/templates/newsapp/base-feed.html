@@ -1,0 +1,28 @@
+{% if page_obj.paginator.count == 0 %}
+  {% block no-items %}
+    <p>No items are available.</p>
+  {% endblock no-items %}
+{% else %}
+  {% block page-and-paging-controls %}
+    {% for page_item in page_obj %}
+      {% block item %}
+      {% endblock item %}
+    {% endfor %}
+    {% if page_obj.has_next %}
+      <p id="paging-area">
+        <a
+          href="#"
+          hx-get="?page={{ page_obj.next_page_number }}"
+          hx-vals='{"use_block": "page-and-paging-controls"}'
+          hx-target="#paging-area"
+          hx-swap="outerHTML"
+          class="block text-center"
+        >Load More</a>
+      </p>
+    {% else %}
+      {% block end %}
+        <p>That's all!</p>
+      {% endblock end %}
+    {% endif %}
+  {% endblock %}
+{% endif %}

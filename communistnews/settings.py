@@ -29,6 +29,7 @@ DEBUG = True
 ALLOWED_HOSTS = ["*"]
 X_FRAME_OPTIONS = "*"
 CSRF_TRUSTED_ORIGINS = ["http://localhost"]
+INTERNAL_IPS = ["127.0.0.1"]
 
 
 # Application definition
@@ -41,6 +42,7 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "django_browser_reload",
+    "debug_toolbar",
     "compressor",
     "mptt",
     "widget_tweaks",
@@ -50,6 +52,7 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
+    "debug_toolbar.middleware.DebugToolbarMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
@@ -63,7 +66,7 @@ ROOT_URLCONF = "communistnews.urls"
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [],
+        "DIRS": [BASE_DIR / "templates"],
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
@@ -139,3 +142,6 @@ STATIC_ROOT = BASE_DIR / "_static"
 MEDIA_ROOT = BASE_DIR / "_media"
 
 COMPRESS_ENABLED = True
+
+# https://django-debug-toolbar.readthedocs.io/en/latest/tips.html#working-with-htmx-and-turbo
+DEBUG_TOOLBAR_CONFIG = {"ROOT_TAG_EXTRA_ATTRS": "hx-preserve"}

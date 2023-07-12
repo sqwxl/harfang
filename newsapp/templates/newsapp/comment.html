@@ -4,7 +4,7 @@
   </div>
   <div class="ml-2">
     <div class="text-sm">
-      <a href="#">{{ comment.user.username }}</a>
+      <a href="{% url 'newsapp:user' user.username %}">{{ comment.user.username }}</a>
       |
       <span class="text-muted">{{ comment.created_on|timesince }}</span>
       {% if comment.parent %}
