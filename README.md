@@ -8,7 +8,7 @@ share button
 
 Harmonic, HN, Reddit, communistnews
 
-Fucking Ubuntu
+Fucking Ubuntu -- Gotta move over to Silverblue, I suppose
 
 
 ## quick start
