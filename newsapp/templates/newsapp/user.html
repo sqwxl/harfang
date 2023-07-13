@@ -9,6 +9,9 @@
         <div class="border-b w-1"></div>
         <a
           href="javascript:void(0)"
+          hx-get="{% url 'newsapp:user-posts' user.username %}"
+          hx-vals='{"use_block": "items"}'
+          hx-target="#items"
           @click="selected = 0"
           class = "border border-fg rounded-t p-1 text-fg no-underline"
           :class="selected === 0 && 'font-bold border-b-0'"
@@ -16,15 +19,22 @@
         <div class="border-b w-1"></div>
         <a
           href="javascript:void(0)"
+          hx-get="{% url 'newsapp:user-comments' user.username %}"
+          hx-vals='{"use_block": "items"}'
+          hx-target="#items"
           @click="selected = 1"
           class = "border border-fg rounded-t p-1 text-fg no-underline"
           :class="selected === 1 && 'font-bold border-b-0'"
         >Comments</a>
         <div class="grow border-b"></div>
       </div>
-      <div>
+      <div id="items">
         {% block items %}
-
+          {% if item_type == "posts" %}
+            {% include "newsapp/posts-feed.html" %}
+          {% else %}
+            {% include "newsapp/comment-feed.html" %}
+          {% endif %}
         {% endblock %}
       </div>
     </div>
