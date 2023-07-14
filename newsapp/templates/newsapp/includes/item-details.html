@@ -1,0 +1,19 @@
+<div class="text-sm text-muted">
+  <span>{{ item.points }} points{{ item.points|pluralize }}</span>
+  |
+  {% if item.news_site %}
+    <a href="{% url 'newsapp:news_site' item.news_site.id %}">{{ item.news_site.name }}</a>
+  {% elif item.user %}
+    <a href="{% url 'newsapp:user' item.user.username %}">{{ item.user.username }}</a>
+  {% endif %}
+  |
+  {% if item.pub_date %}
+    <span>{{ item.pub_date|timesince }} ago</span>
+  {% else %}
+    <span>{{ item.created_on|timesince }} ago</span>
+  {% endif %}
+  |
+  {% with item.comments.count as num_comments %}
+    <span>{{ num_comments }} comment{{ num_comments|pluralize }}</span>
+  {% endwith %}
+</div>

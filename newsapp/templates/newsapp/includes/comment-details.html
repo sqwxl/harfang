@@ -1,0 +1,29 @@
+<div class="text-sm text-muted">
+  <a href="{% url 'newsapp:user' comment.user.username %}">{{ comment.user.username }}</a>
+  <span>{{ comment.created_on|timesince }} ago</span>
+  {% if in_tree %}
+    {% if comment.get_ancestors|length > 1 %}
+      | <a href="#comment-{{ comment.get_root.id }}">root</a>
+    {% endif %}
+    {% if comment.parent %}
+      | <a href="#comment-{{ comment.parent.id }}">parent</a>
+    {% endif %}
+    {% with prev=comment.get_previous_sibling next=comment.get_next_sibling  %}
+      {% if prev %}
+        | <a href="#comment-{{ prev.id }}">prev</a>
+      {% endif %}
+      {% if next %}
+        | <a href="#comment-{{ next.id }}">next</a>
+      {% endif %}
+    {% endwith %}
+    {% if not comment.is_leaf_node %}
+      | <a
+        href="javascript:void(0)"
+        class="no-link"
+        x-data="{ open: true }"
+        @click="$refs.c{{ comment.id }}.classList.toggle('hidden'); open = !open"
+        x-text="open ? '[ - ]' : '[ + ]'"
+      ></a>
+    {% endif %}
+  {% endif %}
+</div>

@@ -10,6 +10,7 @@ from mptt.models import MPTTModel, TreeForeignKey
 
 class NewsSite(models.Model):
     name = models.CharField(max_length=200)
+    description = models.TextField(blank=True)
     url = models.CharField(max_length=200)
     rss_url = models.CharField(max_length=200)
     logo = models.ImageField(upload_to="logos/", blank=True)
@@ -23,27 +24,6 @@ def validate_not_future(date_value):
         raise ValidationError("Date cannot be in the future")
 
 
-class Vote(models.Model):
-    user = models.ForeignKey("auth.User", on_delete=models.CASCADE)
-    value = models.BooleanField()  # True = upvote, False = downvote
-    created_on = models.DateTimeField(auto_now_add=True)
-
-    content_type = models.ForeignKey(
-        ContentType,
-        on_delete=models.CASCADE,
-    )
-    object_id = models.PositiveIntegerField()
-    content_object = GenericForeignKey("content_type", "object_id")
-
-    class Meta:
-        indexes = [
-            models.Index(fields=["content_type", "object_id"]),
-        ]
-
-    def __str__(self):
-        return f"{self.user.username} voted {self.value}"
-
-
 class FeedItem(models.Model):
     title = models.CharField(max_length=200)
     text = models.TextField(blank=True)
@@ -51,6 +31,7 @@ class FeedItem(models.Model):
     created_on = models.DateTimeField(auto_now_add=True)
 
     votes = GenericRelation("Vote")
+    comments = GenericRelation("Comment")
 
     class Meta:
         abstract = True
@@ -67,8 +48,6 @@ class Article(FeedItem):
     image_caption = models.CharField(max_length=200, blank=True)
     news_site = models.ForeignKey("NewsSite", on_delete=models.CASCADE)
 
-    comments = GenericRelation("Comment")
-
 
 class Post(FeedItem):
     user = models.ForeignKey(
@@ -79,15 +58,29 @@ class Post(FeedItem):
     )
     edited_on = models.DateTimeField(null=True, blank=True)
     flagged = models.BooleanField(default=False)
-    votes = models.IntegerField(default=0)
-
-    comments = GenericRelation("Comment")
 
 
 class PostForm(ModelForm):
     class Meta:
         model = Post
         fields = ["title", "url", "text"]
+
+
+class Vote(models.Model):
+    user = models.ForeignKey("auth.User", on_delete=models.CASCADE, related_name="votes")
+    created_on = models.DateTimeField(auto_now_add=True)
+
+    content_type = models.ForeignKey(
+        ContentType,
+        on_delete=models.CASCADE,
+    )
+    object_id = models.PositiveIntegerField()
+    content_object = GenericForeignKey("content_type", "object_id")
+
+    class Meta:
+        indexes = [
+            models.Index(fields=["content_type", "object_id"]),
+        ]
 
 
 class Comment(MPTTModel):

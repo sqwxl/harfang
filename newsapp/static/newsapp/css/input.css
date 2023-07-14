@@ -12,19 +12,19 @@
   }
 
   a {
-    @apply text-blue_d
+    @apply text-blue_d no-underline;
   }
 
   a:hover {
-    @apply text-blue
+    @apply text-blue underline;
   }
 
   a:visited {
-    @apply text-purple
+    @apply text-blue_d;
   }
 
   nav a, nav a:visited, nav a:hover {
-    @apply text-fg
+    @apply text-fg no-underline;
   }
 
   figure {
@@ -47,6 +47,20 @@
     @apply bg-red_d hover:bg-red mr-2 px-2 rounded;
   }
 
+}
+
+@layer components {
+  .no-link {
+    @apply text-fg no-underline;
+  }
+
+  .no-link:hover {
+    @apply text-fg underline;
+  }
+
+  .no-link:visited {
+    @apply text-fg;
+  }
 }
 
 .errorlist {

@@ -4,13 +4,14 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.forms import AuthenticationForm, PasswordResetForm, UserCreationForm
 from django.contrib.auth.models import User
 from django.core.paginator import Paginator
+from django.db.models import Count
 from django.http import HttpRequest, HttpResponseRedirect
 from django.template.response import TemplateResponse
 from django.urls import reverse
 from django.utils import timezone
 from django.views.decorators.http import require_http_methods
 
-from newsapp.models import Article, Comment, CommentForm, Post, PostForm
+from newsapp.models import Article, Comment, CommentForm, NewsSite, Post, PostForm
 
 from .utils import for_htmx, is_htmx
 
@@ -25,7 +26,9 @@ def news(request):
         request,
         "newsapp/news.html",
         {
-            "page_obj": get_page_by_request(request, Article.objects.all().order_by("-pub_date")),
+            "page_obj": get_page_by_request(
+                request, Article.objects.annotate(points=Count("votes")).order_by("-points")
+            ),
         },
     )
 
@@ -36,7 +39,7 @@ def posts(request):
         request,
         "newsapp/posts.html",
         {
-            "page_obj": get_page_by_request(request, Post.objects.order_by("-created_on", "-votes")),
+            "page_obj": get_page_by_request(request, Post.objects.annotate(points=Count("votes")).order_by("-points")),
         },
     )
 
@@ -127,8 +130,9 @@ def reply(request, pk):
     )
 
 
-def comment(request: HttpRequest, article_id, comment_id):
-    comment = Comment.objects.get(pk=comment_id)
+def comment(request: HttpRequest, pk):
+    comment = Comment.objects.get(pk=pk)
+    item_type = comment.content_type.model_class()
     if request.method == "POST":
         form = CommentForm(request.POST, instance=comment)
         if form.is_valid():
@@ -136,9 +140,15 @@ def comment(request: HttpRequest, article_id, comment_id):
             comment.edited_on = timezone.now()
             comment.edited_by = request.user
             comment.save()
-            return HttpResponseRedirect(reverse("newsapp:article", args=(article_id,)))
+            if item_type == Article:
+                view = "newsapp:article"
+            elif item_type == Post:
+                view = "newsapp:post"
+            else:
+                raise ValueError(f"Unknown content type: {item_type}")
+            return HttpResponseRedirect(reverse(view, args=(comment.content_object.id,)))
     elif request.method == "DELETE":
-        return comment_delete(request, comment_id)
+        return comment_delete(request, comment)
     else:
         form = CommentForm(instance=comment)
 
@@ -153,13 +163,11 @@ def comment(request: HttpRequest, article_id, comment_id):
 
 
 @require_http_methods(["DELETE"])
-def comment_delete(request: HttpRequest, pk):
-    comment = Comment.objects.get(pk=pk)
-    if request.method == "DELETE":
-        comment.text = "[deleted]"
-        comment.deleted_on = timezone.now()
-        comment.deleded_by = request.user
-        comment.save()
+def comment_delete(request: HttpRequest, comment):
+    comment.text = "[deleted]"
+    comment.deleted_on = timezone.now()
+    comment.deleded_by = request.user
+    comment.save()
     if is_htmx(request):
         return TemplateResponse(
             request,
@@ -179,20 +187,44 @@ def about(request):
     return TemplateResponse(request, "newsapp/about.html")
 
 
-@for_htmx(use_block_from_params=True)
-def user(request, username, items="posts"):
-    user = User.objects.get(username=username)
-    if items == "posts":
-        objects = Post.objects.filter(user=user).order_by("-created_on", "-votes")
-    else:
-        objects = Comment.objects.filter(user=user).order_by("-created_on")
+def news_site(request, pk):
+    news_site = NewsSite.objects.get(pk=pk)
+    return TemplateResponse(request, "newsapp/news_site.html", {"news_site": news_site})
+
+
+def user(request, username):
+    view_user = User.objects.get(username=username)
     return TemplateResponse(
         request,
         "newsapp/user.html",
         {
-            "user": user,
-            "item_type": items,
-            "page_obj": get_page_by_request(request, objects),
+            "view_user": view_user,
+        },
+    )
+
+
+@for_htmx(use_block_from_params=True)
+def user_posts(request, username):
+    view_user = User.objects.get(username=username)
+    return TemplateResponse(
+        request,
+        "newsapp/posts.html",
+        {
+            "view_user": view_user,
+            "page_obj": get_page_by_request(request, Post.objects.filter(user=view_user).order_by("-created_on")),
+        },
+    )
+
+
+@for_htmx(use_block_from_params=True)
+def user_comments(request, username):
+    view_user = User.objects.get(username=username)
+    return TemplateResponse(
+        request,
+        "newsapp/comment-feed.html",
+        {
+            "view_user": view_user,
+            "page_obj": get_page_by_request(request, Comment.objects.filter(user=view_user).order_by("-created_on")),
         },
     )
 

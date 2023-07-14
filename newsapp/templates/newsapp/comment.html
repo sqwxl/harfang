@@ -3,25 +3,7 @@
     <a href="#"><div class="votearrow" title="upvote"></div></a>
   </div>
   <div class="ml-2">
-    <div class="text-sm">
-      <a href="{% url 'newsapp:user' user.username %}">{{ comment.user.username }}</a>
-      |
-      <span class="text-muted">{{ comment.created_on|timesince }}</span>
-      {% if comment.parent %}
-        |
-        <a href="#{{ comment.parent.id }}">parent</a>
-      {% endif %}
-      {% if in_tree and comment.get_children|length > 0 %}
-        |
-        <a
-          href="javascript:void(0)"
-          class="no-underline text-muted"
-          x-data="{ open: true }"
-          @click="$refs.c{{ comment.id }}.classList.toggle('hidden'); open = !open"
-          x-text="open ? '[ - ]' : '[ + ]'"
-        ></a>
-      {% endif %}
-    </div>
+    {% include "newsapp/includes/comment-details.html" %}
     <div id="comment-{{ comment.id }}-text">
       <div>{{ comment.text }}</div>
     </div>

@@ -1,10 +1,24 @@
-{% extends "newsapp/base-page.html" %}
-{% load static %}
+{% extends "newsapp/base-feed.html" %}
 
-{% block main %}
-  <section>
-    <h1>News Feed</h1>
+{% block title %}
+  <h1 class="text-center">News</h1>
+{% endblock %}
 
-    {% include "newsapp/news-feed.html" %}
-  </section>
+{% block feed_loop %}
+  {% for article in page_obj %}
+    <div class="m-2 min-h-fit not-prose" >
+      <a
+        href="{% url 'newsapp:article' article.id %}"
+        preload="mouseover"
+        class="text-lg font-bold no-link"
+      >
+        {{ article.title|title }}
+      </a>
+      {% include "newsapp/includes/item-details.html" with item=article %}
+    </div>
+  {% endfor %}
+{% endblock %}
+
+{% block page-and-paging-controls %}
+  {{ block.super}}
 {% endblock %}

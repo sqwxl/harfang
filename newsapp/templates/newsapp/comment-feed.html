@@ -1,27 +1,40 @@
-{% extends "newsapp/base-feed.html" %}
+{% extends "newsapp/base-page.html" %}
 {% load static %}
 
-{% block no-items %}
-  <p>No posts are available.</p>
+{% block main %}
+  <section class="not-prose">
+    {% if page_obj.paginator.count == 0 %}
+      {% block no-items %}
+        <p>No comments are available.</p>
+      {% endblock no-items %}
+    {% else %}
+      {% block page-and-paging-controls %}
+        {% for comment in page_obj %}
+          <div class="mx-2 mb-6">
+            <a
+              href="{% url 'newsapp:comment' comment.id %}"
+              preload="mouseover"
+              class="no-link"
+            >
+              <div
+                class="max-w-full"
+              >{{ comment.text|truncatewords:40 }}
+              </div>
+            </a>
+            <div class="text-sm text-muted">
+              <a
+                href="{% url 'newsapp:user' comment.user %}"
+                class="no-link text-muted"
+              >{{ comment.user.username }}</a> &#x2022; <span>{{ comment.created_on|timesince }} ago</span>
+            </div>
+          </div>
+        {% endfor %}
+        {% if page_obj.has_next %}
+          {% include "newsapp/includes/paging-control.html" %}
+        {% else %}
+          <p class="text-center">* * *</p>
+        {% endif %}
+      {% endblock %}
+    {% endif %}
+  </section>
 {% endblock %}
-
-{% block item %}
-  {% with page_item as comment %}
-
-    <a
-      class="mx-2 mb-6 flex justify-between items-stretch text-fg visited:text-fg hover:text-fg1 no-underline"
-      href="{% url 'newsapp:comment' comment.id %}"
-      preload="mouseover"
-    >
-      <div class="min-w-0 flex flex-col justify-between">
-        <div>
-          <p class="max-w-sm font-bold" >
-            {{ comment.text|truncatewords:20 }}
-          </p>
-          <span>{{ comment.user.username }}</span> &#x2022; <span>{{ comment.created_on|timesince }}</span>
-        </div>
-      </div>
-    </a>
-  {% endwith %}
-{% endblock %}
-

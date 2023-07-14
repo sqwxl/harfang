@@ -6,7 +6,7 @@ from django.contrib.contenttypes.models import ContentType
 from django.utils import timezone
 from factory.django import DjangoModelFactory
 
-from newsapp.models import Article, Comment, NewsSite, Post
+from newsapp.models import Article, Comment, NewsSite, Post, Vote
 
 
 class UserFactory(DjangoModelFactory):
@@ -19,6 +19,7 @@ class UserFactory(DjangoModelFactory):
 
 class NewsSiteFactory(DjangoModelFactory):
     name = factory.Faker("company")
+    description = factory.Faker("sentence")
     url = factory.Faker("url")
     rss_url = factory.Faker("url")
 
@@ -48,20 +49,44 @@ class PostFactory(DjangoModelFactory):
     text = factory.Faker("paragraph", nb_sentences=10, variable_nb_sentences=True)
     url = factory.Faker("url")
     user = factory.SubFactory(UserFactory)
-    votes = factory.Faker("pyint")
 
     class Meta:
         model = Post
+
+
+class VoteFactory(DjangoModelFactory):
+    user = factory.SubFactory(UserFactory)
+    created_on = factory.Faker("date_time", tzinfo=timezone.get_current_timezone())
+
+    content_type = factory.LazyAttribute(lambda o: ContentType.objects.get_for_model(o.content_object))
+    object_id = factory.SelfAttribute("content_object.id")
+
+    class Meta:
+        exclude = ["content_object"]
+        abstract = True
+
+
+class ArticleVoteFactory(VoteFactory):
+    content_object = factory.SubFactory(ArticleFactory)
+
+    class Meta:
+        model = Vote
+
+
+class PostVoteFactory(VoteFactory):
+    content_object = factory.SubFactory(PostFactory)
+
+    class Meta:
+        model = Vote
 
 
 class CommentFactory(DjangoModelFactory):
     text = factory.Faker("paragraph", nb_sentences=10, variable_nb_sentences=True)
     user = factory.SubFactory(UserFactory)
     created_on = factory.Faker("date_time", tzinfo=timezone.get_current_timezone())
-    votes = factory.Faker("pyint")
-    object_id = factory.SelfAttribute("content_object.id")
 
     content_type = factory.LazyAttribute(lambda o: ContentType.objects.get_for_model(o.content_object))
+    object_id = factory.SelfAttribute("content_object.id")
 
     class Meta:
         exclude = ["content_object"]

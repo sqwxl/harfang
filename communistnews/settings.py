@@ -26,11 +26,15 @@ SECRET_KEY = os.environ.get("SECRET_KEY", "whatever")
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ["*"]
-X_FRAME_OPTIONS = "*"
-CSRF_TRUSTED_ORIGINS = ["http://localhost"]
 INTERNAL_IPS = ["127.0.0.1"]
+ALLOWED_HOSTS = ["*"]
+X_FRAME_OPTIONS = "DENY"
 
+CSRF_TRUSTED_ORIGINS = ["http://localhost"]
+CSRF_COOKIE_SECURE = True
+
+SESSION_COOKIE_SECURE = True
+# SECURE_SSL_REDIRECT = True
 
 # Application definition
 
@@ -42,6 +46,7 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "django_browser_reload",
+    "django_extensions",
     "debug_toolbar",
     "compressor",
     "mptt",
