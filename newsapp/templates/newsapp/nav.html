@@ -4,12 +4,12 @@
   preload="mouseover"
 >
   <a
-    href="{% url 'newsapp:posts' %}"
+    href="{% url 'newsapp:submissions' %}"
     class="text-4xl mr-4 text-red_d hover:text-red_d visited:text-red_d"
   >☭</a>
   <ul class="flex flex-wrap items-center">
     <li class="px-4 py-2">
-      <a href="{% url 'newsapp:posts' %}">Posts</a>
+      <a href="{% url 'newsapp:submissions' %}">Submissions</a>
     </li>
     <li class="px-4 py-2">
       <a href="{% url 'newsapp:news' %}">News Feed</a>
@@ -19,7 +19,7 @@
     </li>
     {% if user.is_authenticated %}
       <li class="px-4 py-2">
-        <a href="{% url 'newsapp:post-new' %}">Submit</a>
+        <a href="{% url 'newsapp:submission_new' %}">Submit</a>
       </li>
       <li class="px-4 py-2">
         <a href="{% url 'newsapp:logout' %}">Logout</a>

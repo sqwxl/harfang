@@ -1,4 +1,4 @@
-{% extends "newsapp/base-page.html" %}
+{% extends "newsapp/base_page.html" %}
 {% load static %}
 
 {% block main %}
@@ -30,7 +30,7 @@
           </div>
         {% endfor %}
         {% if page_obj.has_next %}
-          {% include "newsapp/includes/paging-control.html" %}
+          {% include "newsapp/includes/paging_control.html" %}
         {% else %}
           <p class="text-center">* * *</p>
         {% endif %}

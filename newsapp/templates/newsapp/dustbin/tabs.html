@@ -3,13 +3,13 @@
     <div class="border-b w-1"></div>
     <a
       href="javascript:void(0)"
-      hx-get="{% url 'newsapp:user-posts' user.username %}"
+      hx-get="{% url 'newsapp:user_submissions' user.username %}"
       hx-vals='{"use_block": "items"}'
       hx-target="#items"
       @click="selected = 0"
       class = "border border-fg rounded-t p-1 text-fg no-underline"
       :class="selected === 0 && 'font-bold border-b-0'"
-    >Posts</a>
+    >Submissions</a>
     <div class="border-b w-1"></div>
     <a
       href="javascript:void(0)"
@@ -24,10 +24,10 @@
   </div>
   <div id="items">
     {% block items %}
-      {% if item_type == "posts" %}
-        {% include "newsapp/posts.html" %}
+      {% if item_type == "submissions" %}
+        {% include "newsapp/submissions.html" %}
       {% else %}
-        {% include "newsapp/comment-feed.html" %}
+        {% include "newsapp/comment_feed.html" %}
       {% endif %}
     {% endblock %}
   </div>

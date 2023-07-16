@@ -1,14 +1,14 @@
-{% extends "newsapp/base-page.html" %}
+{% extends "newsapp/base_page.html" %}
 
 {% block main %}
   <article>
     <section>
-      <h1>{{ post.title|title }}</h1>
-      <p>posted {{ post.created_on|timesince }} ago by <b><a href="{% url 'newsapp:user' post.user.username %}">{{ post.user.username }}</a></b></p>
-      <p><a href="{{ post.url }}" target="_blank" rel="noreferrer">Link</a></p>
+      <h1>{{ submission.title|title }}</h1>
+      <p>submissioned {{ submission.created_on|timesince }} ago by <b><a href="{% url 'newsapp:user' submission.user.username %}">{{ submission.user.username }}</a></b></p>
+      <p><a href="{{ submission.url }}" target="_blank" rel="noreferrer">Link</a></p>
     </section>
     <section>
-      {{ post.text|linebreaks }}
+      {{ submission.text|linebreaks }}
     </section>
     <br><br>
     {% block comments %}
@@ -28,7 +28,7 @@
             >
           </form>
         {% endif %}
-        {% include "newsapp/comment-tree.html" %}
+        {% include "newsapp/comment_tree.html" %}
       </section>
     {% endblock comments %}
   </article>

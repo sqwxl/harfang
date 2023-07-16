@@ -4,23 +4,23 @@ from django.contrib.auth.models import User
 from django.core.management.base import BaseCommand
 from django.db import transaction
 
-from newsapp.models import Article, Comment, NewsSite, Post, Vote
+from newsapp.models import Article, Comment, NewsSite, Submission, Vote
 
 from ._factories import (
     ArticleCommentFactory,
     ArticleFactory,
     ArticleVoteFactory,
     NewsSiteFactory,
-    PostCommentFactory,
-    PostFactory,
-    PostVoteFactory,
+    SubmissionCommentFactory,
+    SubmissionFactory,
+    SubmissionVoteFactory,
     UserFactory,
 )
 
 NUM_SITES = 20
 NUM_ARTICLES = 40
 NUM_USERS = 40
-NUM_POSTS = 40
+NUM_SUBMISSIONS = 40
 NUM_COMMENTS_PER_ITEM = 20
 NUM_VOTES_PER_ITEM = 20
 
@@ -33,7 +33,7 @@ class Command(BaseCommand):
         self.stdout.write("Deleting existing data")
         # Delete all users except the superuser
         User.objects.all().exclude(is_superuser=True).delete()
-        models = [Article, Post, NewsSite, Comment, Vote]
+        models = [Article, Submission, NewsSite, Comment, Vote]
         for model in models:
             model.objects.all().delete()
 
@@ -67,22 +67,22 @@ class Command(BaseCommand):
                     user=random.choice(users),
                 )
 
-        posts = []
-        for _ in range(NUM_POSTS):
-            posts.append(PostFactory(user=random.choice(users)))
+        submissions = []
+        for _ in range(NUM_SUBMISSIONS):
+            submissions.append(SubmissionFactory(user=random.choice(users)))
 
-        for post in posts:
+        for submission in submissions:
             comments = []
             for _ in range(random.randint(0, NUM_COMMENTS_PER_ITEM)):
                 comments.append(
-                    PostCommentFactory(
-                        content_object=post,
+                    SubmissionCommentFactory(
+                        content_object=submission,
                         user=random.choice(users),
                         parent=random.choice([None, *comments]) if comments else None,
                     )
                 )
             for _ in range(random.randint(0, NUM_VOTES_PER_ITEM)):
-                PostVoteFactory(
-                    content_object=post,
+                SubmissionVoteFactory(
+                    content_object=submission,
                     user=random.choice(users),
                 )

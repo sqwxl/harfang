@@ -1399,6 +1399,14 @@ figcaption {
   color: rgb(235 219 178 / var(--tw-text-opacity));
 }
 
+.pointer-events-none {
+  pointer-events: none;
+}
+
+.visible {
+  visibility: visible;
+}
+
 .static {
   position: static;
 }
@@ -1422,6 +1430,10 @@ figcaption {
 
 .m-2 {
   margin: 0.5rem;
+}
+
+.m-4 {
+  margin: 1rem;
 }
 
 .mx-2 {
@@ -1467,8 +1479,20 @@ figcaption {
   margin-top: 1rem;
 }
 
+.mr-2 {
+  margin-right: 0.5rem;
+}
+
 .block {
   display: block;
+}
+
+.inline-block {
+  display: inline-block;
+}
+
+.inline {
+  display: inline;
 }
 
 .flex {
@@ -1485,6 +1509,10 @@ figcaption {
 
 .h-20 {
   height: 5rem;
+}
+
+.h-full {
+  height: 100%;
 }
 
 .min-h-screen {
@@ -1516,6 +1544,31 @@ figcaption {
   width: 2rem;
 }
 
+.w-24 {
+  width: 6rem;
+}
+
+.w-12 {
+  width: 3rem;
+}
+
+.w-4 {
+  width: 1rem;
+}
+
+.w-3 {
+  width: 0.75rem;
+}
+
+.min-w-fit {
+  min-width: -moz-fit-content;
+  min-width: fit-content;
+}
+
+.min-w-full {
+  min-width: 100%;
+}
+
 .max-w-full {
   max-width: 100%;
 }
@@ -1538,6 +1591,11 @@ figcaption {
 
 .grow {
   flex-grow: 1;
+}
+
+.rotate-180 {
+  --tw-rotate: 180deg;
+  transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
 }
 
 .list-none {
@@ -1604,12 +1662,65 @@ figcaption {
   background-color: rgb(29 32 33 / var(--tw-bg-opacity));
 }
 
+.bg-muted {
+  --tw-bg-opacity: 1;
+  background-color: rgb(168 153 132 / var(--tw-bg-opacity));
+}
+
+.fill-fg {
+  fill: #ebdbb2;
+}
+
+.fill-muted {
+  fill: #a89984;
+}
+
+.fill-fg4 {
+  fill: #a89984;
+}
+
+.fill-fg3 {
+  fill: #bdae93;
+}
+
+.fill-grey {
+  fill: #928374;
+}
+
+.fill-none {
+  fill: none;
+}
+
+.fill-bg {
+  fill: #282828;
+}
+
+.stroke-fg {
+  stroke: #ebdbb2;
+}
+
+.stroke-muted {
+  stroke: #a89984;
+}
+
+.stroke-1 {
+  stroke-width: 1;
+}
+
+.stroke-2 {
+  stroke-width: 2;
+}
+
 .p-0 {
   padding: 0px;
 }
 
 .p-1 {
   padding: 0.25rem;
+}
+
+.p-4 {
+  padding: 1rem;
 }
 
 .px-4 {

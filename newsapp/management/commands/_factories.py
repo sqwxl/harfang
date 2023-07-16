@@ -6,7 +6,7 @@ from django.contrib.contenttypes.models import ContentType
 from django.utils import timezone
 from factory.django import DjangoModelFactory
 
-from newsapp.models import Article, Comment, NewsSite, Post, Vote
+from newsapp.models import Article, Comment, NewsSite, Submission, Vote
 
 
 class UserFactory(DjangoModelFactory):
@@ -44,14 +44,14 @@ class ArticleFactory(DjangoModelFactory):
         model = Article
 
 
-class PostFactory(DjangoModelFactory):
+class SubmissionFactory(DjangoModelFactory):
     title = factory.Faker("sentence")
     text = factory.Faker("paragraph", nb_sentences=10, variable_nb_sentences=True)
     url = factory.Faker("url")
     user = factory.SubFactory(UserFactory)
 
     class Meta:
-        model = Post
+        model = Submission
 
 
 class VoteFactory(DjangoModelFactory):
@@ -73,8 +73,8 @@ class ArticleVoteFactory(VoteFactory):
         model = Vote
 
 
-class PostVoteFactory(VoteFactory):
-    content_object = factory.SubFactory(PostFactory)
+class SubmissionVoteFactory(VoteFactory):
+    content_object = factory.SubFactory(SubmissionFactory)
 
     class Meta:
         model = Vote
@@ -101,9 +101,9 @@ class ArticleCommentFactory(CommentFactory):
         model = Comment
 
 
-class PostCommentFactory(CommentFactory):
-    content_object = factory.SubFactory(PostFactory)
-    parent = factory.SubFactory("newsapp._factories.PostCommentFactory")
+class SubmissionCommentFactory(CommentFactory):
+    content_object = factory.SubFactory(SubmissionFactory)
+    parent = factory.SubFactory("newsapp._factories.SubmissionCommentFactory")
 
     class Meta:
         model = Comment

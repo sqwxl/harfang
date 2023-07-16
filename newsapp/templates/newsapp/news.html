@@ -1,4 +1,4 @@
-{% extends "newsapp/base-feed.html" %}
+{% extends "newsapp/base_feed.html" %}
 
 {% block title %}
   <h1 class="text-center">News</h1>
@@ -14,7 +14,7 @@
       >
         {{ article.title|title }}
       </a>
-      {% include "newsapp/includes/item-details.html" with item=article %}
+      {% include "newsapp/includes/item_details.html" with item=article %}
     </div>
   {% endfor %}
 {% endblock %}

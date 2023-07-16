@@ -1,4 +1,4 @@
-{% extends "newsapp/base-page.html" %}
+{% extends "newsapp/base_page.html" %}
 
 {% block main %}
   <section>
@@ -6,10 +6,10 @@
     <p>Joined {{ view_user.date_joined|timesince }} ago</p>
     <div hx-boost="true">
       <a
-        href="{% url 'newsapp:user-posts' view_user.username %}"
-      >Posts</a>
+        href="{% url 'newsapp:user_submissions' view_user.username %}"
+      >Submissions</a>
       <a
-        href="{% url 'newsapp:user-comments' view_user.username %}"
+        href="{% url 'newsapp:user_comments' view_user.username %}"
       >Comments</a>
     </div>
   </section>

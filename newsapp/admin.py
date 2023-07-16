@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from newsapp.models import Article, Comment, NewsSite, Post
+from newsapp.models import Article, Comment, NewsSite, Submission
 
 
 class ArticleAdmin(admin.ModelAdmin):
@@ -21,5 +21,5 @@ class CommentAdmin(admin.ModelAdmin):
 
 admin.site.register(NewsSite)
 admin.site.register(Article, ArticleAdmin)
-admin.site.register(Post, PostAdmin)
+admin.site.register(Submission, PostAdmin)
 admin.site.register(Comment, CommentAdmin)

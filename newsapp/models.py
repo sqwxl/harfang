@@ -30,9 +30,6 @@ class FeedItem(models.Model):
     url = models.CharField(max_length=200)
     created_on = models.DateTimeField(auto_now_add=True)
 
-    votes = GenericRelation("Vote")
-    comments = GenericRelation("Comment")
-
     class Meta:
         abstract = True
 
@@ -48,21 +45,27 @@ class Article(FeedItem):
     image_caption = models.CharField(max_length=200, blank=True)
     news_site = models.ForeignKey("NewsSite", on_delete=models.CASCADE)
 
+    votes = GenericRelation("Vote", related_query_name="article")
+    comments = GenericRelation("Comment", related_query_name="article")
 
-class Post(FeedItem):
+
+class Submission(FeedItem):
     user = models.ForeignKey(
         "auth.User",
         on_delete=models.SET_NULL,
         null=True,
-        related_name="posts",
+        related_name="submissions",
     )
     edited_on = models.DateTimeField(null=True, blank=True)
     flagged = models.BooleanField(default=False)
 
+    votes = GenericRelation("Vote", related_query_name="submission")
+    comments = GenericRelation("Comment", related_query_name="submission")
 
-class PostForm(ModelForm):
+
+class SubmissionForm(ModelForm):
     class Meta:
-        model = Post
+        model = Submission
         fields = ["title", "url", "text"]
 
 
