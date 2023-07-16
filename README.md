@@ -7,8 +7,7 @@ user accounts
 share button
 
 Harmonic, HN, Reddit, communistnews
-
-Fucking Ubuntu -- Gotta move over to Silverblue, I suppose
+Moved over to Fedora, let's see how this goes
 
 
 ## quick start
