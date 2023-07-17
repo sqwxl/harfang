@@ -154,7 +154,7 @@ def submission_form(request):
     )
 
 
-def reply_article_comment(request, pk):
+def article_reply(request, pk):
     parent = ArticleComment.objects.get(pk=pk)
     if request.method == "POST":
         reply = CommentForm(request.POST)
@@ -179,7 +179,7 @@ def reply_article_comment(request, pk):
     )
 
 
-def reply_submission_comment(request, pk):
+def submission_reply(request, pk):
     parent = SubmissionComment.objects.get(pk=pk)
     if request.method == "POST":
         reply = CommentForm(request.POST)

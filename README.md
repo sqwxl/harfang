@@ -1,16 +1,10 @@
-# communistnews
-A communist newsfeed
+# A [Hacker News](https://news.ycombinator.com/) clone
 
-django + htmx
+Built with Django, [htmx](https://htmx.org/), [alpine.js](https://alpinejs.dev/) and Tailwind CSS.
 
-user accounts
-share button
+Uses SQLite
 
-Harmonic, HN, Reddit, communistnews
-Moved over to Fedora, let's see how this goes
-
-
-## quick start
+## Dev Quick Start
 
 install nix:
 ```shell
