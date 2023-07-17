@@ -4,14 +4,24 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.forms import AuthenticationForm, PasswordResetForm, UserCreationForm
 from django.contrib.auth.models import User
 from django.core.paginator import Paginator
-from django.db.models import Count, Exists, OuterRef, QuerySet
+from django.db.models import QuerySet
 from django.http import HttpRequest, HttpResponseRedirect
 from django.template.response import TemplateResponse
 from django.urls import reverse
 from django.utils import timezone
 from django.views.decorators.http import require_http_methods
 
-from newsapp.models import Article, Comment, CommentForm, NewsSite, Submission, SubmissionForm, Vote
+from newsapp.models import (
+    Article,
+    ArticleComment,
+    Comment,
+    CommentForm,
+    NewsSite,
+    Submission,
+    SubmissionComment,
+    SubmissionForm,
+    SubmissionUpvote,
+)
 
 from .utils import for_htmx, is_htmx
 
@@ -26,39 +36,51 @@ def news(request):
         request,
         "newsapp/news.html",
         {
-            "page_obj": get_page_by_request(
-                request,
-                Article.objects.annotate(points=Count("votes"))
-                .annotate(user_has_voted=Exists(Vote.objects.filter(user=request.user, article=OuterRef("pk"))))
-                .order_by("-points"),
-            ),
+            "page_obj": get_page_by_request(request, Article.objects.all()),
         },
     )
 
 
 @for_htmx(use_block_from_params=True)
 def submissions(request):
+    timespan_arg = request.GET.get("range", "day")
+    queryset = Submission.objects.only_health().annotate_user_votes(request.user)  # type: ignore
+    if timespan_arg == "day":
+        queryset = queryset.top_daily()
+    elif timespan_arg == "week":
+        queryset = queryset.top_weekly()
+    elif timespan_arg == "month":
+        queryset = queryset.top_monthly()
+    elif timespan_arg == "year":
+        queryset = queryset.top_yearly()
+    elif timespan_arg == "all":
+        queryset = queryset.top_all_time()
+
     return TemplateResponse(
         request,
         "newsapp/submissions.html",
         {
-            "page_obj": get_page_by_request(
-                request,
-                Submission.objects.annotate(points=Count("votes"))
-                .annotate(user_has_voted=Exists(Vote.objects.filter(user=request.user, submission=OuterRef("pk"))))
-                .order_by("-points"),
-            ),
+            "page_obj": get_page_by_request(request, queryset),
         },
+    )
+
+
+@for_htmx(use_block_from_params=True)
+def submissions_new(request):
+    return TemplateResponse(
+        request,
+        "newsapp/submissions.html",
+        {"page_obj": get_page_by_request(request, Submission.objects.new())},  # type: ignore
     )
 
 
 def submissions_vote(request: HttpRequest, pk):
     submission = Submission.objects.get(pk=pk)
     try:
-        vote = Vote.objects.get(user=request.user, submission=submission)
+        vote = SubmissionUpvote.objects.get(user=request.user, submission=submission)
         vote.delete()
-    except Vote.DoesNotExist:
-        vote = Vote.objects.create(user=request.user, content_object=submission)
+    except SubmissionUpvote.DoesNotExist:
+        vote = SubmissionUpvote.objects.create(user=request.user, submission=submission)
         vote.save()
     return TemplateResponse(
         request,
@@ -83,7 +105,7 @@ def item_view(request, item_type: Literal["article", "submission"], pk):
         form = CommentForm(request.POST)
         if form.is_valid():
             comment = form.save(commit=False)
-            comment.content_object = item
+            comment[item_type] = item
             comment.user = request.user
             comment.save()
             form = CommentForm()
@@ -112,7 +134,7 @@ def submission(request, pk):
     return item_view(request, "submission", pk)
 
 
-def submission_new(request):
+def submission_form(request):
     if request.method == "POST":
         form = SubmissionForm(request.POST)
         if form.is_valid():
@@ -125,20 +147,45 @@ def submission_new(request):
 
     return TemplateResponse(
         request,
-        "newsapp/submission_new.html",
+        "newsapp/submission_form.html",
         {
             "form": form,
         },
     )
 
 
-def reply(request, pk):
-    parent = Comment.objects.get(pk=pk)
+def reply_article_comment(request, pk):
+    parent = ArticleComment.objects.get(pk=pk)
     if request.method == "POST":
         reply = CommentForm(request.POST)
         if reply.is_valid():
             reply = reply.save(commit=False)
-            reply.content_object = parent.content_object
+            reply.article = parent.article
+            reply.parent = parent
+            reply.user = request.user
+            reply.save()
+            viewname = parent.content_object.__class__.__name__.lower()
+            return HttpResponseRedirect(reverse(f"newsapp:{viewname}", args=(parent.submission.pk,)))
+    else:
+        reply = CommentForm()
+
+    return TemplateResponse(
+        request,
+        "newsapp/reply.html",
+        {
+            "comment": parent,
+            "form": reply,
+        },
+    )
+
+
+def reply_submission_comment(request, pk):
+    parent = SubmissionComment.objects.get(pk=pk)
+    if request.method == "POST":
+        reply = CommentForm(request.POST)
+        if reply.is_valid():
+            reply = reply.save(commit=False)
+            # reply.article = parent.article TODO
             reply.parent = parent
             reply.user = request.user
             reply.save()

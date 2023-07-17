@@ -4,12 +4,11 @@ from django.contrib.auth.models import User
 from django.core.management.base import BaseCommand
 from django.db import transaction
 
-from newsapp.models import Article, Comment, NewsSite, Submission, Vote
+from newsapp.models import Article, Comment, NewsSite, Submission, Upvote
 
 from ._factories import (
     ArticleCommentFactory,
     ArticleFactory,
-    ArticleVoteFactory,
     NewsSiteFactory,
     SubmissionCommentFactory,
     SubmissionFactory,
@@ -33,7 +32,7 @@ class Command(BaseCommand):
         self.stdout.write("Deleting existing data")
         # Delete all users except the superuser
         User.objects.all().exclude(is_superuser=True).delete()
-        models = [Article, Submission, NewsSite, Comment, Vote]
+        models = [Article, Submission, NewsSite, Comment, Upvote]
         for model in models:
             model.objects.all().delete()
 
@@ -60,11 +59,6 @@ class Command(BaseCommand):
                         user=random.choice(users),
                         parent=random.choice([None, *comments]) if comments else None,
                     )
-                )
-            for _ in range(random.randint(0, NUM_VOTES_PER_ITEM)):
-                ArticleVoteFactory(
-                    content_object=article,
-                    user=random.choice(users),
                 )
 
         submissions = []

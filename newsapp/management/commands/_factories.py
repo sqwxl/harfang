@@ -6,7 +6,7 @@ from django.contrib.contenttypes.models import ContentType
 from django.utils import timezone
 from factory.django import DjangoModelFactory
 
-from newsapp.models import Article, Comment, NewsSite, Submission, Vote
+from newsapp.models import Article, Comment, NewsSite, Submission, SubmissionUpvote
 
 
 class UserFactory(DjangoModelFactory):
@@ -70,14 +70,14 @@ class ArticleVoteFactory(VoteFactory):
     content_object = factory.SubFactory(ArticleFactory)
 
     class Meta:
-        model = Vote
+        model = SubmissionUpvote
 
 
 class SubmissionVoteFactory(VoteFactory):
     content_object = factory.SubFactory(SubmissionFactory)
 
     class Meta:
-        model = Vote
+        model = SubmissionUpvote
 
 
 class CommentFactory(DjangoModelFactory):

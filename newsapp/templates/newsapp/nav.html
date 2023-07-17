@@ -19,7 +19,7 @@
     </li>
     {% if user.is_authenticated %}
       <li class="px-4 py-2">
-        <a href="{% url 'newsapp:submission_new' %}">Submit</a>
+        <a href="{% url 'newsapp:submission_form' %}">Submit</a>
       </li>
       <li class="px-4 py-2">
         <a href="{% url 'newsapp:logout' %}">Logout</a>

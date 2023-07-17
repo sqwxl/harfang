@@ -8,6 +8,7 @@
   packages = [
     pkgs.git
     pkgs.just
+    pkgs.black
   ];
 
   # https://devenv.sh/scripts/
