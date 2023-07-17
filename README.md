@@ -4,19 +4,20 @@ Built with Django, [htmx](https://htmx.org/), [alpine.js](https://alpinejs.dev/)
 
 Uses SQLite for storage.
 
-Optional dev environment set up with [nix](https://nixos.org/) (via [devenv](https://devenv.sh/getting-started/)) to ensure reproducibility across machines.
 
 ## Nix Quick Start
 
-install [nix](https://nixos.org/download.html#download-nix)
+Optional dev environment set up with [`nix`](https://nixos.org/) (via `devenv`) to ensure reproducibility across machines.
 
-install [direnv](https://direnv.net/docs/installation.html#from-system-packages) with the shell hook.
+install [`devenv`](https://devenv.sh/getting-started/)
 
-install [devenv](https://devenv.sh/getting-started/)
+install [`direnv`](https://devenv.sh/automatic-shell-activation/) with the shell hook
 
-clone the repo and `direnv allow` in the directory.
+clone the repo and run `direnv allow` in the directory to enable automatic shell (and virtualenv) activation
 
-## Dev Setup
+## Dev Quick Start
+
+(if not using nix, you'll need [`just`](https://github.com/casey/just). if you don't feel like installing it, you can take a look inside the `justfile` to see what commands you should run)
 
 ```shell
 # install requirements
