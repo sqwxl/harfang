@@ -2,21 +2,21 @@
 
 Built with Django, [htmx](https://htmx.org/), [alpine.js](https://alpinejs.dev/) and Tailwind CSS.
 
-Uses SQLite
+Uses SQLite for storage.
 
-## Dev Quick Start
+Optional dev environment set up with [nix](https://nixos.org/) (via [devenv](https://devenv.sh/getting-started/)) to ensure reproducibility across machines.
 
-install nix:
-```shell
-sh <(curl -L https://nixos.org/nix/install) --no-daemon
-```
+## Nix Quick Start
 
-install [direnv](https://direnv.net/docs/installation.html#from-system-packages)
+install [nix](https://nixos.org/download.html#download-nix)
+
+install [direnv](https://direnv.net/docs/installation.html#from-system-packages) with the shell hook.
 
 install [devenv](https://devenv.sh/getting-started/)
 
-clone the repo and `direnv allow`
+clone the repo and `direnv allow` in the directory.
 
+## Dev Setup
 
 ```shell
 # install requirements
@@ -27,7 +27,7 @@ just populate
 just serve 
 ```
 
-if you're editing styles, then, in another terminal:
+if you're editing styles, run the following in another terminal:
 
 ```shell
 # run tailwind binary to watch for changes & update the output.css
