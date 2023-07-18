@@ -6,7 +6,8 @@ from django.contrib.contenttypes.models import ContentType
 from django.utils import timezone
 from factory.django import DjangoModelFactory
 
-from newsapp.models import Article, Comment, NewsSite, Submission, SubmissionUpvote
+from comments.models import TreeComment
+from newsapp.models import Article, NewsSite, Submission, SubmissionDownvote, SubmissionUpvote
 
 
 class UserFactory(DjangoModelFactory):
@@ -54,39 +55,30 @@ class SubmissionFactory(DjangoModelFactory):
         model = Submission
 
 
-class VoteFactory(DjangoModelFactory):
+class SubmissionUpvoteFactory(DjangoModelFactory):
     user = factory.SubFactory(UserFactory)
-    created_on = factory.Faker("date_time", tzinfo=timezone.get_current_timezone())
-
-    content_type = factory.LazyAttribute(lambda o: ContentType.objects.get_for_model(o.content_object))
-    object_id = factory.SelfAttribute("content_object.id")
-
-    class Meta:
-        exclude = ["content_object"]
-        abstract = True
-
-
-class ArticleVoteFactory(VoteFactory):
-    content_object = factory.SubFactory(ArticleFactory)
+    submission = factory.SubFactory(SubmissionFactory)
 
     class Meta:
         model = SubmissionUpvote
 
 
-class SubmissionVoteFactory(VoteFactory):
-    content_object = factory.SubFactory(SubmissionFactory)
+class SubmissionDownvoteFactory(DjangoModelFactory):
+    user = factory.SubFactory(UserFactory)
+    submission = factory.SubFactory(SubmissionFactory)
 
     class Meta:
-        model = SubmissionUpvote
+        model = SubmissionDownvote
 
 
 class CommentFactory(DjangoModelFactory):
-    text = factory.Faker("paragraph", nb_sentences=10, variable_nb_sentences=True)
     user = factory.SubFactory(UserFactory)
+    text = factory.Faker("paragraph", nb_sentences=10, variable_nb_sentences=True)
     created_on = factory.Faker("date_time", tzinfo=timezone.get_current_timezone())
 
     content_type = factory.LazyAttribute(lambda o: ContentType.objects.get_for_model(o.content_object))
-    object_id = factory.SelfAttribute("content_object.id")
+    object_pk = factory.SelfAttribute("content_object.id")
+    site_id = 1
 
     class Meta:
         exclude = ["content_object"]
@@ -95,10 +87,10 @@ class CommentFactory(DjangoModelFactory):
 
 class ArticleCommentFactory(CommentFactory):
     content_object = factory.SubFactory(ArticleFactory)
-    parent = factory.SubFactory("newsapp._factories.NewsCommentFactory")
+    parent = factory.SubFactory("newsapp._factories.ArticleCommentFactory")
 
     class Meta:
-        model = Comment
+        model = TreeComment
 
 
 class SubmissionCommentFactory(CommentFactory):
@@ -106,4 +98,4 @@ class SubmissionCommentFactory(CommentFactory):
     parent = factory.SubFactory("newsapp._factories.SubmissionCommentFactory")
 
     class Meta:
-        model = Comment
+        model = TreeComment

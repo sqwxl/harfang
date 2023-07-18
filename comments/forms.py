@@ -6,7 +6,7 @@ from django.utils.text import get_text_list
 from django.utils.translation import gettext, ngettext
 from django_comments.forms import COMMENT_MAX_LENGTH, CommentSecurityForm
 
-from .models import Comment
+from .models import TreeComment
 
 # based off of django_comments.forms
 
@@ -41,7 +41,7 @@ class CommentForm(CommentSecurityForm):
         comment apps should override this, get_comment_create_data, and perhaps
         check_for_duplicate_comment to provide custom comment models.
         """
-        return Comment
+        return TreeComment
 
     def get_comment_create_data(self, site_id=None):
         """

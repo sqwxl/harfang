@@ -43,36 +43,30 @@ class Article(models.Model):
 
 
 class SubmissionQuerySet(models.QuerySet):
-    def annotate_user_votes(self, user):
-        return self.annotate(
-            user_has_upvoted=models.Exists(
-                SubmissionUpvote.objects.filter(user=user, submission=models.OuterRef("pk"))
-            ),
-            user_has_downvoted=models.Exists(
-                SubmissionDownvote.objects.filter(user=user, submission=models.OuterRef("pk"))
-            ),
-        )
+    # def annotate_user_votes(self, user):
+    #     return self.annotate(
+    #         user_has_upvoted=models.Exists(
+    #             SubmissionUpvote.objects.filter(user=user.id, submission=models.OuterRef("pk"))
+    #         ),
+    #         user_has_downvoted=models.Exists(
+    #             SubmissionDownvote.objects.filter(user=user.id, submission=models.OuterRef("pk"))
+    #         ),
+    #     )
 
     def only_healthy(self):
-        return self.exclude(is_healthy=False)
+        return self.filter(flagged=False, deleted_on__isnull=True)
 
-    def top_daily(self):
-        return self.filter(created_on__gte=timezone.now() - timedelta(days=1)).order_by("-score")
+    def daily(self):
+        return self.filter(created_on__gte=timezone.now() - timedelta(days=1))
 
-    def top_weekly(self):
-        return self.filter(created_on__gte=timezone.now() - timedelta(days=7)).order_by("-score")
+    def weekly(self):
+        return self.filter(created_on__gte=timezone.now() - timedelta(days=7))
 
-    def top_monthly(self):
-        return self.filter(created_on__gte=timezone.now() - timedelta(days=30)).order_by("-score")
+    def monthly(self):
+        return self.filter(created_on__gte=timezone.now() - timedelta(days=30))
 
-    def top_yearly(self):
-        return self.filter(created_on__gte=timezone.now() - timedelta(days=365)).order_by("-score")
-
-    def top_all_time(self):
-        return self.order_by("-score")
-
-    def new(self):
-        return self.order_by("-created_on")
+    def yearly(self):
+        return self.filter(created_on__gte=timezone.now() - timedelta(days=365))
 
 
 class Submission(models.Model):
@@ -107,10 +101,6 @@ class Submission(models.Model):
     @property
     def score(self):
         return self.upvotes.count() - self.downvotes.count()  # type: ignore
-
-    @property
-    def is_healthy(self):
-        return not self.flagged and not self.deleted_on
 
 
 class SubmissionForm(ModelForm):

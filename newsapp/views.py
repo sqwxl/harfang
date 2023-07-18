@@ -32,17 +32,15 @@ def news(request):
 @for_htmx(use_block_from_params=True)
 def submissions(request):
     timespan_arg = request.GET.get("range", "day")
-    queryset = Submission.objects.only_health().annotate_user_votes(request.user)  # type: ignore
+    queryset = Submission.objects.only_healthy()  # type: ignore
     if timespan_arg == "day":
-        queryset = queryset.top_daily()
+        queryset = queryset.daily()
     elif timespan_arg == "week":
-        queryset = queryset.top_weekly()
+        queryset = queryset.weekly()
     elif timespan_arg == "month":
-        queryset = queryset.top_monthly()
+        queryset = queryset.monthly()
     elif timespan_arg == "year":
-        queryset = queryset.top_yearly()
-    elif timespan_arg == "all":
-        queryset = queryset.top_all_time()
+        queryset = queryset.yearly()
 
     return TemplateResponse(
         request,

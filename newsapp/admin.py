@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from newsapp.models import Article, ArticleComment, NewsSite, Submission, SubmissionComment
+from newsapp.models import Article, NewsSite, Submission
 
 
 class ArticleAdmin(admin.ModelAdmin):
@@ -13,14 +13,6 @@ class PostAdmin(admin.ModelAdmin):
     list_filter = ["user", "flagged"]
 
 
-class CommentAdmin(admin.ModelAdmin):
-    list_display = ["user", "text", "created_on"]
-    list_display_links = ["text"]
-    list_filter = ["user", "flagged"]
-
-
 admin.site.register(NewsSite)
 admin.site.register(Article, ArticleAdmin)
 admin.site.register(Submission, PostAdmin)
-admin.site.register(SubmissionComment, CommentAdmin)
-admin.site.register(ArticleComment, CommentAdmin)

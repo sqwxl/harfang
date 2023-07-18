@@ -1,7 +1,7 @@
 def get_model():
-    from comments.models import Comment
+    from comments.models import TreeComment
 
-    return Comment
+    return TreeComment
 
 
 def get_form():

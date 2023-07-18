@@ -36,6 +36,8 @@ CSRF_COOKIE_SECURE = True
 SESSION_COOKIE_SECURE = True
 # SECURE_SSL_REDIRECT = True
 
+SITE_ID = 1
+
 # Application definition
 
 INSTALLED_APPS = [
@@ -51,6 +53,7 @@ INSTALLED_APPS = [
     "compressor",
     "mptt",
     "widget_tweaks",
+    "django_comments",
     # ** APP **
     "comments",
     "newsapp",

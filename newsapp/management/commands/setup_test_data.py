@@ -4,24 +4,26 @@ from django.contrib.auth.models import User
 from django.core.management.base import BaseCommand
 from django.db import transaction
 
-from newsapp.models import Article, Comment, NewsSite, Submission, Upvote
+from comments.models import TreeComment
+from newsapp.models import Article, NewsSite, Submission, SubmissionDownvote, SubmissionUpvote
 
 from ._factories import (
     ArticleCommentFactory,
     ArticleFactory,
     NewsSiteFactory,
     SubmissionCommentFactory,
+    SubmissionDownvoteFactory,
     SubmissionFactory,
-    SubmissionVoteFactory,
+    SubmissionUpvoteFactory,
     UserFactory,
 )
 
+NUM_USERS = 40
 NUM_SITES = 20
 NUM_ARTICLES = 40
-NUM_USERS = 40
-NUM_SUBMISSIONS = 40
-NUM_COMMENTS_PER_ITEM = 20
-NUM_VOTES_PER_ITEM = 20
+NUM_SUBMISSIONS = 60
+NUM_COMMENTS_PER_SUBMISSION = 20
+NUM_VOTES_PER_SUBMISSION = 30
 
 
 class Command(BaseCommand):
@@ -32,7 +34,7 @@ class Command(BaseCommand):
         self.stdout.write("Deleting existing data")
         # Delete all users except the superuser
         User.objects.all().exclude(is_superuser=True).delete()
-        models = [Article, Submission, NewsSite, Comment, Upvote]
+        models = [Article, Submission, NewsSite, TreeComment, SubmissionUpvote, SubmissionDownvote]
         for model in models:
             model.objects.all().delete()
 
@@ -52,7 +54,7 @@ class Command(BaseCommand):
 
         for article in articles:
             comments = []
-            for _ in range(random.randint(0, NUM_COMMENTS_PER_ITEM)):
+            for _ in range(random.randint(0, NUM_COMMENTS_PER_SUBMISSION)):
                 comments.append(
                     ArticleCommentFactory(
                         content_object=article,
@@ -67,7 +69,7 @@ class Command(BaseCommand):
 
         for submission in submissions:
             comments = []
-            for _ in range(random.randint(0, NUM_COMMENTS_PER_ITEM)):
+            for _ in range(random.randint(0, NUM_COMMENTS_PER_SUBMISSION)):
                 comments.append(
                     SubmissionCommentFactory(
                         content_object=submission,
@@ -75,8 +77,17 @@ class Command(BaseCommand):
                         parent=random.choice([None, *comments]) if comments else None,
                     )
                 )
-            for _ in range(random.randint(0, NUM_VOTES_PER_ITEM)):
-                SubmissionVoteFactory(
-                    content_object=submission,
-                    user=random.choice(users),
-                )
+            users_drain = iter(users.copy())
+            for _ in range(random.randint(0, NUM_VOTES_PER_SUBMISSION)):
+                is_up = random.choice([True, False])
+                user = next(users_drain)
+                if is_up:
+                    SubmissionUpvoteFactory(
+                        submission=submission,
+                        user=user,
+                    )
+                else:
+                    SubmissionDownvoteFactory(
+                        submission=submission,
+                        user=user,
+                    )
