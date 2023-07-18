@@ -6,8 +6,8 @@ from django.contrib.contenttypes.models import ContentType
 from django.utils import timezone
 from factory.django import DjangoModelFactory
 
-from comments.models import TreeComment
 from newsapp.models import Article, NewsSite, Submission, SubmissionDownvote, SubmissionUpvote
+from treecomments.models import TreeComment
 
 
 class UserFactory(DjangoModelFactory):

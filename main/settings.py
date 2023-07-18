@@ -55,13 +55,13 @@ INSTALLED_APPS = [
     "widget_tweaks",
     "django_comments",
     # ** APP **
-    "tree_comments",
+    "treecomments",
     "newsapp",
     # ** --- **
 ]
 
 # https://django-contrib-comments.readthedocs.io/en/latest/custom.html#customizing-the-comments-framework
-COMMENTS_APP = "tree_comments"
+COMMENTS_APP = "treecomments"
 COMMENTS_ALLOW_PROFANITIES = False
 
 MIDDLEWARE = [

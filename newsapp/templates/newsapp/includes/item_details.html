@@ -1,3 +1,5 @@
+{% load comments %}
+
 <div class="text-sm text-muted">
   <span>{{ item.votes.count }} points{{ item.votes.count|pluralize }}</span>
   |
@@ -13,7 +15,6 @@
     <span>{{ item.created_on|timesince }} ago</span>
   {% endif %}
   |
-  {% with item.comments.count as num_comments %}
-    <span>{{ num_comments }} comment{{ num_comments|pluralize }}</span>
-  {% endwith %}
+  {% get_comment_count for item as comment_count %}
+  <span>{{ comment_count }} comment{{ comment_count|pluralize }}</span>
 </div>

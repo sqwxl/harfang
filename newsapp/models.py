@@ -1,5 +1,6 @@
 from datetime import date, timedelta
 
+from django.contrib.contenttypes.fields import GenericRelation
 from django.core.exceptions import ValidationError
 from django.db import models
 from django.forms import ModelForm
@@ -88,6 +89,8 @@ class Submission(models.Model):
     )
 
     user = models.ForeignKey("auth.User", on_delete=models.SET_NULL, null=True, related_name="submissions")
+
+    comments = GenericRelation("treecomments.TreeComment", object_id_field="object_pk", related_query_name="submission")
 
     objects = SubmissionQuerySet.as_manager()
 
