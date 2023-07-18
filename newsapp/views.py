@@ -8,22 +8,10 @@ from django.db.models import QuerySet
 from django.http import HttpRequest, HttpResponseRedirect
 from django.template.response import TemplateResponse
 from django.urls import reverse
-from django.utils import timezone
-from django.views.decorators.http import require_http_methods
 
-from newsapp.models import (
-    Article,
-    ArticleComment,
-    Comment,
-    CommentForm,
-    NewsSite,
-    Submission,
-    SubmissionComment,
-    SubmissionForm,
-    SubmissionUpvote,
-)
+from newsapp.models import Article, NewsSite, Submission, SubmissionForm, SubmissionUpvote
 
-from .utils import for_htmx, is_htmx
+from .utils import for_htmx
 
 
 def get_page_by_request(request, queryset: QuerySet, paginate_by=10):
@@ -101,25 +89,12 @@ def item_view(request, item_type: Literal["article", "submission"], pk):
         item = Submission.objects.get(pk=pk)
         template = "newsapp/submission.html"
 
-    if request.method == "POST":
-        form = CommentForm(request.POST)
-        if form.is_valid():
-            comment = form.save(commit=False)
-            comment[item_type] = item
-            comment.user = request.user
-            comment.save()
-            form = CommentForm()
-    else:
-        form = CommentForm()
-
     return TemplateResponse(
         request,
         template,
         {
             "article": item,
             "submission": item,
-            "comments": item.comments.all(),  # type: ignore
-            "comment_form": form,
         },
     )
 
@@ -154,109 +129,6 @@ def submission_form(request):
     )
 
 
-def article_reply(request, pk):
-    parent = ArticleComment.objects.get(pk=pk)
-    if request.method == "POST":
-        reply = CommentForm(request.POST)
-        if reply.is_valid():
-            reply = reply.save(commit=False)
-            reply.article = parent.article
-            reply.parent = parent
-            reply.user = request.user
-            reply.save()
-            viewname = parent.content_object.__class__.__name__.lower()
-            return HttpResponseRedirect(reverse(f"newsapp:{viewname}", args=(parent.submission.pk,)))
-    else:
-        reply = CommentForm()
-
-    return TemplateResponse(
-        request,
-        "newsapp/reply.html",
-        {
-            "comment": parent,
-            "form": reply,
-        },
-    )
-
-
-def submission_reply(request, pk):
-    parent = SubmissionComment.objects.get(pk=pk)
-    if request.method == "POST":
-        reply = CommentForm(request.POST)
-        if reply.is_valid():
-            reply = reply.save(commit=False)
-            # reply.article = parent.article TODO
-            reply.parent = parent
-            reply.user = request.user
-            reply.save()
-            viewname = parent.content_object.__class__.__name__.lower()
-            return HttpResponseRedirect(reverse(f"newsapp:{viewname}", args=(parent.submission.pk,)))
-    else:
-        reply = CommentForm()
-
-    return TemplateResponse(
-        request,
-        "newsapp/reply.html",
-        {
-            "comment": parent,
-            "form": reply,
-        },
-    )
-
-
-def comment(request: HttpRequest, pk):
-    comment = Comment.objects.get(pk=pk)
-    item_type = comment.content_type.model_class()
-    if request.method == "POST":
-        form = CommentForm(request.POST, instance=comment)
-        if form.is_valid():
-            comment = form.save(commit=False)
-            comment.edited_on = timezone.now()
-            comment.edited_by = request.user
-            comment.save()
-            if item_type == Article:
-                view = "newsapp:article"
-            elif item_type == Submission:
-                view = "newsapp:submission"
-            else:
-                raise ValueError(f"Unknown content type: {item_type}")
-            return HttpResponseRedirect(reverse(view, args=(comment.content_object.id,)))
-    elif request.method == "DELETE":
-        return comment_delete(request, comment)
-    else:
-        form = CommentForm(instance=comment)
-
-    return TemplateResponse(
-        request,
-        "newsapp/comment_edit.html",
-        {
-            "comment": comment,
-            "form": form,
-        },
-    )
-
-
-@require_http_methods(["DELETE"])
-def comment_delete(request: HttpRequest, comment):
-    comment.text = "[deleted]"
-    comment.deleted_on = timezone.now()
-    comment.deleded_by = request.user
-    comment.save()
-    if is_htmx(request):
-        return TemplateResponse(
-            request,
-            "newsapp/comment.html",
-            {
-                "in_tree": True,
-                "comment": comment,
-            },
-        )
-    else:
-        return HttpResponseRedirect(
-            reverse(f"newsapp:{comment.content_object.__class__.__name__.lower()}", args=(comment.content_object.pk,))
-        )
-
-
 def about(request):
     return TemplateResponse(request, "newsapp/about.html")
 
@@ -286,19 +158,6 @@ def user_submissions(request, username):
         {
             "view_user": view_user,
             "page_obj": get_page_by_request(request, Submission.objects.filter(user=view_user).order_by("-created_on")),
-        },
-    )
-
-
-@for_htmx(use_block_from_params=True)
-def user_comments(request, username):
-    view_user = User.objects.get(username=username)
-    return TemplateResponse(
-        request,
-        "newsapp/comment_feed.html",
-        {
-            "view_user": view_user,
-            "page_obj": get_page_by_request(request, Comment.objects.filter(user=view_user).order_by("-created_on")),
         },
     )
 

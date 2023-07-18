@@ -45,13 +45,21 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    "django.contrib.sites",
     "django_browser_reload",
     "debug_toolbar",
     "compressor",
     "mptt",
     "widget_tweaks",
+    # ** APP **
+    "comments",
     "newsapp",
+    # ** --- **
 ]
+
+# https://django-contrib-comments.readthedocs.io/en/latest/custom.html#customizing-the-comments-framework
+COMMENTS_APP = "comments"
+COMMENTS_ALLOW_PROFANITIES = False
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
@@ -149,3 +157,44 @@ COMPRESS_ENABLED = True
 
 # https://django-debug-toolbar.readthedocs.io/en/latest/tips.html#working-with-htmx-and-turbo
 DEBUG_TOOLBAR_CONFIG = {"ROOT_TAG_EXTRA_ATTRS": "hx-preserve"}
+
+PROFANITIES_LIST = [
+    "beaner",
+    "chinaman",
+    "ching chong",
+    "chink",
+    "coon",
+    "coonass",
+    "cunt",
+    "darkie",
+    "darky",
+    "eskimo",
+    "fag",
+    "faggot",
+    "gook",
+    "half-breed",
+    "jigaboo",
+    "jiggabo",
+    "jigger",
+    "kike",
+    "kyke",
+    "midget",
+    "muzzie",
+    "nigga",
+    "nigger",
+    "paki",
+    "pakkis",
+    "polack",
+    "polak",
+    "raghead",
+    "retard",
+    "retarded",
+    "shemale",
+    "slanteye",
+    "tacohead",
+    "tar-baby",
+    "tard",
+    "towel head",
+    "tranny",
+    "wetback",
+]

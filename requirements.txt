@@ -10,6 +10,7 @@ Django==4.2.3
 django-appconf==1.0.5
 django-browser-reload==1.10.0
 django-compressor==4.4
+django-contrib-comments==2.2.0
 django-debug-toolbar==4.1.0
 django-js-asset==2.1.0
 django-mptt==0.14.0
@@ -26,6 +27,7 @@ identify==2.5.24
 idna==3.4
 markdown-it-py==3.0.0
 mdurl==0.1.2
+msgpack==1.0.5
 mypy==1.4.1
 mypy-extensions==1.0.0
 nodeenv==1.8.0
@@ -33,6 +35,7 @@ Pillow==10.0.0
 platformdirs==3.8.0
 pre-commit==3.3.3
 Pygments==2.15.1
+pynvim==0.4.3
 pytailwindcss==0.2.0
 python-dateutil==2.8.2
 pyxdg==0.28

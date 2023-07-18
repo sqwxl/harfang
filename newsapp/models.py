@@ -4,7 +4,6 @@ from django.core.exceptions import ValidationError
 from django.db import models
 from django.forms import ModelForm
 from django.utils import timezone
-from mptt.models import MPTTModel, TreeForeignKey
 
 
 class NewsSite(models.Model):
@@ -35,7 +34,6 @@ class Article(models.Model):
     image_caption = models.CharField(max_length=200, blank=True, null=True)
 
     news_site = models.ForeignKey("NewsSite", on_delete=models.CASCADE)
-    comments = models.ForeignKey("ArticleComment", on_delete=models.CASCADE, null=True, related_name="article")
 
     def __str__(self):
         return self.title
@@ -96,7 +94,6 @@ class Submission(models.Model):
     )
 
     user = models.ForeignKey("auth.User", on_delete=models.SET_NULL, null=True, related_name="submissions")
-    comments = models.ForeignKey("SubmissionComment", on_delete=models.CASCADE, null=True, related_name="submission")
 
     objects = SubmissionQuerySet.as_manager()
 
@@ -110,10 +107,6 @@ class Submission(models.Model):
     @property
     def score(self):
         return self.upvotes.count() - self.downvotes.count()  # type: ignore
-
-    @property
-    def comment_count(self):
-        return self.comments.count()  # type: ignore
 
     @property
     def is_healthy(self):
@@ -142,63 +135,3 @@ class SubmissionDownvote(models.Model):
     submission = models.ForeignKey(
         "Submission", on_delete=models.CASCADE, null=True, blank=True, related_name="downvotes"
     )
-
-
-class Comment(MPTTModel):
-    user = models.ForeignKey("auth.User", on_delete=models.CASCADE, related_name="comments")
-    text = models.TextField()
-    flagged = models.BooleanField(default=False)
-    created_on = models.DateTimeField("date published", auto_now_add=True)
-    edited_on = models.DateTimeField(null=True, blank=True)
-    edited_by = models.ForeignKey(
-        "auth.User", on_delete=models.CASCADE, null=True, blank=True, related_name="edited_comments"
-    )
-    deleted_on = models.DateTimeField(null=True, blank=True)
-    deleted_by = models.ForeignKey(
-        "auth.User", on_delete=models.CASCADE, null=True, blank=True, related_name="deleted_comments"
-    )
-
-    parent = TreeForeignKey("self", on_delete=models.CASCADE, null=True, blank=True, related_name="replies")
-
-    def __str__(self):
-        return self.text[:20]
-
-    @property
-    def is_deleted(self):
-        return self.deleted_on is not None
-
-    @property
-    def is_edited(self):
-        return self.edited_on is not None
-
-    @property
-    def is_editable(self):
-        return not self.is_deleted
-
-    class MPTTMeta:
-        order_insertion_by = ["-votes", "created_on"]
-
-    class Meta:
-        abstract = True
-
-
-class CommentForm(ModelForm):
-    class Meta:
-        model = Comment
-        fields = ["text"]
-        labels = {"text": ""}
-
-
-class SubmissionComment(Comment):
-    submission = models.ForeignKey("Submission", on_delete=models.CASCADE, related_name="comments")
-
-
-class ArticleComment(Comment):
-    article = models.ForeignKey("Article", on_delete=models.CASCADE, related_name="comments")
-
-    def reply(self, user, form):
-        if form.is_valid():
-            comment = ArticleComment.objects.create(
-                user=user, article=self.article, parent=self, text=form.cleaned_data["text"]
-            )
-            return comment
