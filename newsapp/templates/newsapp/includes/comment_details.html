@@ -1,7 +1,7 @@
 <div class="text-sm text-muted">
   <a href="{% url 'newsapp:user' comment.user.username %}">{{ comment.user.username }}</a>
   <span>{{ comment.created_on|timesince }} ago</span>
-  {% if in_tree %}
+  {% if tree_context %}
     {% if comment.get_ancestors|length > 1 %}
       | <a href="#comment-{{ comment.get_root.id }}">root</a>
     {% endif %}

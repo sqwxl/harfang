@@ -32,7 +32,7 @@ class TreeComment(MPTTModel, BaseCommentAbstractModel):
 
     objects = CommentManager()
 
-    class Meta(MPTTModel.Meta, BaseCommentAbstractModel.Meta):
+    class Meta:
         ordering = ("created_on",)
 
     class MPTTMeta:

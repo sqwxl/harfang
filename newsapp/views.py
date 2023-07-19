@@ -86,12 +86,11 @@ def item_view(request, item_type: Literal["article", "submission"], pk):
     else:
         item = Submission.objects.get(pk=pk)
         template = "newsapp/submission.html"
-        comments = item.comments.all()
 
     return TemplateResponse(
         request,
         template,
-        {"article": item, "submission": item, "comments": comments},
+        {"article": item, "submission": item},
     )
 
 
