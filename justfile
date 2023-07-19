@@ -3,7 +3,7 @@ serve:
   python3 manage.py runserver
 
 css:
-  tailwindcss -i newsapp/static/newsapp/css/input.css -o newsapp/static/newsapp/css/output.css --watch
+  tailwindcss -i static/css/input.css -o static/css/output.css --watch
 
 migrate:
   python3 manage.py makemigrations
@@ -17,6 +17,6 @@ setup:
   pre-commit install
   python3 manage.py makemigrations
 
-clean:
+rm-migrations:
   #!/usr/bin/env bash
   rm -r ./**/migrations/{0*.py,__pycache__} db.sqlite3

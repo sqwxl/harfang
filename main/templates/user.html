@@ -1,0 +1,16 @@
+{% extends "base_page.html" %}
+
+{% block main %}
+  <section>
+    <h1>{{ view_user.username }}</h1>
+    <p>Joined {{ view_user.date_joined|timesince }} ago</p>
+    <div hx-boost="true">
+      <a
+        href="{% url 'news:user_submissions' view_user.username %}"
+      >Submissions</a>
+      <a
+        href="{% url 'news:user_comments' view_user.username %}"
+      >Comments</a>
+    </div>
+  </section>
+{% endblock %}

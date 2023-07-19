@@ -2,11 +2,8 @@
 {% load widget_tweaks %}
 
 {% block main %}
-  <h1>Edit Comment</h1>
-  <form
-    action="{% url 'news:comment' comment.id %}"
-    method="post"
-  >
+  <h1>New Submission</h1>
+  <form action="" method="post">
     {% csrf_token %}
     {{ form.as_div }}
     <div class="flex">

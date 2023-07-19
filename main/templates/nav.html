@@ -1,0 +1,33 @@
+<nav
+  class="flex items-center full mb-4 sm:mb-10 px-4 py-2 bg-bg0_h whitespace-nowrap"
+  hx-boost="true"
+  preload="mouseover"
+>
+  <a
+    href="{% url 'news:submissions' %}"
+    class="text-4xl mr-4 text-red_d hover:text-red_d visited:text-red_d"
+  >✎</a>
+  <ul class="flex flex-wrap items-center">
+    <li class="px-4 py-2">
+      <a href="{% url 'news:submissions' %}">Submissions</a>
+    </li>
+    <li class="px-4 py-2">
+      <a href="{% url 'news:news' %}">News Feed</a>
+    </li>
+    <li class="px-4 py-2">
+      <a href="{% url 'news:about' %}">About</a>
+    </li>
+    {% if user.is_authenticated %}
+      <li class="px-4 py-2">
+        <a href="{% url 'news:submission_form' %}">Submit</a>
+      </li>
+      <li class="px-4 py-2">
+        <a href="{% url 'news:logout' %}">Logout</a>
+      </li>
+    {% else %}
+      <li class="px-4 py-2">
+        <a href="{% url 'news:login' %}">Login</a>
+      </li>
+    {% endif %}
+  </ul>
+</nav>
