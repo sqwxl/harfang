@@ -4,7 +4,8 @@ from django.contrib.auth.models import User
 from django.core.management.base import BaseCommand
 from django.db import transaction
 
-from news.models import Article, NewsSite, Submission, SubmissionDownvote, SubmissionUpvote
+from news.models import Article, NewsSite
+from submissions.models import Submission, SubmissionDownvote, SubmissionUpvote
 from treecomments.models import TreeComment
 
 from ._factories import (
