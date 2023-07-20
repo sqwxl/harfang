@@ -17,7 +17,8 @@ clone the repo and run `direnv allow` in the directory to enable automatic shell
 
 ## Dev Quick Start
 
-(if not using nix, you'll need [`just`](https://github.com/casey/just). if you don't feel like installing it, you can take a look inside the `justfile` to see what commands you should run)
+(if not using the devenv shell, you'll need to have [`just`](https://github.com/casey/just) to run the following convenience tasks.  
+if you don't feel like installing it, you can take a look inside the `justfile` to see what commands you should run)
 
 ```shell
 # install requirements
