@@ -1,4 +1,5 @@
 serve:
+  tailwindcss -i static/css/input.css -o static/css/output.css
   python3 manage.py migrate
   python3 manage.py runserver
 
