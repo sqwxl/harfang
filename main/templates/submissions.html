@@ -2,8 +2,8 @@
 
 {% block feed_loop %}
   {% for submission in page_obj %}
-    {% url "news:submission" submission.id as item_url %}
-    {% url "news:submissions_vote" submission.id as vote_url %}
+    {% url "submissions:submission" submission.id as item_url %}
+    {% url "submissions:submissions_vote" submission.id as vote_url %}
     {% include "includes/feed_item.html" with item=submission item_url=item_url vote_url=vote_url %}
   {% endfor %}
 {% endblock %}
