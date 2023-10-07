@@ -1,16 +1,16 @@
 serve:
-  tailwindcss -i static/css/input.css -o static/css/output.css
+  tailwindcss -i main/static/css/input.css -o main/static/css/output.css
   python3 manage.py migrate
   python3 manage.py runserver
 
 css:
-  tailwindcss -i static/css/input.css -o static/css/output.css --watch
+  tailwindcss -i main/static/css/input.css -o main/static/css/output.css --watch
 
 migrate:
   python3 manage.py makemigrations
   python3 manage.py migrate
 
-populate:
+populate: migrate
   python3 manage.py setup_test_data
 
 setup:
