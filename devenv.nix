@@ -6,20 +6,18 @@
 
   # https://devenv.sh/packages/
   packages = [
-    pkgs.git
     pkgs.just
     pkgs.black
   ];
 
   enterShell = ''
-    git --version
     python --version
   '';
 
   # https://devenv.sh/languages/
   languages.python.enable = true;
   languages.python.venv.enable = true;
-  languages.python.version = "3.11.3";
+  languages.python.version = "3.11.5";
 
   # https://devenv.sh/pre-commit-hooks/
   pre-commit.hooks = {
@@ -30,7 +28,7 @@
       enable = true;
       name = "flynt";
       files = ".*\.py";
-      entry = "${pkgs.python311Packages.flynt}/bin/flynt";
+      entry = "${pkgs.python311Packages.flynt}/bin/flynt --fail-on-change";
     };
     isort.enable = true;
     nixpkgs-fmt.enable = true;
