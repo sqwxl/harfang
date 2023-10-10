@@ -11,11 +11,7 @@
     pkgs.black
   ];
 
-  # https://devenv.sh/scripts/
-  scripts.hello.exec = "echo hello from $GREET";
-
   enterShell = ''
-    hello
     git --version
     python --version
   '';
