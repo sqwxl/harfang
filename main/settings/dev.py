@@ -10,8 +10,8 @@ SESSION_COOKIE_SECURE = False
 
 if DEBUG:
     try:
-        import debug_browser_reload  # noqa: F401
-        import debug_toolbar  # noqa: F401
+        import debug_browser_reload  # NOQA
+        import debug_toolbar  # NOQA
     except ImportError:
         pass
     else:
