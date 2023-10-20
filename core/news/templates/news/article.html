@@ -1,0 +1,43 @@
+{% extends "base_page.html" %}
+{% load widget_tweaks %}
+
+{% block main %}
+  <article>
+    <section>
+      <h1>{{ article.title|title }}</h1>
+      {% if article.subtitle %}<h2>{{ article.subtitle }}</h2>{% endif %}
+      <p>published on {{ article.pub_date }} by <b>{{ article.author }}</b></p>
+      <p><a href={{ article.url }}>view original on {{ article.news_site.name }}</a></p>
+    </section>
+    <section>
+      <figure class="my-12">
+        <img src="{{ article.image_url }}" alt="{{ article.title }}">
+        <figcaption>{{ article.image_caption }}</figcaption>
+      </figure>
+    </section>
+    <section>
+      {% lorem 5 p %}
+    </section>
+    <br><br>
+    {% block comments %}
+      <section id="comments">
+        <h3>Comments</h3>
+        {% if user.is_authenticated %}
+          <form>
+            {% csrf_token %}
+            {{ comment_form.as_div }}
+            <input
+              hx-post=""
+              hx-trigger="click"
+              hx-vals='{"use_block": "comments"}'
+              hx-target="#comments"
+              type="submit"
+              value="Add Comment"
+            >
+          </form>
+        {% endif %}
+        {% include "comments/tree.html" with item=article %}
+      </section>
+    {% endblock comments %}
+    <article>
+{% endblock %}

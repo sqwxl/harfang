@@ -23,6 +23,7 @@ factory-boy==3.2.1
 Faker==18.11.2
 filelock==3.12.2
 greenlet==2.0.2
+gunicorn==21.2.0
 identify==2.5.24
 idna==3.4
 markdown-it-py==3.0.0
@@ -31,13 +32,16 @@ msgpack==1.0.5
 mypy==1.4.1
 mypy-extensions==1.0.0
 nodeenv==1.8.0
+packaging==23.2
 Pillow==10.0.0
 platformdirs==3.8.0
+podman-compose==1.0.6
 pre-commit==3.3.3
 Pygments==2.15.1
 pynvim==0.4.3
 pytailwindcss==0.2.0
 python-dateutil==2.8.2
+python-dotenv==1.0.0
 pyxdg==0.28
 PyYAML==6.0
 rcssmin==1.1.1

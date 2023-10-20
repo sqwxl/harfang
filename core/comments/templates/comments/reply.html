@@ -1,0 +1,12 @@
+{% extends "base_page.html" %}
+{% load widget_tweaks %}
+
+{% block main %}
+  <h1>Reply to {{ parent.author }}</h1>
+  {% include "comment.html" with comment=parent %}
+  <form action="" method="post">
+    {% csrf_token %}
+    {% render_field form.text class+="w-full" %}
+    <input type="submit" value="Reply">
+  </form>
+{% endblock main %}

@@ -1,4 +1,8 @@
-# A [Hacker News](https://news.ycombinator.com/) clone
+<div align="center">
+  # Harfang 🦉
+
+  ## A [Hacker News](https://news.ycombinator.com/) clone
+</div>
 
 Built with Django, [htmx](https://htmx.org/), [alpine.js](https://alpinejs.dev/) and Tailwind CSS.
 

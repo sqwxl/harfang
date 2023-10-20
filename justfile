@@ -3,6 +3,10 @@ serve:
   python3 manage.py migrate
   python3 manage.py runserver
 
+run-containers:
+  podman build -t hn-django -f Dockerfile .
+  podman-compose up -d
+
 css:
   tailwindcss -i main/static/css/input.css -o main/static/css/output.css --watch
 

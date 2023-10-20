@@ -1,0 +1,40 @@
+name: Django CI/CD Pipeline
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: 3.11
+
+    - name: Install Dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+
+    - name: Run Tests
+      run: python manage.py test
+
+    - name: Build Docker Image
+      run: docker build -t hn-django:latest -f Dockerfile .
+
+    - name: Push Docker Image to Registry
+      run: |
+        echo "${{ secrets.DOCKER_APIKEY }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
+        docker push hn-django:latest
+
+    - name: Deploy to Server
+      run: |
+        ssh ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }} "docker-compose pull && docker-compose up -d"
+
