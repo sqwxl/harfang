@@ -1,10 +1,10 @@
 <div align="center">
 
-# Harfang 🦉
+<h1>Harfang 🦉</h1>
+
+A [Hacker News](https://news.ycombinator.com/) clone
 
 </div>
-
-## A [Hacker News](https://news.ycombinator.com/) clone
 
 Built with Django, [htmx](https://htmx.org/), [alpine.js](https://alpinejs.dev/) and Tailwind CSS.
 
