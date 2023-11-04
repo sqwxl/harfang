@@ -6,8 +6,7 @@ A [Hacker News](https://news.ycombinator.com/) clone
 
 </div>
 
-Built with Django, [HTMX](https://htmx.org/), [alpine.js](https://alpinejs.dev/) and Tailwind CSS.
-
+Built with Django, HTMX, Alpine.js and Tailwind CSS.\
 Uses SQLite for storage.
 
 ## Nix Quick Start
