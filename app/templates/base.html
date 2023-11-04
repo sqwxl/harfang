@@ -1,0 +1,42 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+  <head>
+    <meta charset="utf-8">
+    <title>{{ site_title|title }}</title>
+    <meta name="description" content="hacker news clone">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta property="og:title" content="{{ site_title }}">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="">
+    <meta property="og:image" content="">
+    <script src="https://unpkg.com/htmx.org@1.9.3"
+            integrity="sha384-lVb3Rd/Ca0AxaoZg5sACe8FJKF0tnUgR2Kd7ehUOG5GCcROv5uBIZsOqovBAcWua"
+            crossorigin="anonymous"></script>
+    <script src="https://unpkg.com/htmx.org/dist/ext/preload.js"></script>
+    <script defer
+            src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <script defer src="{% static 'js/cn.js' %}"></script>
+    <link rel="stylesheet" href="{% static 'css/output.css' %}">
+    {% block extrahead %}{% endblock %}
+  </head>
+  <body hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'
+        hx-ext="preload"
+        class="flex flex-col min-h-screen text-fg bg-bg">
+    {% block body %}{% endblock %}
+    {% if debug %}
+      <script>
+        if (typeof window.htmx !== "undefined") {
+          htmx.on("htmx:afterSettle", function(detail) {
+            if (
+              typeof window.djdt !== "undefined"
+              && detail.target instanceof HTMLBodyElement
+            ) {
+              djdt.show_toolbar();
+            }
+          });
+        }
+      </script>
+    {% endif %}
+  </body>
+</html>

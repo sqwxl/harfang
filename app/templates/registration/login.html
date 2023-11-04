@@ -1,0 +1,11 @@
+{% extends "base_page.html" %}
+{% block content %}
+    <h1>Login</h1>
+    <form method="post">
+        {% csrf_token %}
+        {{ login_form.as_div }}
+        <input type="submit" value="Login">
+    </form>
+    {% include "users/create.html" with form=register_form %}
+    <a href="{% url 'news:forgot' %}">Forgot your password?</a>
+{% endblock %}

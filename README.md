@@ -1,13 +1,14 @@
 <div align="center">
-  # Harfang 🦉
 
-  ## A [Hacker News](https://news.ycombinator.com/) clone
+# Harfang 🦉
+
+## A [Hacker News](https://news.ycombinator.com/) clone
+
 </div>
 
 Built with Django, [htmx](https://htmx.org/), [alpine.js](https://alpinejs.dev/) and Tailwind CSS.
 
 Uses SQLite for storage.
-
 
 ## Nix Quick Start
 
@@ -28,9 +29,9 @@ if you don't feel like installing it, you can take a look inside the `justfile` 
 # install requirements
 just setup
 # create mock data
-just populate 
+just populate
 # run the dev server
-just serve 
+just serve
 ```
 
 if you're editing styles, run the following in another terminal:

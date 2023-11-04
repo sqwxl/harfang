@@ -1,0 +1,21 @@
+{% load mptt_tags %}
+{% load comments %}
+<ul x-data class="p-0 m-0 mt-4 list-none">
+    {% get_comment_list for item as comment_list %}
+    {% recursetree comment_list %}
+        {% with tree_context=True %}
+            <li>
+                <div>
+                    {% include "detail.html" with comment=node %}
+                    {% if not node.is_leaf_node %}
+                        <div x-ref="c{{ node.id }}" class="ml-2">
+                            <ul class="p-0 m-0 mt-4 list-none">
+                                {{ children }}
+                            </ul>
+                        </div>
+                    {% endif %}
+                </div>
+            </li>
+        {% endwith %}
+    {% endrecursetree %}
+</ul>

@@ -1,0 +1,26 @@
+<nav class="flex items-center py-2 px-4 mb-4 whitespace-nowrap sm:mb-10 full bg-bg0_h"
+     hx-boost="true"
+     preload="mouseover">
+    <a href="{% url 'home' %}"
+       class="mr-4 text-4xl text-red_d visited:text-red_d hover:text-red_d">✎</a>
+    <ul class="flex flex-wrap items-center">
+        <li class="py-2 px-4">
+            <a href="{% url 'top' %}">Top</a>
+        </li>
+        <li class="py-2 px-4">
+            <a href="{% url 'about' %}">About</a>
+        </li>
+        {% if user.is_authenticated %}
+            <li class="py-2 px-4">
+                <a href="{% url 'submit' %}">Submit</a>
+            </li>
+            <li class="py-2 px-4">
+                <a href="{% url 'logout' %}">Logout</a>
+            </li>
+        {% else %}
+            <li class="py-2 px-4">
+                <a href="{% url 'login' %}">Login</a>
+            </li>
+        {% endif %}
+    </ul>
+</nav>

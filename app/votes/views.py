@@ -1,0 +1,2 @@
+def vote(request):
+    pass

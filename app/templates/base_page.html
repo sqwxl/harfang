@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+
+{% block body %}
+  {% include "nav.html" %}
+  {% include "flash.html" %}
+  {% include "aside.html" %}
+  <main class="prose max-w-7xl w-full mx-auto px-1 sm:px-4 grow overflow-x-hidden">
+    {% block content %}{% endblock %}
+  </main>
+  {% include "footer.html" %}
+{% endblock %}

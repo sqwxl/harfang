@@ -1,0 +1,9 @@
+{% extends "base_feed.html" %}
+{% block feed %}
+    {% for post in page_obj %}
+        {% url "post" post.id as item_url %}
+        {% url "vote" post.id as vote_url %}
+        {% include "includes/feed_item.html" with item=post item_url=item_url vote_url=vote_url %}
+    {% endfor %}
+{% endblock %}
+{% block page-and-paging-controls %}{{ block.super }}{% endblock %}

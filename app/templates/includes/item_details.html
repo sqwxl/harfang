@@ -1,0 +1,13 @@
+{% load comments %}
+<div class="text-sm text-muted">
+    <span>{{ item.votes.count }} points{{ item.votes.count|pluralize }}</span>
+    |
+    {% if item.user %}
+        <a href="{% url 'news:user' item.user.username %}">{{ item.user.username }}</a>
+    {% endif %}
+    |
+    <span>{{ item.submit_date|timesince }} ago</span>
+    |
+    {% get_comment_count for item as comment_count %}
+    <span>{{ comment_count }} comment{{ comment_count|pluralize }}</span>
+</div>

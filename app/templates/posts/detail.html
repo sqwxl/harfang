@@ -1,0 +1,37 @@
+{% extends "base_page.html" %}
+{% block content %}
+    <article>
+        <section>
+            <h1>{{ post.title|title }}</h1>
+            <p>
+                posted {{ post.created_on|timesince }} ago by <b><a href="{% url 'user' post.user.username %}">{{ post.user.username }}</a></b>
+            </p>
+            <p>
+                <a href="{{ post.url }}" target="_blank" rel="noreferrer">Link</a>
+            </p>
+        </section>
+        <section>
+            {{ post.body|linebreaks }}
+        </section>
+        <br>
+        <br>
+        {% block comments %}
+            <section id="comments">
+                <h3>Comments</h3>
+                {% if user.is_authenticated %}
+                    <form class="not-prose">
+                        {% csrf_token %}
+                        {{ comment_form.as_div }}
+                        <input hx-post=""
+                               hx-trigger="click"
+                               hx-vals='{"use_block": "comments"}'
+                               hx-target="#comments"
+                               type="submit"
+                               value="Add Comment">
+                    </form>
+                {% endif %}
+                {% include "comments/tree.html" with item=post %}
+            </section>
+        {% endblock comments %}
+    </article>
+{% endblock %}
