@@ -1,10 +1,9 @@
 {% load widget_tweaks %}
-
 <form method="post">
-  {% csrf_token %}
-  {{ form.as_div }}
-  <div class="flex">
-    <input type="submit" value="Save">
-    <input type="button" value="Cancel" onclick="window.history.back()">
-  </div>
+    {% csrf_token %}
+    {{ form.as_div }}
+    <div class="flex">
+        <input type="submit" value="Save">
+        <input type="button" value="Cancel" onclick="window.history.back()">
+    </div>
 </form>

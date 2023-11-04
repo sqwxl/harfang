@@ -8,6 +8,9 @@
             <a href="{% url 'top' %}">Top</a>
         </li>
         <li class="py-2 px-4">
+            <a href="{% url 'latest' %}">New</a>
+        </li>
+        <li class="py-2 px-4">
             <a href="{% url 'about' %}">About</a>
         </li>
         {% if user.is_authenticated %}
