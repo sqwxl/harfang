@@ -1,6 +1,6 @@
 <div align="center">
 
-<p style="font-size: 2em; font-weight: bold">Harfang 🦉</p>
+# 🦉 Harfang
 
 A [Hacker News](https://news.ycombinator.com/) clone
 
