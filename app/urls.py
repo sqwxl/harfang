@@ -12,6 +12,7 @@ urlpatterns = [
     path("posts/<int:pk>/", views.posts_detail, name="post"),
     path("posts/submit/", views.posts_submit, name="submit"),
     path("comments/", include("app.comments.urls")),
+    path("users/create/", views.user_create, name="user_create"),
     path("users/<str:username>/", views.user_detail, name="profile"),
     path("users/<str:username>/posts/", views.user_posts, name="user_posts"),
     path("users/<str:username>/comments/", views.user_comments, name="user_comments"),

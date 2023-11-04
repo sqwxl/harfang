@@ -58,7 +58,7 @@ def submissions_vote(request: HttpRequest, pk):
     #     vote.save()
     return TemplateResponse(
         request,
-        "includes/feed_item.html",
+        "fragments/feed_item.html",
         {
             "item": post,
             "item_url": post.get_absolute_url(),

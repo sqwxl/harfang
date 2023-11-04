@@ -5,11 +5,11 @@
         {% block title %}{% endblock %}
         {% block page-and-paging-controls %}
             {% if page_obj.paginator.count == 0 %}
-                <p>No news items are available.</p>
+                <p>No posts available.</p>
             {% else %}
                 {% block feed %}{% endblock %}
                 {% if page_obj.has_next %}
-                    {% include "includes/paging_controls.html" %}
+                    {% include "fragments/paging_controls.html" %}
                 {% else %}
                     <p class="text-center">* * *</p>
                 {% endif %}

@@ -6,7 +6,7 @@
     </div>
     <div class="ml-2">
         <div class="text-sm text-muted">
-            <a href="{% url 'users' comment.user.username %}">{{ comment.user.username }}</a>
+            <a href="{% url 'profile' comment.user.username %}">{{ comment.user.username }}</a>
             <span>{{ comment.created_on|timesince }} ago</span>
             {% if tree_context %}
                 {% if comment.get_ancestors|length > 1 %}| <a href="#comment-{{ comment.get_root.id }}">root</a>{% endif %}
@@ -29,14 +29,14 @@
         </div>
         <div class="ml-5 text-sm text-muted">
             {% if user.is_authenticated %}
-                <a href="{% url 'reply' comment.id %}">reply</a>
+                <a href="{% url 'comments:reply' comment.id %}">reply</a>
                 {% if user == comment.user or user.is_staff %}
                     {% if comment.is_editable %}
                         |
-                        <a href="{% url 'edit' comment.id %}">edit</a>
+                        <a href="{% url 'comments:edit' comment.id %}">edit</a>
                         |
                         <a href="#"
-                           hx-delete="{% url 'delete' comment.id %}"
+                           hx-delete="{% url 'comments:delete' comment.id %}"
                            hx-target="#comment-{{ comment.id }}"
                            hx-swap="outerHTML">delete</a>
                     {% endif %}

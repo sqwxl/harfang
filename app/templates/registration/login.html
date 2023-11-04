@@ -6,6 +6,6 @@
         {{ login_form.as_div }}
         <input type="submit" value="Login">
     </form>
-    {% include "users/create.html" with form=register_form %}
-    <a href="{% url 'news:forgot' %}">Forgot your password?</a>
+    {% include "users/fragments/create.html" with form=register_form %}
+    <!-- TODO <a href="">Forgot your password?</a> -->
 {% endblock %}

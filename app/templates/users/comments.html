@@ -10,9 +10,8 @@
             {% block page-and-paging-controls %}
                 {% for comment in page_obj %}
                     <div class="mx-2 mb-6">
-                        <a href="{% url 'comments:detail' comment.id %}"
-                           preload="mouseover"
-                           class="no-link">
+                        <!-- TODO <a href="{% url 'comments:detail' comment.id %}" -->
+                        <a href="#" preload="mouseover" class="no-link">
                             <div class="max-w-full">{{ comment.comment|truncatewords:40 }}</div>
                         </a>
                         <div class="text-sm text-muted">
@@ -21,7 +20,7 @@
                     </div>
                 {% endfor %}
                 {% if page_obj.has_next %}
-                    {% include "includes/paging_control.html" %}
+                    {% include "fragments/paging_control.html" %}
                 {% else %}
                     <p class="text-center">* * *</p>
                 {% endif %}

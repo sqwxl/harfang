@@ -1,0 +1,30 @@
+{% extends "base_feed.html" %}
+{% load comments %}
+{% block feed %}
+    {% for post in page_obj %}
+        <div id="post-{{ post.id }}" class="flex m-2 h-16 not-prose">
+            <div class="mr-2">
+                <!-- TODO add voting action -->
+                {% include "fragments/votearrow.html" %}
+            </div>
+            <div>
+                <a href="{% url 'post' post.id %}"
+                   preload="mouseover"
+                   class="text-lg font-bold no-link">{{ post.title|title }}</a>
+                <div class="text-sm text-muted">
+                    <span>{{ post.votes.count }} points{{ post.votes.count|pluralize }}</span>
+                    |
+                    {% if post.user %}
+                        <a href="{% url 'profile' post.user.username %}">{{ post.user.username }}</a>
+                    {% endif %}
+                    |
+                    <span>{{ post.submit_date|timesince }} ago</span>
+                    |
+                    {% get_comment_count for post as comment_count %}
+                    <span>{{ comment_count }} comment{{ comment_count|pluralize }}</span>
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+{% endblock %}
+{% block page-and-paging-controls %}{{ block.super }}{% endblock %}

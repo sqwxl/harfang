@@ -2,7 +2,7 @@
 {% load widget_tweaks %}
 {% block content %}
     <h1>Reply to {{ parent.author }}</h1>
-    {% include "detail.html" with comment=parent %}
+    {% include "comments/fragments/detail.html" with comment=parent %}
     <form method="post">
         {% csrf_token %}
         {% render_field form.text class+="w-full" %}

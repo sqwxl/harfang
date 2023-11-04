@@ -4,7 +4,7 @@
         <section>
             <h1>{{ post.title|title }}</h1>
             <p>
-                posted {{ post.created_on|timesince }} ago by <b><a href="{% url 'user' post.user.username %}">{{ post.user.username }}</a></b>
+                posted {{ post.created_on|timesince }} ago by <b><a href="{% url 'profile' post.user.username %}">{{ post.user.username }}</a></b>
             </p>
             <p>
                 <a href="{{ post.url }}" target="_blank" rel="noreferrer">Link</a>
