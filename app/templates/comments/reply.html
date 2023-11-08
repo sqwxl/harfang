@@ -1,14 +1,6 @@
 {% extends "base_page.html" %}
-{% load widget_tweaks %}
 {% block content %}
-    <h1>Reply to {{ parent.author }}</h1>
+    <h1>Reply to {{ parent.user.username }}</h1>
     {% include "comments/fragments/detail.html" with comment=parent %}
-    <form method="post">
-        {% csrf_token %}
-        {% render_field form.text class+="w-full" %}
-        <div class="flex">
-            <input type="submit" value="Reply">
-            <input type="button" value="Cancel" onclick="window.history.back()">
-        </div>
-    </form>
+    {% include "comments/form.html" %}
 {% endblock content %}

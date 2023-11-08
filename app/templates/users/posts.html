@@ -4,19 +4,19 @@
     <section class="not-prose">
         {% if page_obj.paginator.count == 0 %}
             {% block no-items %}
-                <p>No comments are available.</p>
+                <p>No posts are available.</p>
             {% endblock no-items %}
         {% else %}
             {% block page-and-paging-controls %}
-                {% for comment in page_obj %}
+                {% for post in page_obj %}
                     <div class="mx-2 mb-6">
-                        <!-- TODO <a href="{% url 'comments:detail' comment.id %}" -->
+                        <!-- TODO <a href="{% url 'post' post.id %}" -->
+                        <h4 class="font-bold">{{ post.title }}</h4>
                         <a href="#" preload="mouseover" class="no-link">
-                            <div class="max-w-full">{{ comment.comment|truncatewords:40 }}</div>
+                            <div class="max-w-full">{{ post.body|truncatewords:40 }}</div>
                         </a>
                         <div class="text-sm text-muted">
-                            <a href="{% url 'profile' comment.user.username %}"
-                               class="no-link text-muted">{{ comment.user.username }}</a> &#x2022; <span>{{ comment.created_on|timesince }} ago</span>
+                            <a href="{% url 'profile' post.user %}" class="no-link text-muted">{{ post.user.username }}</a> &#x2022; <span>{{ post.created_on|timesince }} ago</span>
                         </div>
                     </div>
                 {% endfor %}

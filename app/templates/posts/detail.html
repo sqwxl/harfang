@@ -1,10 +1,11 @@
+{% load comments widget_tweaks %}
 {% extends "base_page.html" %}
 {% block content %}
     <article>
         <section>
             <h1>{{ post.title|title }}</h1>
             <p>
-                posted {{ post.created_on|timesince }} ago by <b><a href="{% url 'profile' post.user.username %}">{{ post.user.username }}</a></b>
+                posted {{ post.submit_date|timesince }} ago by <b><a href="{% url 'profile' post.user.username %}">{{ post.user.username }}</a></b>
             </p>
             <p>
                 <a href="{{ post.url }}" target="_blank" rel="noreferrer">Link</a>
@@ -21,8 +22,10 @@
                 {% if user.is_authenticated %}
                     <form class="not-prose">
                         {% csrf_token %}
-                        {{ comment_form.as_div }}
-                        <input hx-post=""
+                        {% get_comment_form for post as form %}
+                        {% url 'post' post.id as next %}
+                        {% include "comments/fragments/form_fields.html" %}
+                        <input hx-post="{% comment_form_target %}"
                                hx-trigger="click"
                                hx-vals='{"use_block": "comments"}'
                                hx-target="#comments"
@@ -30,7 +33,7 @@
                                value="Add Comment">
                     </form>
                 {% endif %}
-                {% include "comments/tree.html" with item=post %}
+                {% include "comments/tree.html" %}
             </section>
         {% endblock comments %}
     </article>

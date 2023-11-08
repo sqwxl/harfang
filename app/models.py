@@ -9,6 +9,8 @@ from django.forms import ModelForm
 from django.urls import reverse
 from django.utils import timezone
 
+from app.treecomments.models import TreeComment
+
 
 class User(AbstractUser):
     pass
@@ -47,15 +49,16 @@ class PostQuerySet(models.QuerySet):
 
 
 class Post(models.Model):
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True, related_name="submissions")
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True, related_name="posts")
     title = models.CharField(max_length=250)
-    subtitle = models.CharField(max_length=200, blank=True, null=True)
-    body = models.TextField(blank=True, null=True)
+    url = models.CharField(max_length=200, blank=True)
+    body = models.TextField(blank=True)
     submit_date = models.DateTimeField(auto_now_add=True)
-    url = models.CharField(max_length=200)
     enable_comments = models.BooleanField(default=True)
 
-    comments = GenericRelation("comments.models.Comment", object_id_field="object_pk", related_query_name="post")
+    comments = GenericRelation(
+        "treecomments.models.TreeComment", object_id_field="object_pk", related_query_name="target"
+    )
 
     objects = PostQuerySet.as_manager()
 
@@ -66,15 +69,30 @@ class Post(models.Model):
         if not self.url and not self.body:
             raise ValidationError("A submission must have either a url or text")
 
+        super().clean()
+
     @property
     def score(self):
         return self.upvotes.count() - self.downvotes.count()  # type: ignore
 
     def get_absolute_url(self):
-        return reverse("posts_detail", kwargs={"pk": self.pk})
+        return reverse("post", kwargs={"pk": self.pk})
 
 
 class PostForm(ModelForm):
     class Meta:
         model = Post
-        fields = ["title", "url", "text"]
+        fields = ["title", "url", "body"]
+
+
+class Vote(models.Model):
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    submit_date = models.DateTimeField(auto_now_add=True)
+
+
+class PostVote(Vote):
+    post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name="votes")
+
+
+class CommentVote(Vote):
+    comment = models.ForeignKey(TreeComment, on_delete=models.CASCADE, related_name="votes")

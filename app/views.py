@@ -5,7 +5,7 @@ from django.shortcuts import get_object_or_404
 from django.template.response import TemplateResponse
 from django.urls import reverse
 
-from app.comments.models import Comment
+from app.treecomments.models import TreeComment
 from app.utils import get_page_by_request
 from app.utils.htmx import for_htmx
 
@@ -69,12 +69,11 @@ def submissions_vote(request: HttpRequest, pk):
 
 @for_htmx(use_block_from_params=True)
 def posts_detail(request, pk):
-    item = Post.objects.get(pk=pk)
-    template = "post.html"
+    post = Post.objects.get(pk=pk)
     return TemplateResponse(
         request,
-        template,
-        {"article": item, "post": item},
+        "posts/detail.html",
+        {"post": post},
     )
 
 
@@ -91,7 +90,7 @@ def posts_submit(request):
 
     return TemplateResponse(
         request,
-        "submission_form.html",
+        "posts/form.html",
         {
             "form": form,
         },
@@ -103,7 +102,7 @@ def user_posts(request, username):
     view_user = User.objects.get(username=username)
     return TemplateResponse(
         request,
-        "posts/list.html",
+        "users/posts.html",
         {
             "view_user": view_user,
             "page_obj": get_page_by_request(request, Post.objects.filter(user=view_user).order_by("-created_on")),
@@ -119,13 +118,16 @@ def user_comments(request, username):
         "users/comments.html",
         {
             "view_user": view_user,
-            "page_obj": get_page_by_request(request, Comment.objects.filter(user=view_user).order_by("-created_on")),
+            "page_obj": get_page_by_request(
+                request, TreeComment.objects.filter(user=view_user).order_by("-created_on")
+            ),
         },
     )
 
 
 def user_detail(request, username):
     view_user = User.objects.get(username=username)
+    # TODO handle username == request.user.username
     return TemplateResponse(
         request,
         "users/detail.html",
@@ -139,6 +141,8 @@ def user_create(request):
     form = UserCreationForm(request.POST)
     if form.is_valid():
         form.save()
-        return HttpResponseRedirect(reverse("auth:login"))
+        return HttpResponseRedirect(reverse("login"))
     else:
-        return TemplateResponse(request, "auth/login.html", {"login_form": AuthenticationForm(), "register_form": form})
+        return TemplateResponse(
+            request, "registration/login.html", {"login_form": AuthenticationForm(), "register_form": form}
+        )

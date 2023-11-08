@@ -27,11 +27,12 @@ INSTALLED_APPS = [
     "widget_tweaks",
     # apps
     "app",
+    "app.treecomments",
 ]
 
 
 # https://django-contrib-comments.readthedocs.io/en/latest/custom.html#customizing-the-comments-framework
-COMMENTS_APP = "app.comments"
+COMMENTS_APP = "app.treecomments"
 COMMENTS_ALLOW_PROFANITIES = False
 
 MIDDLEWARE = [

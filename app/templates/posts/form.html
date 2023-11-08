@@ -1,14 +1,13 @@
 {% extends "base_page.html" %}
 {% load widget_tweaks %}
-
 {% block content %}
-  <h1>New Submission</h1>
-  <form action="" method="post">
-    {% csrf_token %}
-    {{ form.as_div }}
-    <div class="flex">
-      <input type="submit" value="Save">
-      <input type="button" value="Cancel" onclick="window.history.back()">
-    </div>
-  </form>
+    <h1>New Post</h1>
+    <form action="" method="post">
+        {% csrf_token %}
+        {{ form.as_div }}
+        <div class="flex">
+            <input type="submit" value="Save">
+            <input type="button" value="Cancel" onclick="window.history.back()">
+        </div>
+    </form>
 {% endblock content %}
