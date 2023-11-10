@@ -12,3 +12,4 @@ multi_line_output = 3
 [tool.ruff]
 line-length = 120
 ignore = ["F405"]
+extend-exclude = ["migrations"]

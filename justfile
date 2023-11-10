@@ -14,7 +14,7 @@ migrate:
     python3 manage.py makemigrations
     python3 manage.py migrate
 
-populate: migrate
+populate: rm-migrations migrate
     python3 manage.py setup_test_data
 
 setup:
@@ -24,4 +24,8 @@ setup:
 
 rm-migrations:
     #!/usr/bin/env bash
-    rm -r ./**/migrations/{0*.py,__pycache__} db.sqlite3
+    echo "Removing migrations..."
+    find . -path "*/migrations/0*.py" -delete 2> /dev/null
+    find . -path "*/migrations/__pycache__" -delete 2> /dev/null
+    echo "Removing database..."
+    rm -f db.sqlite3 2> /dev/null

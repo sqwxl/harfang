@@ -1,6 +1,5 @@
-from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
-from django.contrib.auth.models import User
-from django.http import HttpRequest, HttpResponseRedirect
+from django.contrib.auth.decorators import login_required
+from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404
 from django.template.response import TemplateResponse
 from django.urls import reverse
@@ -9,7 +8,8 @@ from app.treecomments.models import TreeComment
 from app.utils import get_page_by_request
 from app.utils.htmx import for_htmx
 
-from .models import Post, PostForm
+from .forms import PostForm, ProfileForm, UserCreationForm
+from .models import Post, Profile, User
 
 
 # redirect 'home' view to posts_top
@@ -19,22 +19,26 @@ def home(_):
 
 @for_htmx(use_block_from_params=True)
 def posts_top(request):
-    timespan_arg = request.GET.get("range", "day")
-    queryset = Post.objects.only_healthy()  # type: ignore
-    if timespan_arg == "day":
-        queryset = queryset.daily()
-    elif timespan_arg == "week":
-        queryset = queryset.weekly()
-    elif timespan_arg == "month":
-        queryset = queryset.monthly()
-    elif timespan_arg == "year":
-        queryset = queryset.yearly()
+    range = request.GET.get("range", "day")
+    posts = Post.objects.all()
+    if range == "day":
+        queryset = posts.day().top()
+    elif range == "week":
+        queryset = posts.week().top()
+    elif range == "month":
+        queryset = posts.month().top()
+    elif range == "year":
+        queryset = posts.year().top()
+    else:  # i.e. "all"
+        queryset = posts.top()
 
     return TemplateResponse(
         request,
-        "submissions.html",
+        "posts/feed.html",
         {
             "page_obj": get_page_by_request(request, queryset),
+            "range": range,
+            "has_menu": True,
         },
     )
 
@@ -43,26 +47,9 @@ def posts_top(request):
 def posts_latest(request):
     return TemplateResponse(
         request,
-        "submissions.html",
-        {"page_obj": get_page_by_request(request, Post.objects.new())},  # type: ignore
-    )
-
-
-def submissions_vote(request: HttpRequest, pk):
-    post = Post.objects.get(pk=pk)
-    # try:
-    #     vote = SubmissionUpvote.objects.get(user=request.user, post=post)
-    #     vote.delete()
-    # except SubmissionUpvote.DoesNotExist:
-    #     vote = SubmissionUpvote.objects.create(user=request.user, post=post)
-    #     vote.save()
-    return TemplateResponse(
-        request,
-        "fragments/feed_item.html",
+        "posts/feed.html",
         {
-            "item": post,
-            "item_url": post.get_absolute_url(),
-            # "vote_url": reverse("news:submissions_vote", kwargs={"pk": post.pk}), TODO
+            "page_obj": get_page_by_request(request, Post.objects.all().latest()),
         },
     )
 
@@ -77,6 +64,7 @@ def posts_detail(request, pk):
     )
 
 
+@login_required
 def posts_submit(request):
     if request.method == "POST":
         form = PostForm(request.POST)
@@ -105,7 +93,7 @@ def user_posts(request, username):
         "users/posts.html",
         {
             "view_user": view_user,
-            "page_obj": get_page_by_request(request, Post.objects.filter(user=view_user).order_by("-created_on")),
+            "page_obj": get_page_by_request(request, Post.objects.filter(user=view_user).order_by("-submit_date")),
         },
     )
 
@@ -119,30 +107,42 @@ def user_comments(request, username):
         {
             "view_user": view_user,
             "page_obj": get_page_by_request(
-                request, TreeComment.objects.filter(user=view_user).order_by("-created_on")
+                request, TreeComment.objects.filter(user=view_user).order_by("-submit_date")
             ),
         },
     )
 
 
-def user_detail(request, username):
-    view_user = User.objects.get(username=username)
-    # TODO handle username == request.user.username
+def user_profile(request, username):
+    profile = get_object_or_404(Profile, user__username=username)
     return TemplateResponse(
         request,
-        "users/detail.html",
+        "users/profile.html",
         {
-            "view_user": view_user,
+            "profile": profile,
         },
     )
 
 
-def user_create(request):
-    form = UserCreationForm(request.POST)
-    if form.is_valid():
-        form.save()
-        return HttpResponseRedirect(reverse("login"))
+@login_required
+def user_profile_edit(request):
+    if request.method == "POST":
+        form = ProfileForm(request.POST, instance=request.user.profile)
+        if form.is_valid():
+            form.save()
+            return HttpResponseRedirect(reverse("profile", kwargs={"username": request.user.username}))
     else:
-        return TemplateResponse(
-            request, "registration/login.html", {"login_form": AuthenticationForm(), "register_form": form}
-        )
+        form = ProfileForm()
+
+    return TemplateResponse(request, "users/profile_edit.html", {"form": form})
+
+
+def user_create(request):
+    if request.method == "POST":
+        form = UserCreationForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return HttpResponseRedirect(reverse("login"))
+    else:
+        form = UserCreationForm()
+    return TemplateResponse(request, "users/form.html", {"form": form})

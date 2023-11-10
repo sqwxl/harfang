@@ -1,6 +1,25 @@
 {% extends "base_feed.html" %}
 {% load comments %}
+{% block menu %}
+    {% if has_menu %}
+        <div class="flex justify-end items-center">
+            <select id="range-selector"
+                    class="w-40"
+                    name="range"
+                    hx-target="body"
+                    hx-replace-url="true"
+                    hx-get="{% url 'top' %}">
+                <option {% if range == "day" %}selected{% endif %} value="day">24h</option>
+                <option {% if range == "week" %}selected{% endif %} value="week">Week</option>
+                <option {% if range == "month" %}selected{% endif %} value="month">Month</option>
+                <option {% if range == "year" %}selected{% endif %} value="year">Year</option>
+                <option {% if range == "all" %}selected{% endif %} value="all">All-time</option>
+            </select>
+        </div>
+    {% endif %}
+{% endblock %}
 {% block feed %}
+    {% if page_obj.paginator.count == 0 %}<p>No posts available.</p>{% endif %}
     {% for post in page_obj %}
         <div id="post-{{ post.id }}" class="flex m-2 h-16 not-prose">
             <div class="mr-2">

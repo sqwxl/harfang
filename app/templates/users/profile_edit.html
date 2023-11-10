@@ -1,0 +1,12 @@
+{% extends "base_page.html" %}
+{% load widget_tweaks %}
+{% block content %}
+    <section>
+        <h1>Edit Profile</h1>
+        <form method="post">
+            {% csrf_token %}
+            {{ form.as_div }}
+            <input type="submit" value="Save">
+        </form>
+    </section>
+{% endblock %}

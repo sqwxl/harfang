@@ -3,9 +3,11 @@
     <h1>Login</h1>
     <form method="post">
         {% csrf_token %}
-        {{ login_form.as_div }}
+        {{ form.as_div }}
         <input type="submit" value="Login">
     </form>
-    {% include "users/fragments/create.html" with form=register_form %}
     <!-- TODO <a href="">Forgot your password?</a> -->
+    <div>
+        <a href="{% url 'signup' %}">Register</a>
+    </div>
 {% endblock %}

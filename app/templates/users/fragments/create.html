@@ -1,6 +1,0 @@
-<h1>Register</h1>
-<form action="{% url 'user_create' %}" method="post">
-    {% csrf_token %}
-    {{ form.as_div }}
-    <input type="submit" value="Register">
-</form>

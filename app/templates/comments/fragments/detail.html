@@ -7,7 +7,7 @@
     <div class="ml-2">
         <div class="text-sm text-muted">
             <a href="{% url 'profile' comment.user.username %}">{{ comment.user.username }}</a>
-            <span>{{ comment.created_on|timesince }} ago</span>
+            <span>{{ comment.submit_date|timesince }} ago</span>
             {% if tree_context %}
                 {% if comment.get_ancestors|length > 1 %}| <a href="#comment-{{ comment.get_root.id }}">root</a>{% endif %}
                 {% if comment.parent %}| <a href="#comment-{{ comment.parent.id }}">parent</a>{% endif %}

@@ -10,13 +10,14 @@
             {% block page-and-paging-controls %}
                 {% for comment in page_obj %}
                     <div class="mx-2 mb-6">
-                        <!-- TODO <a href="{% url 'comments:detail' comment.id %}" -->
-                        <a href="#" preload="mouseover" class="no-link">
+                        <a href="{% url 'post' comment.content_object.id %}#comment-{{ comment.id }}"
+                           preload="mouseover"
+                           class="no-link">
                             <div class="max-w-full">{{ comment.comment|truncatewords:40 }}</div>
                         </a>
                         <div class="text-sm text-muted">
                             <a href="{% url 'profile' comment.user.username %}"
-                               class="no-link text-muted">{{ comment.user.username }}</a> &#x2022; <span>{{ comment.created_on|timesince }} ago</span>
+                               class="no-link text-muted">{{ comment.user.username }}</a> &#x2022; <span>{{ comment.submit_date|timesince }} ago</span>
                         </div>
                     </div>
                 {% endfor %}

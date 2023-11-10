@@ -7,8 +7,8 @@ admin.site.register(User, UserAdmin)
 
 
 class PostAdmin(admin.ModelAdmin):
-    list_display = ["title", "author", "pub_date", "publisher"]
-    list_filter = ["author", "publisher"]
+    list_display = ["title", "user", "submit_date"]
+    list_filter = ["user"]
 
 
 admin.site.register(Post, PostAdmin)

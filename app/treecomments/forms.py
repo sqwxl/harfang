@@ -2,7 +2,7 @@ from django.forms import HiddenInput
 from django_comments.forms import CommentForm
 from mptt.fields import TreeNodeChoiceField
 
-from app.treecomments.models import TreeComment
+from .models import TreeComment
 
 
 class TreeCommentForm(CommentForm):
