@@ -1,0 +1,12 @@
+<!-- https://django-contrib-comments.readthedocs.io/en/latest/quickstart.html#providing-a-comment-form-for-authenticated-users -->
+<!-- hidden fields content_type, object_pk, timestamp, security_hash, parent -->
+{% for field in form %}
+    {% if field.is_hidden %}
+        <div>{{ field }}</div>
+    {% elif field.name == "comment" %}
+        {% if field.errors %}{{ field.errors }}{% endif %}
+        <p {% if field.errors %}class="error"{% endif %}>{{ field.label_tag }} {{ field }}</p>
+    {% elif field.name == "honeypot" %}
+        <p hidden>{{ field.label_tag }} {{ field }}</p>
+    {% endif %}
+{% endfor %}

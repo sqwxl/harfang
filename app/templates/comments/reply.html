@@ -1,6 +1,16 @@
 {% extends "base_page.html" %}
 {% block content %}
-    <h1>Reply to {{ parent.user.username }}</h1>
-    {% include "comments/fragments/detail.html" with comment=parent %}
-    {% include "comments/form.html" %}
+    <section>
+        <h1>Reply to {{ parent.user.username }}</h1>
+        {% include "comments/fragments/detail.html" with comment=parent %}
+        <br>
+        <form action="" method="post">
+            {% csrf_token %}
+            {% include "comments/fragments/form.html" %}
+            <div class="flex">
+                <button>Post Reply</button>
+                <button type="button" onclick="window.history.back()">Cancel</button>
+            </div>
+        </form>
+    </section>
 {% endblock content %}

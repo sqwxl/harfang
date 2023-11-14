@@ -43,6 +43,10 @@
     @apply w-full rounded mt-2 mb-4 mr-2 px-2 py-1 bg-fg text-bg;
   }
 
+  select {
+    @apply pr-8;
+  }
+
   [type="submit"], [type="button"], button {
     @apply bg-red_d hover:bg-red mr-2 px-2 rounded;
   }

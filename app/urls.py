@@ -1,5 +1,5 @@
 from django.contrib.auth import views as auth_views
-from django.urls import include, path
+from django.urls import include, path, re_path
 from django.views.generic import TemplateView
 
 from . import views
@@ -19,6 +19,7 @@ urlpatterns = [
     path("posts/<int:pk>/", views.posts_detail, name="post"),
     path("posts/submit/", views.posts_submit, name="submit"),
     path("comments/", include("app.treecomments.urls")),
+    re_path(r"^comments/", include("django_comments.urls")),
     path("users/signup/", views.user_create, name="signup"),
     path("users/<str:username>/", views.user_profile, name="profile"),
     path("users/<str:username>/posts/", views.user_posts, name="user_posts"),

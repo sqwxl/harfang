@@ -1,8 +1,17 @@
+import copy
 from functools import wraps
 
-from django.http.request import HttpRequest
+from django.http.request import HttpRequest, QueryDict
 from django.http.response import HttpResponse
 from render_block import render_block_to_string
+
+
+def getify(request):
+    rv = copy.copy(request)
+    rv.POST = QueryDict()
+    rv.method = "GET"
+
+    return rv
 
 
 def is_htmx(request: HttpRequest):

@@ -2,21 +2,23 @@
      hx-boost="true"
      preload="mouseover">
     <a href="{% url 'home' %}"
-       class="mr-4 text-4xl text-red_d visited:text-red_d hover:text-red_d">✎</a>
+       class="mr-4 text-xl text-red_d visited:text-red_d hover:text-red_d">🪶</a>
     <ul class="flex flex-wrap items-center grow">
         <li class="py-2 px-4">
             <a href="{% url 'top' %}">Top</a>
         </li>
         <li class="py-2 px-4">
-            <a href="{% url 'latest' %}">New</a>
+            <a href="{% url 'latest' %}">Latest</a>
         </li>
-        <li class="py-2 px-4">
-            <a href="{% url 'about' %}">About</a>
-        </li>
+        {% if user.is_authenticated %}
+            <li class="py-2 px-4">
+                <a href="{% url 'submit' %}">Submit</a>
+            </li>
+        {% endif %}
         <li class="grow"></li>
         {% if user.is_authenticated %}
             <li class="py-2 px-4">
-                <a href="{% url 'submit' %}">Post</a>
+                <a href="{% url 'profile' user.username %}">{{ user.username }}</a>
             </li>
             <li class="py-2 px-4">
                 <a href="{% url 'logout' %}">Logout</a>

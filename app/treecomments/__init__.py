@@ -1,10 +1,10 @@
 def get_model():
-    from .models import TreeComment
+    from app.treecomments.models import TreeComment
 
     return TreeComment
 
 
 def get_form():
-    from .forms import TreeCommentForm
+    from app.treecomments.forms import TreeCommentForm
 
     return TreeCommentForm

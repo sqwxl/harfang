@@ -20,14 +20,14 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.sites",
     "django.contrib.staticfiles",
+    # apps
+    "app",
+    "app.treecomments",
     # 3rd-party apps
     "compressor",
     "django_comments",
     "mptt",
     "widget_tweaks",
-    # apps
-    "app",
-    "app.treecomments",
 ]
 
 

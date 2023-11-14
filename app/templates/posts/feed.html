@@ -3,18 +3,21 @@
 {% block menu %}
     {% if has_menu %}
         <div class="flex justify-end items-center">
-            <select id="range-selector"
-                    class="w-40"
-                    name="range"
-                    hx-target="body"
-                    hx-replace-url="true"
-                    hx-get="{% url 'top' %}">
-                <option {% if range == "day" %}selected{% endif %} value="day">24h</option>
-                <option {% if range == "week" %}selected{% endif %} value="week">Week</option>
-                <option {% if range == "month" %}selected{% endif %} value="month">Month</option>
-                <option {% if range == "year" %}selected{% endif %} value="year">Year</option>
-                <option {% if range == "all" %}selected{% endif %} value="all">All-time</option>
-            </select>
+            <div>
+                <label for="range-selector" class="mr-2">Time range:</label>
+                <select id="range-selector"
+                        name="range"
+                        class="w-auto"
+                        hx-target="body"
+                        hx-replace-url="true"
+                        hx-get="{% url 'top' %}">
+                    <option {% if range == "day" %}selected{% endif %} value="day">24h</option>
+                    <option {% if range == "week" %}selected{% endif %} value="week">Week</option>
+                    <option {% if range == "month" %}selected{% endif %} value="month">Month</option>
+                    <option {% if range == "year" %}selected{% endif %} value="year">Year</option>
+                    <option {% if range == "all" %}selected{% endif %} value="all">All-time</option>
+                </select>
+            </div>
         </div>
     {% endif %}
 {% endblock %}

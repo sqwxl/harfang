@@ -17,29 +17,35 @@
   # https://devenv.sh/languages/
   languages.python.enable = true;
   languages.python.venv.enable = true;
-  languages.python.version = "3.11.5";
+  languages.python.version = "3.11.6";
 
   # https://devenv.sh/pre-commit-hooks/
-  pre-commit.hooks = {
-    autoflake.enable = true;
-    black.enable = true;
-    flake8.enable = true;
-    flynt = {
-      enable = true;
-      name = "flynt";
-      files = ".*\.py";
-      entry = "${pkgs.python311Packages.flynt}/bin/flynt --fail-on-change";
+  pre-commit = {
+    hooks = {
+      autoflake.enable = true;
+      black.enable = true;
+      flake8.enable = true;
+      flynt = {
+        enable = true;
+        name = "flynt";
+        files = ".*\.py";
+        entry = "${pkgs.python311Packages.flynt}/bin/flynt --fail-on-change";
+      };
+      isort.enable = true;
+      nixpkgs-fmt.enable = true;
+      pyupgrade.enable = true;
+      ruff.enable = true;
+      djhtml = {
+        enable = true;
+        name = "djhtml";
+        files = ".*/templates/.*\.html$";
+        entry = "${pkgs.djhtml}/bin/djhtml";
+      };
     };
-    isort.enable = true;
-    nixpkgs-fmt.enable = true;
-    pyupgrade.enable = true;
-    ruff.enable = true;
-    djhtml = {
-      enable = true;
-      name = "djhtml";
-      files = ".*/templates/.*\.html$";
-      entry = "${pkgs.djhtml}/bin/djhtml";
-    };
+    excludes = [
+      ".*/migrations/.*"
+    ];
+
   };
 
   # https://devenv.sh/processes/

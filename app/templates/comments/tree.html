@@ -1,7 +1,6 @@
-{% load mptt_tags comments %}
+{% load mptt_tags %}
 <ul x-data class="p-0 m-0 mt-4 list-none">
-    {% get_comment_list for post as comment_list %}
-    {% recursetree comment_list %}
+    {% recursetree comments %}
         {% with tree_context=True %}
             <li>
                 <div>

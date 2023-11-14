@@ -23,10 +23,6 @@ module.exports = {
     },
     fontFamily: {
       'sans': [
-        "Optima",
-        "Candara",
-        "Noto Sans",
-        "source-sans-pro",
         "sans-serif",
         'Apple Color Emoji',
         'Segoe UI Emoji',
@@ -34,12 +30,6 @@ module.exports = {
         'Noto Color Emoji',
       ],
       'serif': [
-        'Didot',
-        'Bodoni MT',
-        'Noto Serif Display',
-        'URW Palladio L',
-        'P052',
-        'Sylfaen',
         'serif',
         'Apple Color Emoji',
         'Segoe UI Emoji',

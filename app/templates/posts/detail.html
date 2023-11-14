@@ -1,9 +1,10 @@
 {% extends "base_page.html" %}
-{% load comments widget_tweaks %}
 {% block content %}
     <article>
         <section>
-            <h1>{{ post.title|title }}</h1>
+            <h1>
+                <a href="{% url 'post' post.id %}" class="no-link">{{ post.title }}</a>
+            </h1>
             <p>
                 posted {{ post.submit_date|timesince }} ago by <b><a href="{% url 'profile' post.user.username %}">{{ post.user.username }}</a></b>
             </p>
@@ -16,25 +17,23 @@
         </section>
         <br>
         <br>
-        {% block comments %}
-            <section id="comments">
-                <h3>Comments</h3>
-                {% if user.is_authenticated %}
-                    <form class="not-prose">
+        <section id="comments">
+            {% block comments %}
+                {% if form %}
+                    <form class="not-prose"
+                          action=""
+                          method="post"
+                          hx-post=""
+                          hx-vals='{"use_block": "comments"}'
+                          hx-target="#comments">
                         {% csrf_token %}
-                        {% get_comment_form for post as form %}
-                        {% url 'post' post.id as next %}
-                        {% include "comments/fragments/form_fields.html" %}
-                        <input hx-post="{% comment_form_target %}"
-                               hx-trigger="click"
-                               hx-vals='{"use_block": "comments"}'
-                               hx-target="#comments"
-                               type="submit"
-                               value="Add Comment">
+                        {% include "comments/fragments/form.html" %}
+                        <button type="submit">Add Comment</button>
                     </form>
                 {% endif %}
+                <h3>Comments</h3>
                 {% include "comments/tree.html" %}
-            </section>
-        {% endblock comments %}
+            {% endblock %}
+        </section>
     </article>
 {% endblock %}

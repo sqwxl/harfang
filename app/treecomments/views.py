@@ -1,3 +1,6 @@
+import logging
+
+from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404
 from django.template.response import TemplateResponse
@@ -5,18 +8,28 @@ from django.template.response import TemplateResponse
 from .forms import TreeCommentForm
 from .models import TreeComment
 
+logger = logging.getLogger(__name__)
 
-def reply(request, parent_comment_id):
-    parent = get_object_or_404(TreeComment, id=parent_comment_id)
+
+@login_required
+def reply(request, parent_id):
+    parent = get_object_or_404(TreeComment, id=parent_id)
     if request.method == "POST":
-        form = TreeCommentForm(request.POST)
+        form = TreeCommentForm(parent.content_object, request.POST)
         if form.is_valid():
             comment = form.get_comment_object()
-            comment.parent = parent  # type: ignore
+            print(f"###### form: {form.fields}")
+            comment.user = request.user
             comment.save()
-            return HttpResponseRedirect(comment.get_content_object_url())
+            return HttpResponseRedirect(comment.get_content_object_url() + "#comment-" + str(comment.id))  # type: ignore
     else:
-        form = TreeCommentForm(parent.content_object, initial={"parent": parent_comment_id})
+        form = TreeCommentForm(
+            parent.content_object,
+            initial={
+                "user": request.user,
+                "parent": parent_id,
+            },
+        )
 
     return TemplateResponse(
         request,
@@ -24,6 +37,7 @@ def reply(request, parent_comment_id):
         {
             "parent": parent,
             "form": form,
+            "page_title": "Reply",
         },
     )
 

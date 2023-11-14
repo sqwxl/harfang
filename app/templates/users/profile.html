@@ -10,7 +10,7 @@
         {% if profile.bio %}<div>{{ profile.bio|linebreaks }}</div>{% endif %}
         <div hx-boost="true">
             <a href="{% url 'user_posts' profile.user.username %}">Submissions ({{ profile.user.posts.count }})</a>
-            <a href="{% url 'user_comments' profile.user.username %}">Comments ({{ profile.user.treecomment_comments.count }})</a>
+            <a href="{% url 'user_comments' profile.user.username %}">Comments ({{ profile.user.comments.count }})</a>
         </div>
     </section>
 {% endblock %}

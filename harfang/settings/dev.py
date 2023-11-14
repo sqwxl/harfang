@@ -10,25 +10,21 @@ SESSION_COOKIE_SECURE = False
 
 if DEBUG:
     try:
-        import debug_browser_reload  # NOQA
         import debug_toolbar  # NOQA
+        import django_browser_reload  # NOQA
     except ImportError:
-        pass
+        print("Failed to load debug_toolbar or debug_browser_reload")
     else:
         INSTALLED_APPS.extend(  # noqa: F405
             [
                 "debug_toolbar",
-                "debug_browser_reload",
+                "django_browser_reload",
             ]
         )
         INTERNAL_IPS = ["127.0.0.1"]
         MIDDLEWARE.insert(
             MIDDLEWARE.index("django.middleware.common.CommonMiddleware") + 1,
             "debug_toolbar.middleware.DebugToolbarMiddleware",
-        )
-        MIDDLEWARE.insert(
-            MIDDLEWARE.index("debug_toolbar.middleware.DebugToolbarMiddleware") + 1,
-            "djangoproject.middleware.CORSMiddleware",
         )
         MIDDLEWARE.insert(
             MIDDLEWARE.index("debug_toolbar.middleware.DebugToolbarMiddleware") + 1,

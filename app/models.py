@@ -2,6 +2,7 @@ from datetime import timedelta
 
 from django.conf import settings
 from django.contrib.auth.models import AbstractUser
+from django.contrib.contenttypes.fields import GenericRelation
 from django.core.exceptions import ValidationError
 from django.db import models
 from django.db.models.signals import post_save
@@ -62,6 +63,7 @@ class Post(PointsMixin, models.Model):
     body = models.TextField(blank=True)
     submit_date = models.DateTimeField(default=timezone.now, editable=False)
     enable_comments = models.BooleanField(default=True)
+    comments = GenericRelation("treecomments.TreeComment", object_id_field="object_pk")
 
     objects = PostQuerySet.as_manager()
 
@@ -84,7 +86,7 @@ class Post(PointsMixin, models.Model):
         super().clean()
 
     def get_absolute_url(self):
-        return reverse("post", kwargs={"pk": self.pk})
+        return reverse("post", args=[str(self.pk)])
 
 
 class PostVote(models.Model):
