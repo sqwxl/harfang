@@ -1,0 +1,27 @@
+{% load comments %}
+<div id="post-{{ post.id }}" class="flex m-2 h-16 not-prose">
+    <div class="m-2">
+        <button class="p-0 m-0 w-4 rounded-none border-none {% if post.has_voted %}opacity-25{% endif %} bg-bg"
+                type="button"
+                hx-post="{% url 'post_vote' post.id %}"
+                hx-target="#post-{{ post.id }}"
+                hx-swap="outerHTML">{% include "fragments/votearrow-svg.html" %}</button>
+    </div>
+    <div>
+        <a href="{% url 'post' post.id %}"
+           preload="mouseover"
+           class="text-lg font-bold no-link">{{ post.title|title }}</a>
+        <div class="text-sm text-muted">
+            <span>{{ post.votes.count }} points{{ post.votes.count|pluralize }}</span>
+            |
+            {% if post.user %}
+                <a href="{% url 'profile' post.user.username %}">{{ post.user.username }}</a>
+            {% endif %}
+            |
+            <span>{{ post.submit_date|timesince }} ago</span>
+            |
+            {% get_comment_count for post as comment_count %}
+            <span>{{ comment_count }} comment{{ comment_count|pluralize }}</span>
+        </div>
+    </div>
+</div>

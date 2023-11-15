@@ -1,8 +1,10 @@
 <div id="comment-{{ comment.id }}" class="flex">
-    <div>
-        <a href="#">
-            <div class="votearrow" title="upvote"></div>
-        </a>
+    <div class="m-2">
+        <button class="p-0 m-0 w-3 rounded-none border-none {% if comment.has_voted %}opacity-25{% endif %} bg-bg"
+                type="button"
+                hx-post="{% url 'comment_vote' comment.id %}"
+                hx-target="#comment-{{ comment.id }}"
+                hx-swap="outerHTML">{% include "fragments/votearrow-svg.html" %}</button>
     </div>
     <div class="ml-2">
         <div class="text-sm text-muted">

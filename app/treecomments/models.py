@@ -7,10 +7,14 @@ from django_comments.managers import CommentManager
 from mptt.models import MPTTModel, TreeForeignKey, TreeManager
 
 from app.common.mixins import PointsMixin
+from app.models import CommentVote
 
 
 class TreeCommentManager(TreeManager, CommentManager):
-    pass
+    def with_user_vote_status(self, user):
+        return self.get_queryset().annotate(
+            has_voted=models.Exists(CommentVote.objects.filter(user=user, comment=models.OuterRef("pk")))
+        )
 
 
 class TreeComment(PointsMixin, MPTTModel, BaseCommentAbstractModel):

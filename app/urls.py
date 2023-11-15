@@ -20,6 +20,8 @@ urlpatterns = [
     path("posts/submit/", views.posts_submit, name="submit"),
     path("comments/", include("app.treecomments.urls")),
     re_path(r"^comments/", include("django_comments.urls")),
+    path("votes/posts/<int:pk>", views.post_vote, name="post_vote"),
+    path("votes/comments/<int:pk>", views.comment_vote, name="comment_vote"),
     path("users/signup/", views.user_create, name="signup"),
     path("users/<str:username>/", views.user_profile, name="profile"),
     path("users/<str:username>/posts/", views.user_posts, name="user_posts"),

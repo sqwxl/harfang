@@ -3,6 +3,8 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404
 from django.template.response import TemplateResponse
 from django.urls import reverse
+from django.utils import timezone
+from django.views.decorators.http import require_POST
 
 from app.treecomments.forms import TreeCommentForm
 from app.treecomments.models import TreeComment
@@ -10,7 +12,7 @@ from app.utils import get_page_by_request
 from app.utils.htmx import for_htmx, getify, is_htmx
 
 from .forms import PostForm, ProfileForm, UserCreationForm
-from .models import Post, Profile, User
+from .models import CommentVote, Post, PostVote, Profile, User
 
 
 # redirect 'home' view to posts_top
@@ -21,7 +23,11 @@ def home(_):
 @for_htmx(use_block_from_params=True)
 def posts_top(request):
     range = request.GET.get("range", "day")
-    posts = Post.objects.all()
+    # get annotated queryset with user's vote status
+    if request.user.is_authenticated:
+        posts = Post.objects.with_user_vote_status(request.user)
+    else:
+        posts = Post.objects.all()
     if range == "day":
         queryset = posts.day().top()
     elif range == "week":
@@ -47,14 +53,51 @@ def posts_top(request):
 
 @for_htmx(use_block_from_params=True)
 def posts_latest(request):
+    if request.user.is_authenticated:
+        posts = Post.objects.with_user_vote_status(request.user)
+    else:
+        posts = Post.objects.all()
     return TemplateResponse(
         request,
         "posts/feed.html",
         {
-            "page_obj": get_page_by_request(request, Post.objects.all().latest()),
+            "page_obj": get_page_by_request(request, posts.latest()),
             "page_title": "Latest Posts",
         },
     )
+
+
+@login_required
+@require_POST
+def post_vote(request, pk):
+    # TODO generalize to handle votes coming from elsewhere than the feed view
+    post = get_object_or_404(Post, pk=pk)
+    vote = post.votes.filter(user=request.user)
+    if vote.exists():
+        vote.delete()
+        post.has_voted = False
+    else:
+        vote = PostVote(user=request.user, post=post, submit_date=timezone.now())
+        vote.save()
+        post.has_voted = True
+
+    return TemplateResponse(request, "posts/fragments/feed_item.html", {"post": post})
+
+
+@login_required
+@require_POST
+def comment_vote(request, pk):
+    comment = get_object_or_404(TreeComment, pk=pk)
+    vote = comment.votes.filter(user=request.user)
+    if vote.exists():
+        vote.delete()
+        comment.has_voted = False
+    else:
+        vote = CommentVote(user=request.user, comment=comment, submit_date=timezone.now())
+        vote.save()
+        comment.has_voted = True
+
+    return TemplateResponse(request, "comments/fragments/detail.html", {"comment": comment})
 
 
 @for_htmx(use_block_from_params=True)
@@ -66,6 +109,7 @@ def _posts_detail(request, pk):
     post = get_object_or_404(Post, pk=pk)
     form = None
     if request.user.is_authenticated:
+        comments = post.comments.with_user_vote_status(request.user)
         form = TreeCommentForm(post, initial={"user": request.user})
 
         if request.method == "POST":
@@ -79,6 +123,8 @@ def _posts_detail(request, pk):
                 return _posts_detail(getify(request), pk)
 
             return HttpResponseRedirect("")
+    else:
+        comments = post.comments.all()
 
     return TemplateResponse(
         request,
@@ -87,7 +133,7 @@ def _posts_detail(request, pk):
             "post": post,
             "page_title": post.title,
             "form": form,
-            "comments": post.comments.all(),
+            "comments": comments,
         },
     )
 

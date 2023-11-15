@@ -37,6 +37,9 @@ def save_user_profile(sender, instance, **kwargs):
 
 
 class PostQuerySet(models.QuerySet):
+    def with_user_vote_status(self, user):
+        return self.annotate(has_voted=models.Exists(PostVote.objects.filter(user=user, post=models.OuterRef("pk"))))
+
     def day(self):
         return self.filter(submit_date__gte=timezone.now() - timedelta(days=1))
 
@@ -88,6 +91,9 @@ class Post(PointsMixin, models.Model):
     def get_absolute_url(self):
         return reverse("post", args=[str(self.pk)])
 
+    def get_vote_url(self):
+        return reverse("post_vote", args=[str(self.pk)])
+
 
 class PostVote(models.Model):
     class Meta:
@@ -119,7 +125,7 @@ class CommentVote(models.Model):
 
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     submit_date = models.DateTimeField(default=timezone.now, editable=False)
-    comment = models.ForeignKey("treecomments.TreeComment", on_delete=models.CASCADE, related_name="comments")
+    comment = models.ForeignKey("treecomments.TreeComment", on_delete=models.CASCADE, related_name="votes")
 
     def save(self, *args, **kwargs):
         if self.comment.user == self.user:
