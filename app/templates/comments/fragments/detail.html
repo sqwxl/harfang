@@ -1,12 +1,13 @@
-<div id="comment-{{ comment.id }}" class="flex">
+<div id="comment-{{ comment.id }}" class="flex" ml-3>
     <div class="m-2">
-        <button class="p-0 m-0 w-3 rounded-none border-none {% if comment.has_voted %}opacity-25{% endif %} bg-bg"
+        <button class="p-3 m-0 w-10 rounded-none border-none {% if comment.has_voted or comment.user == user %}opacity-25{% endif %} bg-bg hover:bg-bg"
                 type="button"
+                {% if not user.is_authenticated or comment.user == user %}disabled{% endif %}
                 hx-post="{% url 'comment_vote' comment.id %}"
                 hx-target="#comment-{{ comment.id }}"
                 hx-swap="outerHTML">{% include "fragments/votearrow-svg.html" %}</button>
     </div>
-    <div class="ml-2">
+    <div>
         <div class="text-sm text-muted">
             <a href="{% url 'profile' comment.user.username %}">{{ comment.user.username }}</a>
             <span>{{ comment.submit_date|timesince }} ago</span>

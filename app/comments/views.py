@@ -1,5 +1,3 @@
-import logging
-
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404
@@ -8,8 +6,6 @@ from django.template.response import TemplateResponse
 from .forms import CommentForm
 from .models import Comment
 
-logger = logging.getLogger(__name__)
-
 
 @login_required
 def reply(request, parent_id):
@@ -17,17 +13,12 @@ def reply(request, parent_id):
     if request.method == "POST":
         form = CommentForm(request.POST)
         if form.is_valid():
-            comment = form.get_comment_object()
+            comment = form.save(commit=False)
             comment.user = request.user
             comment.save()
             return HttpResponseRedirect(comment.get_content_object_url() + "#comment-" + str(comment.id))  # type: ignore
     else:
-        form = CommentForm(
-            initial={
-                "user": request.user,
-                "parent": parent_id,
-            },
-        )
+        form = CommentForm(initial={"parent": parent_id})
 
     return TemplateResponse(
         request,
@@ -45,11 +36,11 @@ def update(request, pk):
     if request.method == "POST":
         form = CommentForm(request.POST)
         if form.is_valid() and form.has_changed():
-            comment = form.get_comment_object()
+            comment = form.save(commit=False)
             comment.save()
             return HttpResponseRedirect(comment.get_content_object_url())
     else:
-        form = CommentForm(comment.content_object, instance=comment)
+        form = CommentForm(instance=comment)
 
     return TemplateResponse(
         request,
@@ -78,7 +69,6 @@ def update(request, pk):
 
 
 # TODO  this should be a POST; don't actually delete the comment, just mark it as deleted
-# might be redundant with django_comments' delete view, check that
 # def delete(request, pk):
 #     reply = get_object_or_404(Comment, pk=pk)
 #     if request.method == "POST":

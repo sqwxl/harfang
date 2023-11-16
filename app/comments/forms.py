@@ -10,10 +10,17 @@ from .models import Comment
 
 
 class CommentForm(forms.ModelForm):
-    post = forms.IntegerField(widget=forms.HiddenInput)
+    class Meta:
+        model = Comment
+        fields = ["body", "post", "parent", "honeypot"]
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields["post"].widget = forms.HiddenInput()
+
     parent = TreeNodeChoiceField(queryset=Comment.objects.all(), widget=forms.HiddenInput, required=False)
 
-    body = forms.CharField(max_length=3000, widget=forms.Textarea)
+    body = forms.CharField(label=_("Comment"), max_length=3000, widget=forms.Textarea)
 
     honeypot = forms.CharField(
         required=False, label=_("If you enter anything in this field " "your comment will be treated as spam")

@@ -109,16 +109,19 @@ def _posts_detail(request, pk):
     post = get_object_or_404(Post, pk=pk)
     form = None
     comments = post.comments.all().ordered_by_points()
+
     if request.user.is_authenticated:
+        # annotate comments w user's vote status
         comments = comments.with_user_vote_status(request.user)
-        form = CommentForm()
+
+        form = CommentForm(initial={"post": post})
 
         if request.method == "POST":
             form = CommentForm(request.POST)
+            print(form.errors)
             if form.is_valid():
                 comment = form.save(commit=False)
                 comment.user = request.user
-                comment.post = post
                 comment.save()
             if is_htmx(request):
                 return _posts_detail(getify(request), pk)
@@ -129,8 +132,8 @@ def _posts_detail(request, pk):
         request,
         "posts/detail.html",
         {
-            "post": post,
             "page_title": post.title,
+            "post": post,
             "form": form,
             "comments": comments,
         },
