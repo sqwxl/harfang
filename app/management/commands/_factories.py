@@ -2,12 +2,11 @@ from datetime import datetime
 
 import factory
 import faker
-from django.contrib.contenttypes.models import ContentType
 from django.db.models.signals import post_save
 from django.utils import timezone
 
+from app.comments.models import Comment
 from app.models import CommentVote, Post, PostVote, Profile, User
-from app.treecomments.models import TreeComment
 
 fake = faker.Faker()
 
@@ -63,14 +62,14 @@ class PostFactory(factory.django.DjangoModelFactory):
 
 class CommentFactory(factory.django.DjangoModelFactory):
     class Meta:
-        model = TreeComment
+        model = Comment
 
     user = factory.SubFactory(UserFactory)
-    comment = factory.Faker("paragraph", nb_sentences=10, variable_nb_sentences=True)
+    body = factory.Faker("paragraph", nb_sentences=10, variable_nb_sentences=True)
 
     @factory.lazy_attribute
     def submit_date(self):
-        start_date = self.content_object.submit_date if not self.parent else self.parent.submit_date
+        start_date = self.post.submit_date if not self.parent else self.parent.submit_date
         if start_date < self.user.date_joined:
             start_date = self.user.date_joined
 
@@ -79,11 +78,7 @@ class CommentFactory(factory.django.DjangoModelFactory):
             tzinfo=timezone.get_current_timezone(),
         )
 
-    content_type = ContentType.objects.get_for_model(Post)  # type: ignore
-    object_pk = factory.SelfAttribute("content_object.id")
-    content_object = factory.SubFactory(PostFactory)
-    site_id = 1
-
+    post = factory.SubFactory(PostFactory)
     parent = factory.SubFactory("harfang._factories.CommentFactory")
 
 

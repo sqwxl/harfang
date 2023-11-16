@@ -6,8 +6,8 @@ from django.urls import reverse
 from django.utils import timezone
 from django.views.decorators.http import require_POST
 
-from app.treecomments.forms import TreeCommentForm
-from app.treecomments.models import TreeComment
+from app.comments.forms import CommentForm
+from app.comments.models import Comment
 from app.utils import get_page_by_request
 from app.utils.htmx import for_htmx, getify, is_htmx
 
@@ -87,7 +87,7 @@ def post_vote(request, pk):
 @login_required
 @require_POST
 def comment_vote(request, pk):
-    comment = get_object_or_404(TreeComment, pk=pk)
+    comment = get_object_or_404(Comment, pk=pk)
     vote = comment.votes.filter(user=request.user)
     if vote.exists():
         vote.delete()
@@ -108,23 +108,22 @@ def posts_detail(request, pk):
 def _posts_detail(request, pk):
     post = get_object_or_404(Post, pk=pk)
     form = None
+    comments = post.comments.all().ordered_by_points()
     if request.user.is_authenticated:
-        comments = post.comments.with_user_vote_status(request.user)
-        form = TreeCommentForm(post, initial={"user": request.user})
+        comments = comments.with_user_vote_status(request.user)
+        form = CommentForm()
 
         if request.method == "POST":
-            form = TreeCommentForm(post, request.POST)
+            form = CommentForm(request.POST)
             if form.is_valid():
-                comment = form.get_comment_object()
+                comment = form.save(commit=False)
                 comment.user = request.user
-                comment.content_object = post
+                comment.post = post
                 comment.save()
             if is_htmx(request):
                 return _posts_detail(getify(request), pk)
 
             return HttpResponseRedirect("")
-    else:
-        comments = post.comments.all()
 
     return TemplateResponse(
         request,
@@ -214,9 +213,7 @@ def user_comments(request, username):
         "users/comments.html",
         {
             "view_user": view_user,
-            "page_obj": get_page_by_request(
-                request, TreeComment.objects.filter(user=view_user).order_by("-submit_date")
-            ),
+            "page_obj": get_page_by_request(request, Comment.objects.filter(user=view_user).order_by("-submit_date")),
             "page_title": f"{view_user.username}'s Comments",
         },
     )

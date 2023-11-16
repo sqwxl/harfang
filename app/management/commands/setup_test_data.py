@@ -3,8 +3,8 @@ import random
 from django.core.management.base import BaseCommand
 from django.db import transaction
 
+from app.comments.models import Comment
 from app.models import CommentVote, Post, PostVote, User
-from app.treecomments.models import TreeComment
 
 from ._factories import CommentFactory, CommentVoteFactory, PostFactory, PostVoteFactory, UserFactory
 
@@ -24,7 +24,7 @@ class Command(BaseCommand):
         # Delete all users except the superuser
         User.objects.all().exclude(is_superuser=True).delete()
         # Delete all model instances
-        models = [Post, TreeComment, PostVote, CommentVote]
+        models = [Post, Comment, PostVote, CommentVote]
         for model in models:
             model.objects.all().delete()
 
@@ -44,7 +44,7 @@ class Command(BaseCommand):
                 comments.append(
                     CommentFactory(
                         user=random.choice(users),
-                        content_object=post,
+                        post=post,
                         parent=random.choice([None, *comments]) if comments else None,
                     )
                 )
@@ -57,7 +57,7 @@ class Command(BaseCommand):
                         user=user,
                     )
 
-        comments = TreeComment.objects.all()
+        comments = Comment.objects.all()
 
         for comment in comments:
             users_drain = iter(users.copy())

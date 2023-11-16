@@ -13,7 +13,7 @@
                         <a href="{% url 'post' comment.content_object.id %}#comment-{{ comment.id }}"
                            preload="mouseover"
                            class="no-link">
-                            <div class="max-w-full">{{ comment.comment|truncatewords:40 }}</div>
+                            <div class="max-w-full">{{ comment.body|truncatewords:40 }}</div>
                         </a>
                         <div class="text-sm text-muted">
                             <a href="{% url 'profile' comment.user.username %}"

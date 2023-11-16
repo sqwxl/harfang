@@ -5,26 +5,24 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404
 from django.template.response import TemplateResponse
 
-from .forms import TreeCommentForm
-from .models import TreeComment
+from .forms import CommentForm
+from .models import Comment
 
 logger = logging.getLogger(__name__)
 
 
 @login_required
 def reply(request, parent_id):
-    parent = get_object_or_404(TreeComment, id=parent_id)
+    parent = get_object_or_404(Comment, id=parent_id)
     if request.method == "POST":
-        form = TreeCommentForm(parent.content_object, request.POST)
+        form = CommentForm(request.POST)
         if form.is_valid():
             comment = form.get_comment_object()
-            print(f"###### form: {form.fields}")
             comment.user = request.user
             comment.save()
             return HttpResponseRedirect(comment.get_content_object_url() + "#comment-" + str(comment.id))  # type: ignore
     else:
-        form = TreeCommentForm(
-            parent.content_object,
+        form = CommentForm(
             initial={
                 "user": request.user,
                 "parent": parent_id,
@@ -43,15 +41,15 @@ def reply(request, parent_id):
 
 
 def update(request, pk):
-    comment = get_object_or_404(TreeComment, pk=pk)
+    comment = get_object_or_404(Comment, pk=pk)
     if request.method == "POST":
-        form = TreeCommentForm(request.POST)
+        form = CommentForm(request.POST)
         if form.is_valid() and form.has_changed():
             comment = form.get_comment_object()
             comment.save()
             return HttpResponseRedirect(comment.get_content_object_url())
     else:
-        form = TreeCommentForm(comment.content_object, instance=comment)
+        form = CommentForm(comment.content_object, instance=comment)
 
     return TemplateResponse(
         request,

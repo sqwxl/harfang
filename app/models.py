@@ -66,7 +66,7 @@ class Post(PointsMixin, models.Model):
     body = models.TextField(blank=True)
     submit_date = models.DateTimeField(default=timezone.now, editable=False)
     enable_comments = models.BooleanField(default=True)
-    comments = GenericRelation("treecomments.TreeComment", object_id_field="object_pk")
+    comments = GenericRelation("comments.Comment", object_id_field="object_pk")
 
     objects = PostQuerySet.as_manager()
 
@@ -125,7 +125,7 @@ class CommentVote(models.Model):
 
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     submit_date = models.DateTimeField(default=timezone.now, editable=False)
-    comment = models.ForeignKey("treecomments.TreeComment", on_delete=models.CASCADE, related_name="votes")
+    comment = models.ForeignKey("comments.Comment", on_delete=models.CASCADE, related_name="votes")
 
     def save(self, *args, **kwargs):
         if self.comment.user == self.user:

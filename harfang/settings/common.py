@@ -22,18 +22,13 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     # apps
     "app",
-    "app.treecomments",
+    "app.comments",
     # 3rd-party apps
     "compressor",
-    "django_comments",
     "mptt",
     "widget_tweaks",
 ]
 
-
-# https://django-contrib-comments.readthedocs.io/en/latest/custom.html#customizing-the-comments-framework
-COMMENTS_APP = "app.treecomments"
-COMMENTS_ALLOW_PROFANITIES = False
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
@@ -81,6 +76,7 @@ DATABASES = {
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
 
 AUTH_USER_MODEL = "app.User"
+LOGIN_URL = "/login/"
 LOGIN_REDIRECT_URL = "/"
 
 AUTH_PASSWORD_VALIDATORS = [
@@ -135,6 +131,7 @@ MEDIA_ROOT = BASE_DIR / "_media"
 # https://django-debug-toolbar.readthedocs.io/en/latest/tips.html#working-with-htmx-and-turbo
 DEBUG_TOOLBAR_CONFIG = {"ROOT_TAG_EXTRA_ATTRS": "hx-preserve"}
 
+COMMENTS_ALLOW_PROFANITIES = False
 PROFANITIES_LIST = [
     "beaner",
     "chinaman",
