@@ -1,28 +1,33 @@
 <div align="center">
 
-# 🦉 Harfang
+# 🪶 Harfang
 
-A [Hacker News](https://news.ycombinator.com/) clone
+A social network/forum inspired by Hacker News and Reddit.
 
 </div>
 
-Built with Django, HTMX, Alpine.js and Tailwind CSS.\
-Uses SQLite for storage.
+Built with Django, HTMX, Alpine.js, Tailwind CSS and SQLite
 
-## Nix Quick Start
+Features so far:
 
-Optional dev environment set up with [`nix`](https://nixos.org/) (via `devenv`) to ensure reproducibility across machines.
+- Posts ("Top" and "Latest" views)
+- Threaded comment system (i.e. nested comments)
+- Votes and points system for posts and comments
+- User profiles
+- Admin operations (moderation)
 
-install [`devenv`](https://devenv.sh/getting-started/)
+Next up:
 
-install [`direnv`](https://devenv.sh/automatic-shell-activation/) with the shell hook
-
-clone the repo and run `direnv allow` in the directory to enable automatic shell (and virtualenv) activation
+- Public API (for bot accounts)
+- Media Posts
+- User DMs/Chat
+- Host an MVP
+- Email system
 
 ## Dev Quick Start
 
-(if not using the devenv shell, you'll need to have [`just`](https://github.com/casey/just) to run the following convenience tasks.  
-if you don't feel like installing it, you can take a look inside the `justfile` to see what commands you should run)
+Use [`just`](https://github.com/casey/just).\
+If you don't feel like installing it, you can take a look inside the [justfile](justfile) to see what commands you should run)
 
 ```shell
 # install requirements
@@ -39,3 +44,13 @@ if you're editing styles, run the following in another terminal:
 # run tailwind binary to watch for changes & update the output.css
 just css
 ```
+
+## Nix Quick Start
+
+Optional dev environment set up with [`nix`](https://nixos.org/) (via `devenv`) to ensure reproducibility across machines.
+
+install [`devenv`](https://devenv.sh/getting-started/)
+
+install [`direnv`](https://devenv.sh/automatic-shell-activation/) with the shell hook
+
+clone the repo and run `direnv allow` in the directory to enable automatic shell (and virtualenv) activation
