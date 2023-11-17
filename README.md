@@ -2,11 +2,10 @@
 
 # 🪶 Harfang
 
-A social network/forum inspired by Hacker News and Reddit.
+A social network/forum inspired by Hacker News and Reddit.\
+Built with Django, HTMX, Alpine.js, Tailwind CSS
 
 </div>
-
-Built with Django, HTMX, Alpine.js, Tailwind CSS and SQLite
 
 Features so far:
 
@@ -19,6 +18,7 @@ Features so far:
 Next up:
 
 - Public API (for bot accounts)
+- Optimize accessibility
 - Media Posts
 - User DMs/Chat
 - Host an MVP
