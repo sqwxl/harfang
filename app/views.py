@@ -67,39 +67,6 @@ def posts_latest(request):
     )
 
 
-@login_required
-@require_POST
-def post_vote(request, pk):
-    # TODO generalize to handle votes coming from elsewhere than the feed view
-    post = get_object_or_404(Post, pk=pk)
-    vote = post.votes.filter(user=request.user)
-    if vote.exists():
-        vote.delete()
-        post.has_voted = False
-    else:
-        vote = PostVote(user=request.user, post=post, submit_date=timezone.now())
-        vote.save()
-        post.has_voted = True
-
-    return TemplateResponse(request, "posts/fragments/feed_item.html", {"post": post})
-
-
-@login_required
-@require_POST
-def comment_vote(request, pk):
-    comment = get_object_or_404(Comment, pk=pk)
-    vote = comment.votes.filter(user=request.user)
-    if vote.exists():
-        vote.delete()
-        comment.has_voted = False
-    else:
-        vote = CommentVote(user=request.user, comment=comment, submit_date=timezone.now())
-        vote.save()
-        comment.has_voted = True
-
-    return TemplateResponse(request, "comments/fragments/detail.html", {"comment": comment})
-
-
 @for_htmx(use_block_from_params=True)
 def posts_detail(request, pk):
     return _posts_detail(request, pk)
@@ -108,11 +75,12 @@ def posts_detail(request, pk):
 def _posts_detail(request, pk):
     post = get_object_or_404(Post, pk=pk)
     form = None
-    comments = post.comments.all().ordered_by_points()
 
     if request.user.is_authenticated:
         # annotate comments w user's vote status
-        comments = comments.with_user_vote_status(request.user)
+        comments = Comment.objects.with_user_vote_status(request.user).filter(
+            post=post
+        )
 
         form = CommentForm(initial={"post": post})
 
@@ -127,6 +95,8 @@ def _posts_detail(request, pk):
                 return _posts_detail(getify(request), pk)
 
             return HttpResponseRedirect("")
+    else:
+        comments = Comment.objects.filter(post=post)
 
     return TemplateResponse(
         request,
@@ -175,15 +145,16 @@ def user_profile(request, username):
 
 
 @login_required
-def user_profile_edit(request):
+def user_profile_edit(request, username):
+    form = ProfileForm()
+
     if request.method == "POST":
         form = ProfileForm(request.POST, instance=request.user.profile)
         if form.is_valid():
             form.save()
-            return HttpResponseRedirect(reverse("profile", kwargs={"username": request.user.username}))
-    else:
-        form = ProfileForm()
-
+            return HttpResponseRedirect(
+                reverse("profile", kwargs={"username": request.user.username})
+            )
     return TemplateResponse(
         request,
         "users/profile_edit.html",
@@ -202,7 +173,10 @@ def user_posts(request, username):
         "users/posts.html",
         {
             "view_user": view_user,
-            "page_obj": get_page_by_request(request, Post.objects.filter(user=view_user).order_by("-submit_date")),
+            "page_obj": get_page_by_request(
+                request,
+                Post.objects.filter(user=view_user).order_by("-submit_date"),
+            ),
             "page_title": f"{view_user.username}'s Posts",
         },
     )
@@ -216,7 +190,10 @@ def user_comments(request, username):
         "users/comments.html",
         {
             "view_user": view_user,
-            "page_obj": get_page_by_request(request, Comment.objects.filter(user=view_user).order_by("-submit_date")),
+            "page_obj": get_page_by_request(
+                request,
+                Comment.objects.filter(user=view_user).order_by("-submit_date"),
+            ),
             "page_title": f"{view_user.username}'s Comments",
         },
     )
@@ -231,3 +208,52 @@ def user_create(request):
     else:
         form = UserCreationForm()
     return TemplateResponse(request, "users/form.html", {"form": form})
+
+
+@login_required
+@require_POST
+def post_vote(request, pk):
+    post = get_object_or_404(Post, pk=pk)
+    try:
+        vote = post.votes.get(user=request.user)
+        vote.delete()
+        post.has_voted = False
+    except PostVote.DoesNotExist:
+        PostVote(
+            user=request.user, post=post, submit_date=timezone.now()
+        ).save()
+        post.has_voted = True
+    except PostVote.MultipleObjectsReturned as e:
+        # TODO handle this case (should never happen since unique_together is set on PostVote)
+        print(e)
+
+    post.refresh_from_db()
+
+    # TODO generalize to handle votes coming from elsewhere than the feed view
+    return TemplateResponse(
+        request, "posts/fragments/feed_item.html", {"post": post}
+    )
+
+
+@login_required
+@require_POST
+def comment_vote(request, pk):
+    comment = get_object_or_404(Comment, pk=pk)
+    try:
+        vote = comment.votes.get(user=request.user)
+        vote.delete()
+        comment.has_voted = False
+    except CommentVote.DoesNotExist:
+        CommentVote(
+            user=request.user, comment=comment, submit_date=timezone.now()
+        ).save()
+        comment.has_voted = True
+    except CommentVote.MultipleObjectsReturned as e:
+        # TODO handle this case (should never happen since unique_together is set on CommentVote)
+        print(e)
+
+    comment.refresh_from_db()
+
+    return TemplateResponse(
+        request, "comments/fragments/detail.html", {"comment": comment}
+    )

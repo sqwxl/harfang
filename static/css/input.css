@@ -53,6 +53,10 @@
 
 }
 
+.anchor-btn {
+  @apply bg-bg hover:bg-bg inline 
+}
+
 @layer components {
   .no-link {
     @apply text-fg no-underline;

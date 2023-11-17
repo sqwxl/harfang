@@ -12,6 +12,6 @@ class PointsMixin(models.Model):
         self.save(update_fields=["points"])
 
     def decrement_points(self):
-        # TODO prevent negative points? (shouldnt be possible)
+        # TODO prevent negative points? (shouldnt be possible because of unique_together)
         self.points = models.F("points") - 1
         self.save(update_fields=["points"])

@@ -1,29 +1,30 @@
-<div id="comment-{{ comment.id }}" class="flex" ml-3>
-    <div class="m-2">
-        <button class="p-3 m-0 w-10 rounded-none border-none {% if comment.has_voted or comment.user == user %}opacity-25{% endif %} bg-bg hover:bg-bg"
-                type="button"
-                {% if not user.is_authenticated or comment.user == user %}disabled{% endif %}
-                hx-post="{% url 'comment_vote' comment.id %}"
-                hx-target="#comment-{{ comment.id }}"
-                hx-swap="outerHTML">{% include "fragments/votearrow-svg.html" %}</button>
-    </div>
+<div id="comment-{{ comment.id }}" class="flex">
+    <button class="flex-none p-2 w-8 bg-transparent hover:bg-transparent {% if comment.has_voted or comment.user == user %}opacity-25{% endif %}"
+            type="button"
+            {% if not user.is_authenticated or comment.user == user %}disabled{% endif %}
+            hx-post="{% url 'comment_vote' comment.id %}"
+            hx-target="#comment-{{ comment.id }}"
+            hx-swap="outerHTML">{% include "fragments/votearrow-svg.html" %}</button>
     <div>
         <div class="text-sm text-muted">
-            <a href="{% url 'profile' comment.user.username %}">{{ comment.user.username }}</a>
+            <span>{{ comment.points }} point{{ comment.points|pluralize }} |{{ " " }}</span>
+            <a href="{% url 'profile' comment.user.username %}"
+               {% if user == comment.user %}class="text-orange"{% endif %}>{{ comment.user.username }}</a>
             <span>{{ comment.submit_date|timesince }} ago</span>
             {% if tree_context %}
-                {% if comment.get_ancestors|length > 1 %}| <a href="#comment-{{ comment.get_root.id }}">root</a>{% endif %}
-                {% if comment.parent %}| <a href="#comment-{{ comment.parent.id }}">parent</a>{% endif %}
+                {% if comment.is_child_node %}
+                    | <a href="#comment-{{ comment.get_root.id }}">root</a> | <a href="#comment-{{ comment.parent.id }}">parent</a>
+                {% endif %}
                 {% with prev=comment.get_previous_sibling next=comment.get_next_sibling %}
                     {% if prev %}| <a href="#comment-{{ prev.id }}">prev</a>{% endif %}
                     {% if next %}| <a href="#comment-{{ next.id }}">next</a>{% endif %}
                 {% endwith %}
                 {% if not comment.is_leaf_node %}
-                    | <a href="javascript:void(0)"
-                         class="no-link"
-                         x-data="{ open: true }"
-                         @click="$refs.c{{ comment.id }}.classList.toggle('hidden'); open = !open"
-                         x-text="open ? '[ - ]' : '[ + ]'"></a>
+                    |
+                    <button class="anchor-btn"
+                            x-data="{ open: true }"
+                            @click="$refs.c{{ comment.id }}.classList.toggle('hidden'); open = !open"
+                            x-text="open ? '[ - ]' : '[ + ]'"></button>
                 {% endif %}
             {% endif %}
         </div>
@@ -32,16 +33,18 @@
         </div>
         <div class="ml-5 text-sm text-muted">
             {% if user.is_authenticated %}
-                <a href="{% url 'comments:reply' comment.id %}">reply</a>
-                {% if user == comment.user or user.is_staff %}
-                    {% if comment.is_editable %}
-                        |
-                        <a href="{% url 'comments:edit' comment.id %}">edit</a>
-                        |
-                        <a href="#"
-                           hx-delete="{% url 'comments:delete' comment.id %}"
-                           hx-target="#comment-{{ comment.id }}"
-                           hx-swap="outerHTML">delete</a>
+                {% if tree_context %}
+                    <a href="{% url 'comments:reply' comment.id %}">reply</a>
+                    {% if user == comment.user or user.is_staff %}
+                        {% if comment.is_editable %}
+                            |
+                            <a href="{% url 'comments:edit' comment.id %}">edit</a>
+                            |
+                            <a href="#"
+                               hx-delete="{% url 'comments:delete' comment.id %}"
+                               hx-target="#comment-{{ comment.id }}"
+                               hx-swap="outerHTML">delete</a>
+                        {% endif %}
                     {% endif %}
                 {% endif %}
             {% endif %}

@@ -18,7 +18,11 @@ class User(PointsMixin, AbstractUser):
 
 
 class Profile(models.Model):
-    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="profile")
+    user = models.OneToOneField(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name="profile",
+    )
     bio = models.TextField(blank=True)
 
     def __str__(self):
@@ -38,7 +42,11 @@ def save_user_profile(sender, instance, **kwargs):
 
 class PostQuerySet(models.QuerySet):
     def with_user_vote_status(self, user):
-        return self.annotate(has_voted=models.Exists(PostVote.objects.filter(user=user, post=models.OuterRef("pk"))))
+        return self.annotate(
+            has_voted=models.Exists(
+                PostVote.objects.filter(user=user, post=models.OuterRef("pk"))
+            )
+        )
 
     def day(self):
         return self.filter(submit_date__gte=timezone.now() - timedelta(days=1))
@@ -50,7 +58,9 @@ class PostQuerySet(models.QuerySet):
         return self.filter(submit_date__gte=timezone.now() - timedelta(days=30))
 
     def year(self):
-        return self.filter(submit_date__gte=timezone.now() - timedelta(days=365))
+        return self.filter(
+            submit_date__gte=timezone.now() - timedelta(days=365)
+        )
 
     def latest(self):
         return self.order_by("-submit_date")
@@ -60,13 +70,18 @@ class PostQuerySet(models.QuerySet):
 
 
 class Post(PointsMixin, models.Model):
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True, related_name="posts")
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.SET_NULL,
+        null=True,
+        related_name="posts",
+    )
     title = models.CharField(max_length=250)
     url = models.CharField(max_length=200, blank=True)
     body = models.TextField(blank=True)
     submit_date = models.DateTimeField(default=timezone.now, editable=False)
-    enable_comments = models.BooleanField(default=True)
     comments = GenericRelation("comments.Comment", object_id_field="object_pk")
+    # TODO enable_comments = models.BooleanField(default=True)
 
     objects = PostQuerySet.as_manager()
 
@@ -101,7 +116,9 @@ class PostVote(models.Model):
 
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     submit_date = models.DateTimeField(default=timezone.now, editable=False)
-    post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name="votes")
+    post = models.ForeignKey(
+        Post, on_delete=models.CASCADE, related_name="votes"
+    )
 
     def save(self, *args, **kwargs):
         if self.post.user == self.user:
@@ -125,19 +142,24 @@ class CommentVote(models.Model):
 
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     submit_date = models.DateTimeField(default=timezone.now, editable=False)
-    comment = models.ForeignKey("comments.Comment", on_delete=models.CASCADE, related_name="votes")
+    comment = models.ForeignKey(
+        "comments.Comment", on_delete=models.CASCADE, related_name="votes"
+    )
 
     def save(self, *args, **kwargs):
         if self.comment.user == self.user:
             raise ValidationError("You cannot vote on your own comment")
 
         is_new = self._state.adding
-        super().save(*args, **kwargs)
         if is_new:
             self.comment.increment_points()
             self.comment.user.increment_points()
+        super().save(*args, **kwargs)
 
     def delete(self, *args, **kwargs):
-        self.comment.decrement_points()
-        self.comment.user.decrement_points()
+        # if comment exists, decrement its points
+        print("deleting vote")
+        if self.comment:
+            self.comment.decrement_points()
+            self.comment.user.decrement_points()
         super().delete(*args, **kwargs)

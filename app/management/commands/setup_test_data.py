@@ -31,8 +31,11 @@ class Command(BaseCommand):
         self.stdout.write("Creating new data")
 
         users = []
-        for _ in range(NUM_USERS):
-            users.append(UserFactory())
+        for i in range(NUM_USERS):
+            users.append(UserFactory(username=f"user{i}"))
+
+        # create superuser
+        users.append(UserFactory(is_superuser=True, is_staff=True, username="admin"))
 
         posts = []
         for _ in range(NUM_POSTS):
@@ -41,13 +44,11 @@ class Command(BaseCommand):
         for post in posts:
             comments = []
             for _ in range(random.randint(0, NUM_COMMENTS_PER_POST)):
-                comments.append(
-                    CommentFactory(
-                        user=random.choice(users),
-                        post=post,
-                        parent=random.choice([None, *comments]) if comments else None,
-                    )
-                )
+                parent = random.choice([None, *comments])
+                comment = CommentFactory(user=random.choice(users), post=post, parent=parent)
+                # if parent:
+                #     parent.refresh_from_db()
+                comments.append(comment)
             users_drain = iter(users.copy())
             for _ in range(random.randint(0, NUM_VOTES_PER_POST)):
                 user = next(users_drain)

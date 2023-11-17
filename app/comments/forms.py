@@ -15,6 +15,11 @@ class CommentForm(forms.ModelForm):
         fields = ["body", "post", "parent", "honeypot"]
 
     def __init__(self, *args, **kwargs):
+        # use parent's post if parent is set in initial dict
+        if initial := kwargs.get("initial"):
+            if "parent" in initial:
+                initial["post"] = initial["parent"].post
+
         super().__init__(*args, **kwargs)
         self.fields["post"].widget = forms.HiddenInput()
 

@@ -3,16 +3,16 @@
     {% recursetree comments %}
         {% with tree_context=True %}
             <li>
-                <div>
-                    {% include "comments/fragments/detail.html" with comment=node %}
-                    {% if not node.is_leaf_node %}
-                        <div x-ref="c{{ node.id }}" class="ml-2">
+                {% include "comments/fragments/detail.html" with comment=node %}
+                {% if not node.is_leaf_node %}
+                    <div class="ml-4 border-l-2 border-l-solid border-l-grey">
+                        <div x-ref="c{{ node.id }}">
                             <ul class="p-0 m-0 mt-4 list-none">
                                 {{ children }}
                             </ul>
                         </div>
-                    {% endif %}
-                </div>
+                    </div>
+                {% endif %}
             </li>
         {% endwith %}
     {% endrecursetree %}

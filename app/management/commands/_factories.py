@@ -29,7 +29,7 @@ class UserFactory(factory.django.DjangoModelFactory):
         model = User
 
     username = factory.Faker("user_name")
-    password = factory.Faker("password")
+    password = factory.django.Password("password")
     email = factory.Faker("email")
     date_joined = factory.Faker(
         "date_time_between", start_date=datetime(2023, 8, 1), tzinfo=timezone.get_current_timezone()
@@ -57,7 +57,7 @@ class PostFactory(factory.django.DjangoModelFactory):
         start_date=factory.SelfAttribute("..user.date_joined"),
         tzinfo=timezone.get_current_timezone(),
     )
-    enable_comments = factory.Faker("boolean", chance_of_getting_true=95)
+    # enable_comments = factory.Faker("boolean", chance_of_getting_true=95)
 
 
 class CommentFactory(factory.django.DjangoModelFactory):
@@ -65,6 +65,10 @@ class CommentFactory(factory.django.DjangoModelFactory):
         model = Comment
 
     user = factory.SubFactory(UserFactory)
+
+    post = factory.SubFactory(PostFactory)
+    parent = factory.SubFactory("harfang._factories.CommentFactory")
+
     body = factory.Faker("paragraph", nb_sentences=10, variable_nb_sentences=True)
 
     @factory.lazy_attribute
@@ -77,9 +81,6 @@ class CommentFactory(factory.django.DjangoModelFactory):
             start_date=start_date,
             tzinfo=timezone.get_current_timezone(),
         )
-
-    post = factory.SubFactory(PostFactory)
-    parent = factory.SubFactory("harfang._factories.CommentFactory")
 
 
 class PostVoteFactory(factory.django.DjangoModelFactory):

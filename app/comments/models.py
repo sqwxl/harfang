@@ -3,34 +3,23 @@ from django.db import models
 from django.urls import reverse
 from django.utils import timezone
 from mptt.models import MPTTModel, TreeForeignKey, TreeManager
-from mptt.querysets import TreeQuerySet
 
 from app.common.mixins import PointsMixin
 from app.models import CommentVote
 
 
-class CommentQuerySet(TreeQuerySet):
+class CommentManager(TreeManager):
     def with_user_vote_status(self, user):
-        return self.annotate(
+        return self.get_queryset().annotate(
             has_voted=models.Exists(CommentVote.objects.filter(user=user, comment=models.OuterRef("pk")))
         )
-
-    def ordered_by_points(self):
-        return self.order_by("-points", "submit_date")
-
-
-class CommentManager(TreeManager):
-    def get_queryset(self):
-        return CommentQuerySet(self.model, using=self._db)
 
 
 class Comment(PointsMixin, MPTTModel):
     class MPTTMeta:
         order_insertion_by = ["submit_date"]
 
-    user = models.ForeignKey(
-        settings.AUTH_USER_MODEL, verbose_name="user", null=True, on_delete=models.SET_NULL, related_name="comments"
-    )
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, null=True, on_delete=models.SET_NULL, related_name="comments")
     post = models.ForeignKey("app.Post", on_delete=models.CASCADE, related_name="comments")
     parent = TreeForeignKey("self", on_delete=models.CASCADE, null=True, blank=True, related_name="children")
 

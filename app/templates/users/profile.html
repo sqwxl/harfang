@@ -3,7 +3,7 @@
     <section>
         <h1>{{ profile.user.username }}</h1>
         {% if user == profile.user %}
-            <a href="{% url 'edit_profile' user.username %}">Edit</a>
+            <a href="{% url 'profile_edit' user.username %}">Edit</a>
         {% endif %}
         <p>Joined {{ profile.user.date_joined|timesince }} ago | Karma: {{ profile.user.points }}</p>
         {% if profile.bio %}<div>{{ profile.bio|linebreaks }}</div>{% endif %}

@@ -10,7 +10,7 @@
             {% block page-and-paging-controls %}
                 {% for comment in page_obj %}
                     <div class="mx-2 mb-6">
-                        <a href="{% url 'post' comment.content_object.id %}#comment-{{ comment.id }}"
+                        <a href="{% url 'post' comment.post.id %}#comment-{{ comment.id }}"
                            preload="mouseover"
                            class="no-link">
                             <div class="max-w-full">{{ comment.body|truncatewords:40 }}</div>

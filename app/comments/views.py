@@ -16,9 +16,11 @@ def reply(request, parent_id):
             comment = form.save(commit=False)
             comment.user = request.user
             comment.save()
-            return HttpResponseRedirect(comment.get_content_object_url() + "#comment-" + str(comment.id))  # type: ignore
+            return HttpResponseRedirect(
+                comment.post.get_absolute_url() + "#comment-" + str(comment.id)
+            )  # type: ignore
     else:
-        form = CommentForm(initial={"parent": parent_id})
+        form = CommentForm(initial={"parent": parent})
 
     return TemplateResponse(
         request,
