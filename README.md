@@ -22,7 +22,9 @@ Next up:
 - Media Posts
 - User DMs/Chat
 - Host an MVP
+- SEO
 - Email system
+- Dark/Light color-schemes
 
 ## Dev Quick Start
 

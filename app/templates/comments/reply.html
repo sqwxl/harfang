@@ -7,10 +7,7 @@
         <form action="" method="post">
             {% csrf_token %}
             {% include "comments/fragments/form.html" %}
-            <div class="flex">
-                <button>Post Reply</button>
-                <button type="button" onclick="window.history.back()">Cancel</button>
-            </div>
+            <button>Save</button>
         </form>
     </section>
 {% endblock content %}

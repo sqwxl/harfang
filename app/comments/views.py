@@ -40,7 +40,7 @@ def update(request, pk):
         if form.is_valid() and form.has_changed():
             comment = form.save(commit=False)
             comment.save()
-            return HttpResponseRedirect(comment.get_content_object_url())
+            return HttpResponseRedirect(comment.get_post_url())
     else:
         form = CommentForm(instance=comment)
 
@@ -49,6 +49,23 @@ def update(request, pk):
         "comments/update.html",
         {
             "form": form,
+        },
+    )
+
+
+@login_required
+def delete(request, pk):
+    reply = get_object_or_404(Comment, pk=pk)
+    if request.method == "POST":
+        post_url = reply.get_post_url()
+        reply.delete()
+        return HttpResponseRedirect(post_url)
+
+    return TemplateResponse(
+        request,
+        "comments/delete.html",
+        {
+            "reply": reply,
         },
     )
 
@@ -66,23 +83,5 @@ def update(request, pk):
 #         return HttpResponseRedirect(target_object.get_absolute_url())  # type: ignore
 #
 #     return TemplateResponse(request, "comments/create.html", {"form": form})
-#
-#
-
-
-# TODO  this should be a POST; don't actually delete the comment, just mark it as deleted
-# def delete(request, pk):
-#     reply = get_object_or_404(Comment, pk=pk)
-#     if request.method == "POST":
-#         reply.delete()
-#         return HttpResponseRedirect(reverse("comments:reply", args=(reply.pk,)))
-#
-#     return TemplateResponse(
-#         request,
-#         "comments/delete.html",
-#         {
-#             "reply": reply,
-#         },
-#     )
 #
 #

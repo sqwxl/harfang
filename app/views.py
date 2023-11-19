@@ -153,7 +153,7 @@ def user_profile_edit(request, username):
         if form.is_valid():
             form.save()
             return HttpResponseRedirect(
-                reverse("profile", kwargs={"username": request.user.username})
+                reverse("profile", kwargs={"username": username})
             )
     return TemplateResponse(
         request,
