@@ -22,7 +22,9 @@ Next up:
 - Media Posts
 - User DMs/Chat
 - Host an MVP
+- SEO
 - Email system
+- Dark/Light color-schemes
 
 ## Dev Quick Start
 
@@ -47,10 +49,8 @@ just css
 
 ## Nix Quick Start
 
-Optional dev environment set up with [`nix`](https://nixos.org/) (via `devenv`) to ensure reproducibility across machines.
+Optional dev environment set up with [`nix`](https://nixos.org/) to ensure reproducibility across machines.
 
-install [`devenv`](https://devenv.sh/getting-started/)
-
-install [`direnv`](https://devenv.sh/automatic-shell-activation/) with the shell hook
+install [`devenv`](https://devenv.sh/getting-started/) and [`direnv`](https://devenv.sh/automatic-shell-activation/) with the shell hook
 
 clone the repo and run `direnv allow` in the directory to enable automatic shell (and virtualenv) activation

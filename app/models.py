@@ -2,7 +2,6 @@ from datetime import timedelta
 
 from django.conf import settings
 from django.contrib.auth.models import AbstractUser
-from django.contrib.contenttypes.fields import GenericRelation
 from django.core.exceptions import ValidationError
 from django.db import models
 from django.db.models.signals import post_save
@@ -80,7 +79,6 @@ class Post(PointsMixin, models.Model):
     url = models.CharField(max_length=200, blank=True)
     body = models.TextField(blank=True)
     submit_date = models.DateTimeField(default=timezone.now, editable=False)
-    comments = GenericRelation("comments.Comment", object_id_field="object_pk")
     # TODO enable_comments = models.BooleanField(default=True)
 
     objects = PostQuerySet.as_manager()

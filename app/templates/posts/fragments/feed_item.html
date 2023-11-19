@@ -1,10 +1,11 @@
 <div id="post-{{ post.id }}" class="flex m-2 h-16 not-prose">
     <button class="flex-none p-2 w-8 bg-transparent hover:bg-transparent {% if post.has_voted or post.user == user %}opacity-25{% endif %} bg-bg hover:bg-bg"
             type="button"
+            aria-label="Upvote"
             {% if not user.is_authenticated or post.user == user %}disabled{% endif %}
             hx-post="{% url 'post_vote' post.id %}"
             hx-target="#post-{{ post.id }}"
-            hx-swap="outerHTML">{% include "fragments/votearrow-svg.html" %}</button>
+            hx-swap="outerHTML">{% include "fragments/votearrow_svg.html" %}</button>
     <div>
         <a href="{% url 'post' post.id %}"
            preload="mouseover"

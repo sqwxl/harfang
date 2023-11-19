@@ -1,10 +1,9 @@
 {% extends "base_page.html" %}
-{% load widget_tweaks %}
 {% block content %}
     <h1>Register</h1>
     <form method="post">
         {% csrf_token %}
-        {{ form.as_div }}
+        {{ form }}
         <input type="submit" value="Register">
     </form>
 {% endblock %}

@@ -23,12 +23,20 @@ class CommentForm(forms.ModelForm):
         super().__init__(*args, **kwargs)
         self.fields["post"].widget = forms.HiddenInput()
 
-    parent = TreeNodeChoiceField(queryset=Comment.objects.all(), widget=forms.HiddenInput, required=False)
+    parent = TreeNodeChoiceField(
+        queryset=Comment.objects.all(), widget=forms.HiddenInput, required=False
+    )
 
-    body = forms.CharField(label=_("Comment"), max_length=3000, widget=forms.Textarea)
+    body = forms.CharField(
+        label=_("Comment"), max_length=3000, widget=forms.Textarea
+    )
 
     honeypot = forms.CharField(
-        required=False, label=_("If you enter anything in this field " "your comment will be treated as spam")
+        required=False,
+        label=_(
+            "If you enter anything in this field "
+            "your comment will be treated as spam"
+        ),
     )
 
     def clean_honeypot(self):
@@ -45,19 +53,26 @@ class CommentForm(forms.ModelForm):
             parent=new.parent,
         )
         for old in possible_duplicates:
-            if old.submit_date.date() == new.submit_date.date() and old.body == new.body:
+            if (
+                old.submit_date.date() == new.submit_date.date()
+                and old.body == new.body
+            ):
                 return old
 
         return
 
     def clean_body(self):
         """
-        If COMMENTS_ALLOW_PROFANITIES is False, check that the comment doesn't
+        If COMMENTS_BLOCK_PROFANITIES is True, check that the comment doesn't
         contain anything in PROFANITIES_LIST.
         """
         body = self.cleaned_data["body"]
-        if not getattr(settings, "COMMENTS_ALLOW_PROFANITIES", False) and getattr(settings, "PROFANITIES_LIST", False):
-            bad_words = [w for w in settings.PROFANITIES_LIST if w in body.lower()]
+        if getattr(settings, "COMMENTS_BLOCK_PROFANITIES", True) and getattr(
+            settings, "PROFANITIES_LIST", False
+        ):
+            bad_words = [
+                w for w in settings.PROFANITIES_LIST if w in body.lower()
+            ]
             if bad_words:
                 raise forms.ValidationError(
                     ngettext(
@@ -65,6 +80,12 @@ class CommentForm(forms.ModelForm):
                         "Watch your mouth! The words %s are not allowed here.",
                         len(bad_words),
                     )
-                    % get_text_list([f"\"{i[0]}{'-' * (len(i) - 2)}{i[-1]}\"" for i in bad_words], gettext("and"))
+                    % get_text_list(
+                        [
+                            f"\"{i[0]}{'-' * (len(i) - 2)}{i[-1]}\""
+                            for i in bad_words
+                        ],
+                        gettext("and"),
+                    )
                 )
         return body

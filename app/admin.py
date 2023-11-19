@@ -3,8 +3,6 @@ from django.contrib.auth.admin import UserAdmin
 
 from .models import Post, User
 
-admin.site.register(User, UserAdmin)
-
 
 class PostAdmin(admin.ModelAdmin):
     list_display = ["title", "user", "submit_date"]
@@ -12,3 +10,4 @@ class PostAdmin(admin.ModelAdmin):
 
 
 admin.site.register(Post, PostAdmin)
+admin.site.register(User, UserAdmin)

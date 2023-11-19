@@ -5,14 +5,19 @@
         <meta charset="utf-8">
         <title>
             🪶 Harfang |&nbsp;
-            {% block title %}{{ page_title }}{% endblock %}
+            {% block page_title %}{{ page_title }}{% endblock %}
         </title>
-        <meta name="description" content="a hacker news clone">
+        <meta name="application-name" content="Harfang">
+        <meta name="description"
+              content="Harfang is simple forum/user content site with a focus on simplicity and accessibility">
+        <meta name="keywords"
+              content="forum, user content, social media, discussion">
+        <meta name="author" content="Harfang">
+        <meta name="referrer" content="same-origin">
+        <meta name="theme-color" content="#282828">
+        <meta name="color-scheme" content="dark">
+        <!-- TODO: support light color-scheme  -->
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <meta property="og:title" content="{{ site_title }}">
-        <meta property="og:type" content="website">
-        <meta property="og:url" content="">
-        <meta property="og:image" content="">
         <script src="https://unpkg.com/htmx.org@1.9.3"
                 integrity="sha384-lVb3Rd/Ca0AxaoZg5sACe8FJKF0tnUgR2Kd7ehUOG5GCcROv5uBIZsOqovBAcWua"
                 crossorigin="anonymous"></script>
