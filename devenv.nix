@@ -1,33 +1,23 @@
 { pkgs, ... }:
 
 {
-  # https://devenv.sh/basics/
+  name = "Harfang";
+
   env.GREET = "devenv";
 
-  # https://devenv.sh/packages/
   packages = [
     pkgs.just
-    pkgs.black
+    pkgs.djhtml
   ];
 
-  enterShell = ''
-    python --version
-  '';
-
-  # https://devenv.sh/languages/
   languages.python.enable = true;
   languages.python.venv.enable = true;
-  languages.python.version = "3.11.6";
 
-  # https://devenv.sh/pre-commit-hooks/
   pre-commit = {
+    excludes = [
+      ".*/migrations/.*"
+    ];
     hooks = {
-      flynt = {
-        enable = true;
-        name = "flynt";
-        files = ".*\.py";
-        entry = "${pkgs.python311Packages.flynt}/bin/flynt --fail-on-change";
-      };
       nixpkgs-fmt.enable = true;
       pyupgrade.enable = true;
       ruff.enable = true;
@@ -38,14 +28,5 @@
         entry = "${pkgs.djhtml}/bin/djhtml";
       };
     };
-    excludes = [
-      ".*/migrations/.*"
-    ];
-
   };
-
-  # https://devenv.sh/processes/
-  # processes.ping.exec = "ping example.com";
-
-  # See full reference at https://devenv.sh/reference/options/
 }
