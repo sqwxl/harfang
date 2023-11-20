@@ -8,24 +8,30 @@ from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.urls import reverse
 from django.utils import timezone
+from django.utils.translation import gettext_lazy as _
 
 from .common.mixins import PointsMixin
 
 
 class User(PointsMixin, AbstractUser):
-    pass
+    def __str__(self):
+        return self.username
 
 
 class Profile(models.Model):
+    class Meta:
+        verbose_name = _("profile")
+        verbose_name_plural = _("profiles")
+
     user = models.OneToOneField(
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
         related_name="profile",
     )
-    bio = models.TextField(blank=True)
+    bio = models.TextField(_("bio"), blank=True)
 
     def __str__(self):
-        return self.user.username
+        return f"{self.user.username}'s profile"
 
 
 @receiver(post_save, sender=settings.AUTH_USER_MODEL)
@@ -69,15 +75,19 @@ class PostQuerySet(models.QuerySet):
 
 
 class Post(PointsMixin, models.Model):
+    class Meta:
+        verbose_name = _("post")
+        verbose_name_plural = _("posts")
+
     user = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         on_delete=models.SET_NULL,
         null=True,
         related_name="posts",
     )
-    title = models.CharField(max_length=250)
-    url = models.CharField(max_length=200, blank=True)
-    body = models.TextField(blank=True)
+    title = models.CharField(_("title"), max_length=250)
+    url = models.CharField(_("url"), max_length=200, blank=True)
+    body = models.TextField(_("body"), blank=True)
     submit_date = models.DateTimeField(default=timezone.now, editable=False)
     # TODO enable_comments = models.BooleanField(default=True)
 
@@ -108,25 +118,34 @@ class Post(PointsMixin, models.Model):
         return reverse("post_vote", args=[str(self.pk)])
 
 
-class PostVote(models.Model):
+class Vote(models.Model):
     class Meta:
-        unique_together = ("user", "post")
+        abstract = True
 
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     submit_date = models.DateTimeField(default=timezone.now, editable=False)
+
+
+class PostVote(Vote):
+    class Meta:
+        unique_together = ("user", "post")
+
     post = models.ForeignKey(
         Post, on_delete=models.CASCADE, related_name="votes"
     )
+
+    def __str__(self):
+        return f"{self.user} voted on {self.post}"
 
     def save(self, *args, **kwargs):
         if self.post.user == self.user:
             raise ValidationError("You cannot vote on your own submission")
 
         is_new = self._state.adding
-        super().save(*args, **kwargs)
         if is_new:
             self.post.increment_points()
             self.post.user.increment_points()
+        super().save(*args, **kwargs)
 
     def delete(self, *args, **kwargs):
         self.post.decrement_points()
@@ -134,15 +153,16 @@ class PostVote(models.Model):
         super().delete(*args, **kwargs)
 
 
-class CommentVote(models.Model):
+class CommentVote(Vote):
     class Meta:
         unique_together = ("user", "comment")
 
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-    submit_date = models.DateTimeField(default=timezone.now, editable=False)
     comment = models.ForeignKey(
         "comments.Comment", on_delete=models.CASCADE, related_name="votes"
     )
+
+    def __str__(self):
+        return f"{self.user} voted on {self.comment}"
 
     def save(self, *args, **kwargs):
         if self.comment.user == self.user:
@@ -156,7 +176,6 @@ class CommentVote(models.Model):
 
     def delete(self, *args, **kwargs):
         # if comment exists, decrement its points
-        print("deleting vote")
         if self.comment:
             self.comment.decrement_points()
             self.comment.user.decrement_points()

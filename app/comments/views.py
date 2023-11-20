@@ -2,6 +2,7 @@ from django.contrib.auth.decorators import login_required, permission_required
 from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404
 from django.template.response import TemplateResponse
+from django.utils.translation import gettext as _
 
 from .forms import CommentForm
 from .models import Comment
@@ -28,7 +29,7 @@ def reply(request, parent_id):
         {
             "parent": parent,
             "form": form,
-            "page_title": "Reply",
+            "page_title": _("Reply"),
         },
     )
 
@@ -51,6 +52,7 @@ def update(request, pk):
         "comments/edit.html",
         {
             "form": form,
+            "page_title": _("Edit Comment"),
         },
     )
 
@@ -58,6 +60,7 @@ def update(request, pk):
 @login_required
 @permission_required("comments.can_moderate")
 def delete(request, pk):
+    # FIXME
     comment = get_object_or_404(Comment, pk=pk)
     if request.method == "POST":
         post_url = comment.get_post_url()
@@ -68,7 +71,7 @@ def delete(request, pk):
         request,
         "comments/delete.html",
         {
-            "reply": comment,
+            "comment": comment,
         },
     )
 

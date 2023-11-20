@@ -4,6 +4,7 @@ from django.shortcuts import get_object_or_404
 from django.template.response import TemplateResponse
 from django.urls import reverse
 from django.utils import timezone
+from django.utils.translation import gettext as _
 from django.views.decorators.http import require_POST
 
 from app.comments.forms import CommentForm
@@ -46,7 +47,7 @@ def posts_top(request):
             "page_obj": get_page_by_request(request, queryset),
             "range": range,
             "has_menu": True,
-            "page_title": "Top Posts",
+            "page_title": _("Top Posts"),
         },
     )
 
@@ -62,7 +63,7 @@ def posts_latest(request):
         "posts/feed.html",
         {
             "page_obj": get_page_by_request(request, posts.latest()),
-            "page_title": "Latest Posts",
+            "page_title": _("Latest Posts"),
         },
     )
 
@@ -75,12 +76,11 @@ def posts_detail(request, pk):
 def _posts_detail(request, pk):
     post = get_object_or_404(Post, pk=pk)
     form = None
+    comments = post.comments.all()
 
     if request.user.is_authenticated:
         # annotate comments w user's vote status
-        comments = Comment.objects.with_user_vote_status(request.user).filter(
-            post=post
-        )
+        comments = comments.filter(post=post)
 
         form = CommentForm(initial={"post": post})
 
@@ -95,8 +95,6 @@ def _posts_detail(request, pk):
                 return _posts_detail(getify(request), pk)
 
             return HttpResponseRedirect("")
-    else:
-        comments = Comment.objects.filter(post=post)
 
     return TemplateResponse(
         request,
@@ -127,7 +125,7 @@ def posts_submit(request):
         "posts/form.html",
         {
             "form": form,
-            "page_title": "Submit Post",
+            "page_title": _("Submit Post"),
         },
     )
 
@@ -160,7 +158,7 @@ def user_profile_edit(request, username):
         "users/profile_edit.html",
         {
             "form": form,
-            "page_title": "Edit Profile",
+            "page_title": _("Edit Profile"),
         },
     )
 
@@ -177,7 +175,7 @@ def user_posts(request, username):
                 request,
                 Post.objects.filter(user=view_user).order_by("-submit_date"),
             ),
-            "page_title": f"{view_user.username}'s Posts",
+            "page_title": _("{username}'s Posts").format(username=username),
         },
     )
 
@@ -194,7 +192,7 @@ def user_comments(request, username):
                 request,
                 Comment.objects.filter(user=view_user).order_by("-submit_date"),
             ),
-            "page_title": f"{view_user.username}'s Comments",
+            "page_title": _("{username}'s Comments").format(username=username),
         },
     )
 
@@ -207,7 +205,14 @@ def user_create(request):
             return HttpResponseRedirect(reverse("login"))
     else:
         form = UserCreationForm()
-    return TemplateResponse(request, "users/form.html", {"form": form})
+    return TemplateResponse(
+        request,
+        "users/form.html",
+        {
+            "form": form,
+            "page_title": _("Register"),
+        },
+    )
 
 
 @login_required
