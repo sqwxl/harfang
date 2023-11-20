@@ -1,4 +1,4 @@
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, permission_required
 from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404
 from django.template.response import TemplateResponse
@@ -33,6 +33,8 @@ def reply(request, parent_id):
     )
 
 
+@login_required
+@permission_required("comments.change_comment")
 def update(request, pk):
     comment = get_object_or_404(Comment, pk=pk)
     if request.method == "POST":
@@ -54,18 +56,19 @@ def update(request, pk):
 
 
 @login_required
+@permission_required("comments.can_moderate")
 def delete(request, pk):
-    reply = get_object_or_404(Comment, pk=pk)
+    comment = get_object_or_404(Comment, pk=pk)
     if request.method == "POST":
-        post_url = reply.get_post_url()
-        reply.delete()
+        post_url = comment.get_post_url()
+        comment.delete()
         return HttpResponseRedirect(post_url)
 
     return TemplateResponse(
         request,
         "comments/delete.html",
         {
-            "reply": reply,
+            "reply": comment,
         },
     )
 
