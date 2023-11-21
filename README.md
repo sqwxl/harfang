@@ -13,11 +13,11 @@ Features so far:
 - Threaded comment system (i.e. nested comments)
 - Votes and points system for posts and comments
 - User profiles
-- Admin operations (moderation)
+- Internationalization
 
 Next up:
 
-- Internationalization
+- Admin operations (moderation)
 - Public API (for bot accounts)
 - Optimize accessibility
 - Media Posts
