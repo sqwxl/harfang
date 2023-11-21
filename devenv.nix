@@ -8,8 +8,9 @@
     pkgs.djlint
     pkgs.gettext
     pkgs.just
+    pkgs.marksman
     pkgs.pyright
-    pkgs.python311Packages.ruff-lsp
+    pkgs.ruff-lsp
     pkgs.tailwindcss
   ];
 
