@@ -1,11 +1,12 @@
 {% extends "base_page.html" %}
+{% load i18n %}
 {% block content %}
     <section>
-        <h1>Edit Profile</h1>
+        <h1>{% translate "Edit Profile" %}</h1>
         <form method="post">
             {% csrf_token %}
             {{ form }}
-            <input type="submit" value="Save">
+            <button>{% translate "Save" %}</button>
         </form>
     </section>
 {% endblock %}

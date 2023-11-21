@@ -1,14 +1,16 @@
 {% extends "base_page.html" %}
-{% block page_title %}Login{% endblock %}
+{% load i18n %}
+{% translate "Login" as login %}
+{% block page_title %}{{ login }}{% endblock %}
 {% block content %}
-    <h1>Login</h1>
+    <h1>{{ login }}</h1>
     <form method="post">
         {% csrf_token %}
         {{ form.as_div }}
-        <input type="submit" value="Login">
+        <button>{{ login }}</button>
     </form>
     <!-- TODO <a href="">Forgot your password?</a> -->
     <div>
-        <a href="{% url 'signup' %}">Register</a>
+        <a href="{% url 'signup' %}">{% translate "Register" %}</a>
     </div>
 {% endblock %}

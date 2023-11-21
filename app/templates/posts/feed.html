@@ -1,27 +1,30 @@
 {% extends "base_feed.html" %}
+{% load i18n %}
 {% block menu %}
     {% if has_menu %}
         <div class="flex justify-end items-center">
             <div>
-                <label for="range-selector" class="mr-2">Time range:</label>
+                <label for="range-selector" class="mr-2">{% translate "Time range" %}:</label>
                 <select id="range-selector"
                         name="range"
                         class="w-auto"
                         hx-target="body"
                         hx-replace-url="true"
                         hx-get="{% url 'top' %}">
-                    <option {% if range == "day" %}selected{% endif %} value="day">24h</option>
-                    <option {% if range == "week" %}selected{% endif %} value="week">Week</option>
-                    <option {% if range == "month" %}selected{% endif %} value="month">Month</option>
-                    <option {% if range == "year" %}selected{% endif %} value="year">Year</option>
-                    <option {% if range == "all" %}selected{% endif %} value="all">All-time</option>
+                    <option {% if range == "day" %}selected{% endif %} value="day">{% translate "24h" %}</option>
+                    <option {% if range == "week" %}selected{% endif %} value="week">{% translate "Week" %}</option>
+                    <option {% if range == "month" %}selected{% endif %} value="month">{% translate "Month" %}</option>
+                    <option {% if range == "year" %}selected{% endif %} value="year">{% translate "Year" %}</option>
+                    <option {% if range == "all" %}selected{% endif %} value="all">{% translate "All-time" %}</option>
                 </select>
             </div>
         </div>
     {% endif %}
 {% endblock %}
 {% block feed %}
-    {% if page_obj.paginator.count == 0 %}<p>No posts available.</p>{% endif %}
+    {% if page_obj.paginator.count == 0 %}
+        <p>{% translate "No posts available." %}</p>
+    {% endif %}
     {% for post in page_obj %}
         {% include "posts/fragments/feed_item.html" %}
     {% endfor %}

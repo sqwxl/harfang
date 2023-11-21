@@ -1,11 +1,11 @@
 {% extends "base_page.html" %}
-{% load static %}
+{% load i18n static %}
 {% block content %}
     <section>
         {% block menu %}{% endblock %}
         {% block page-and-paging-controls %}
             {% if page_obj.paginator.count == 0 %}
-                <p>No posts available.</p>
+                <p>{% translate "No posts available." %}</p>
             {% else %}
                 {% block feed %}{% endblock %}
                 {% if page_obj.has_next %}

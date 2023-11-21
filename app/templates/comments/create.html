@@ -1,5 +1,6 @@
 {% extends "base_page.html" %}
+{% load i18n %}
 {% block content %}
-    <h1>New Comment</h1>
+    <h1>{% translate "New Comment" %}</h1>
     {% include "comments/fragments/form.html" %}
 {% endblock content %}

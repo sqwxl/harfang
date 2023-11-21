@@ -3,11 +3,10 @@
 {
   name = "Harfang";
 
-  env.GREET = "devenv";
-
   packages = [
     pkgs.just
     pkgs.djhtml
+    pkgs.djlint
   ];
 
   languages.python.enable = true;

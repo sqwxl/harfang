@@ -17,6 +17,7 @@ Features so far:
 
 Next up:
 
+- Internationalization
 - Public API (for bot accounts)
 - Optimize accessibility
 - Media Posts

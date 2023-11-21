@@ -1,22 +1,26 @@
 {% extends "base_page.html" %}
-{% load static %}
+{% load i18n static %}
 {% block content %}
     <section class="not-prose">
         {% if page_obj.paginator.count == 0 %}
             {% block no-items %}
-                <p>No posts are available.</p>
+                <p>{% translate "No posts are available." %}</p>
             {% endblock no-items %}
         {% else %}
             {% block page-and-paging-controls %}
                 {% for post in page_obj %}
                     <div class="mx-2 mb-6">
-                        <!-- TODO <a href="{% url 'post' post.id %}" -->
-                        <h4 class="font-bold">{{ post.title }}</h4>
-                        <a href="#" preload="mouseover" class="no-link">
-                            <div class="max-w-full">{{ post.body|truncatewords:40 }}</div>
-                        </a>
+                        <h4 class="font-bold">
+                            <a href="{% url 'post' post.id %}">{{ post.title }}</a>
+                        </h4>
+                        <div class="max-w-full">{{ post.body|truncatewords:40 }}</div>
                         <div class="text-sm text-muted">
-                            <a href="{% url 'profile' post.user %}" class="no-link text-muted">{{ post.user.username }}</a> &#x2022; <span>{{ post.submit_date|timesince }} ago</span>
+                            <a href="{% url 'profile' post.user %}" class="no-link text-muted">{{ post.user.username }}</a> 🞄
+                            <span>
+                                {% blocktranslate with age=post.submit_date|timesince %}
+                                    {{ age }} ago
+                                {% endblocktranslate %}
+                            </span>
                         </div>
                     </div>
                 {% endfor %}

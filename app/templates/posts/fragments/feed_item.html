@@ -1,3 +1,4 @@
+{% load i18n %}
 <div id="post-{{ post.id }}" class="flex m-2 h-16 not-prose">
     <button class="flex-none p-2 w-8 bg-transparent hover:bg-transparent {% if post.has_voted or post.user == user %}opacity-25{% endif %} bg-bg hover:bg-bg"
             type="button"
@@ -11,18 +12,29 @@
            preload="mouseover"
            class="text-lg font-bold no-link">{{ post.title|title }}</a>
         <div class="text-sm text-muted">
-            <span>{{ post.points }} point{{ post.points|pluralize }}</span>
-            |
             <span>
-                <a href="{% url 'profile' post.user.username %}"
-                   {% if user == post.user %}class="text-orange"{% endif %}>{{ post.user.username }}</a>
+                {% blocktranslate count n=post.points %}
+                    {{ n }} point
+                {% plural %}
+                    {{ n }} points
+                {% endblocktranslate %}
             </span>
-            |
-            <span>{{ post.submit_date|timesince }} ago</span>
-            |
-            {% with post.comments.count as  comment_count %}
-                <span>{{ comment_count }} comment{{ comment_count|pluralize }}</span>
-            {% endwith %}
+            🞄 <a href="{% url 'profile' post.user.username %}"
+                 {% if user == post.user %}class="text-orange"{% endif %}>{{ post.user.username }}</a>
+            🞄
+            <span>
+                {% blocktranslate with age=comment.submit_date|timesince %}
+                    {{ age }} ago
+                {% endblocktranslate %}
+            </span>
+            🞄
+            <span>
+                {% blocktranslate count n=post.comments.count %}
+                    {{ n }} comment
+                {% plural %}
+                    {{ n }} comments
+                {% endblocktranslate %}
+            </span>
         </div>
     </div>
 </div>

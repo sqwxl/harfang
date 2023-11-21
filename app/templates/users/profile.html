@@ -1,15 +1,28 @@
 {% extends "base_page.html" %}
+{% load i18n %}
 {% block content %}
     <section>
         <h1>{{ profile.user.username }}</h1>
         {% if user == profile.user %}
-            <a href="{% url 'profile_edit' user.username %}">Edit</a>
+            <a href="{% url 'profile_edit' user.username %}">{% translate "Edit" %}</a>
         {% endif %}
-        <p>Joined {{ profile.user.date_joined|timesince }} ago | Karma: {{ profile.user.points }}</p>
+        <p>
+            {% blocktranslate with age=profile.user.date_joined|timesince karma=profile.user.points %}
+                Joined {{ age }} ago 🞄 Karma: {{ karma }}
+            {% endblocktranslate %}
+        </p>
         {% if profile.bio %}<div>{{ profile.bio|linebreaks }}</div>{% endif %}
         <div hx-boost="true">
-            <a href="{% url 'user_posts' profile.user.username %}">Submissions ({{ profile.user.posts.count }})</a>
-            <a href="{% url 'user_comments' profile.user.username %}">Comments ({{ profile.user.comments.count }})</a>
+            <a href="{% url 'user_posts' profile.user.username %}">
+                {% blocktranslate with count=profile.user.posts.count %}
+                    Submissions ({{ count }})
+                {% endblocktranslate %}
+            </a>
+            <a href="{% url 'user_comments' profile.user.username %}">
+                {% blocktranslate with count=profile.user.comments.count %}
+                    Comments ({{ profile.user.comments.count }})
+                {% endblocktranslate %}
+            </a>
         </div>
     </section>
 {% endblock %}
