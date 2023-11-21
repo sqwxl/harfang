@@ -1,5 +1,5 @@
 {% load i18n %}
-<div id="post-{{ post.id }}" class="flex m-2 h-16 not-prose">
+<article id="post-{{ post.id }}" class="flex m-2 h-16 not-prose">
     <button class="flex-none p-2 w-8 bg-transparent hover:bg-transparent {% if post.has_voted or post.user == user %}opacity-25{% endif %} bg-bg hover:bg-bg"
             type="button"
             aria-label="Upvote"
@@ -37,4 +37,4 @@
             </span>
         </div>
     </div>
-</div>
+</article>

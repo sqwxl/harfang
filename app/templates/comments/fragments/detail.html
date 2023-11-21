@@ -1,5 +1,5 @@
 {% load i18n %}
-<div id="comment-{{ comment.id }}" class="flex">
+<article id="comment-{{ comment.id }}" class="flex">
     <button class="inline-block flex-none p-2 w-8 h-8 bg-transparent hover:bg-transparent {% if comment.has_voted or comment.user == user or not user.is_authenticated %}opacity-25{% endif %}"
             type="button"
             {% if not user.is_authenticated or comment.user == user %}disabled{% endif %}
@@ -58,4 +58,4 @@
             {% endif %}
         </div>
     </div>
-</div>
+</article>
