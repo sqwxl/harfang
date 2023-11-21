@@ -12,15 +12,15 @@
   }
 
   a {
-    @apply text-blue_d no-underline;
+    @apply text-blue no-underline;
   }
 
   a:hover {
-    @apply text-blue underline;
+    @apply text-blue_d underline;
   }
 
   a:visited {
-    @apply text-blue_d;
+    @apply text-purple;
   }
 
   nav a, nav a:visited, nav a:hover {
