@@ -9,7 +9,8 @@
     pkgs.gettext
     pkgs.just
     pkgs.pyright
-    pkgs.ruff-lsp
+    pkgs.python311Packages.ruff-lsp
+    pkgs.tailwindcss
   ];
 
   languages.python.enable = true;
@@ -24,7 +25,6 @@
     ];
     hooks = {
       nixpkgs-fmt.enable = true;
-      pyupgrade.enable = true;
       ruff.enable = true;
       djhtml = {
         enable = true;
