@@ -1,11 +1,16 @@
 from django.contrib import admin
+from django.conf import settings
 from django.urls import include, path
 
 urlpatterns = [
     path("admin/", admin.site.urls),
-    # app
     path("", include("app.urls")),
-    #
-    path("__reload__/", include("django_browser_reload.urls")),
-    path("__debug__/", include("debug_toolbar.urls")),
 ]
+
+if settings.DEBUG:
+    urlpatterns.extend(
+        [
+            path("__debug__/", include("debug_toolbar.urls")),
+            path("__reload__/", include("django_browser_reload.urls")),
+        ]
+    )
