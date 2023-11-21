@@ -4,13 +4,19 @@
   name = "Harfang";
 
   packages = [
-    pkgs.just
     pkgs.djhtml
     pkgs.djlint
+    pkgs.gettext
+    pkgs.just
+    pkgs.pyright
+    pkgs.ruff-lsp
   ];
 
   languages.python.enable = true;
   languages.python.venv.enable = true;
+  languages.python.venv.requirements = "-r ${./requirements.txt}";
+
+  difftastic.enable = true;
 
   pre-commit = {
     excludes = [
