@@ -4,6 +4,8 @@ DEBUG = True
 
 ALLOWED_HOSTS = ["localhost", "127.0.0.1"]
 
+LOCALE_PATHS = [os.path.join(BASE_DIR, "locale")]
+
 CSRF_COOKIE_SECURE = False
 
 SESSION_COOKIE_SECURE = False
@@ -27,6 +29,7 @@ if DEBUG:
             "debug_toolbar.middleware.DebugToolbarMiddleware",
         )
         MIDDLEWARE.insert(
-            MIDDLEWARE.index("debug_toolbar.middleware.DebugToolbarMiddleware") + 1,
+            MIDDLEWARE.index("debug_toolbar.middleware.DebugToolbarMiddleware")
+            + 1,
             "django_browser_reload.middleware.BrowserReloadMiddleware",
         )

@@ -1,0 +1,302 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2023-11-21 15:32+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+
+#: app/comments/forms.py:31
+msgid "Comment"
+msgstr "Commentaire"
+
+#: app/comments/forms.py:37
+msgid ""
+"If you enter anything in this field your comment will be treated as spam"
+msgstr ""
+"Si vous entrez quelque chose dans ce champ, votre commentaire sera traité "
+"comme du spam"
+
+#: app/comments/forms.py:79
+#, python-format
+msgid "Watch your mouth! The word %s is not allowed here."
+msgid_plural "Watch your mouth! The words %s are not allowed here."
+msgstr[0] "Attention à votre langage ! Le mot %s n'est pas autorisé ici."
+msgstr[1] "Attention à votre langage ! Les mots %s ne sont pas autorisés ici."
+
+#: app/comments/forms.py:88
+msgid "and"
+msgstr "et"
+
+#: app/comments/models.py:26 app/comments/models.py:49
+msgid "comment"
+msgstr "commentaire"
+
+#: app/comments/models.py:27
+msgid "comments"
+msgstr "commentaires"
+
+#: app/comments/models.py:54
+msgid "is removed"
+msgstr "est supprimé"
+
+#: app/comments/models.py:58
+msgid ""
+"Check this box if the comment is inappropriate. A \"This comment has been "
+"removed\" message will be displayed instead."
+msgstr ""
+"Cochez cette case si le commentaire est inapproprié. Un message \"Ce "
+"commentaire a été supprimé\" sera affiché à sa place."
+
+#: app/comments/views.py:32
+msgid "Reply"
+msgstr "Répondre"
+
+#: app/comments/views.py:55 app/templates/comments/edit.html:4
+msgid "Edit Comment"
+msgstr "Modifier le commentaire"
+
+#: app/models.py:23
+msgid "profile"
+msgstr "profil"
+
+#: app/models.py:24
+msgid "profiles"
+msgstr "profils"
+
+#: app/models.py:31
+msgid "bio"
+msgstr ""
+
+#: app/models.py:79
+msgid "post"
+msgstr ""
+
+#: app/models.py:80
+msgid "posts"
+msgstr ""
+
+#: app/models.py:88
+msgid "title"
+msgstr "titre"
+
+#: app/models.py:89
+msgid "url"
+msgstr ""
+
+#: app/models.py:90
+msgid "body"
+msgstr "corps"
+
+#: app/templates/about.html:3 app/templates/fragments/footer.html:6
+msgid "About"
+msgstr "À propos"
+
+#: app/templates/about.html:7
+msgid "This is a news app"
+msgstr "Ceci est une application de nouvelles"
+
+#: app/templates/base_feed.html:8 app/templates/posts/feed.html:26
+msgid "No posts available."
+msgstr "Aucun post disponible."
+
+#: app/templates/comments/create.html:4
+msgid "New Comment"
+msgstr "Nouveau commentaire"
+
+#: app/templates/comments/fragments/detail.html:12
+#: app/templates/posts/fragments/feed_item.html:16
+#, python-format
+msgid "%(n)s point"
+msgid_plural "%(n)s points"
+msgstr[0] ""
+msgstr[1] ""
+
+#: app/templates/comments/fragments/detail.html:22
+#: app/templates/posts/fragments/feed_item.html:26
+#: app/templates/users/comments.html:21 app/templates/users/posts.html:20
+#, python-format
+msgid "%(age)s ago"
+msgstr "il y a %(age)s"
+
+#: app/templates/comments/fragments/detail.html:28
+msgid "root"
+msgstr "racine"
+
+#: app/templates/comments/fragments/detail.html:29
+msgid "parent"
+msgstr ""
+
+#: app/templates/comments/fragments/detail.html:48
+msgid "reply"
+msgstr "repondre"
+
+#: app/templates/comments/fragments/detail.html:51
+msgid "edit"
+msgstr "modifier"
+
+#: app/templates/comments/fragments/detail.html:56
+msgid "delete"
+msgstr "supprimer"
+
+#: app/templates/comments/reply.html:6
+#, python-format
+msgid "Reply to %(username)s"
+msgstr "Répondre à %(username)s"
+
+#: app/templates/comments/reply.html:15 app/templates/users/form.html:8
+#: app/templates/users/profile_edit.html:9
+msgid "Save"
+msgstr "Sauvegarder"
+
+#: app/templates/fragments/footer.html:9
+msgid "Contact"
+msgstr ""
+
+#: app/templates/fragments/nav.html:9
+msgid "Top"
+msgstr ""
+
+#: app/templates/fragments/nav.html:12
+msgid "Latest"
+msgstr "Récents"
+
+#. Translators: 'Submit' as in 'Submit new post'
+#: app/templates/fragments/nav.html:17 app/templates/posts/form.html:8
+msgid "Submit"
+msgstr "Soumettre"
+
+#: app/templates/fragments/nav.html:26
+msgid "Logout"
+msgstr ""
+
+#: app/templates/fragments/nav.html:30 app/templates/registration/login.html:3
+msgid "Login"
+msgstr ""
+
+#: app/templates/fragments/paging_control.html:7
+msgid "Load More Items"
+msgstr "Charger plus d'éléments"
+
+#: app/templates/posts/detail.html:11
+#, python-format
+msgid "posted %(age)s ago by <a href=\"%(profile_url)s\">%(username)s</a>"
+msgstr "posté il y a %(age)s par <a href=\"%(profile_url)s\">%(username)s</a>"
+
+#: app/templates/posts/detail.html:16
+msgid "Link"
+msgstr "Lien"
+
+#: app/templates/posts/detail.html:35
+msgid "Add Comment"
+msgstr "Ajouter un commentaire"
+
+#: app/templates/posts/detail.html:38
+msgid "Comments"
+msgstr "Commentaires"
+
+#: app/templates/posts/feed.html:7
+msgid "Time range"
+msgstr "Fourchette de temps"
+
+#: app/templates/posts/feed.html:14
+msgid "24h"
+msgstr ""
+
+#: app/templates/posts/feed.html:15
+msgid "Week"
+msgstr "Semaine"
+
+#: app/templates/posts/feed.html:16
+msgid "Month"
+msgstr "Mois"
+
+#: app/templates/posts/feed.html:17
+msgid "Year"
+msgstr "Année"
+
+#: app/templates/posts/feed.html:18
+msgid "All-time"
+msgstr "Tout"
+
+#: app/templates/posts/form.html:4
+msgid "New Post"
+msgstr "Nouveau post"
+
+#: app/templates/posts/fragments/feed_item.html:32
+#, python-format
+msgid "%(n)s comment"
+msgid_plural "%(n)s comments"
+msgstr[0] "%(n)s commentaire"
+msgstr[1] "%(n)s commentaires"
+
+#: app/templates/registration/login.html:14 app/templates/users/form.html:4
+#: app/views.py:213
+msgid "Register"
+msgstr "S'inscrire"
+
+#: app/templates/users/comments.html:7
+msgid "No comments are available."
+msgstr "Aucun commentaire disponible."
+
+#: app/templates/users/posts.html:7
+msgid "No posts are available."
+msgstr "Aucun post disponible."
+
+#: app/templates/users/profile.html:7
+msgid "Edit"
+msgstr "Modifier"
+
+#: app/templates/users/profile.html:10
+#, python-format
+msgid "Joined %(age)s ago 🞄 Karma: %(karma)s"
+msgstr "Membre depuis %(age)s 🞄 Karma : %(karma)s"
+
+#: app/templates/users/profile.html:17
+#, python-format
+msgid "Submissions (%(n)s)"
+msgstr "Posts (%(n)s))"
+
+#: app/templates/users/profile.html:22
+#, fuzzy, python-format
+#| msgid "Comments"
+msgid "Comments (%(n)s)"
+msgstr "Commentaires (%(n)s)"
+
+#: app/templates/users/profile_edit.html:5 app/views.py:161
+msgid "Edit Profile"
+msgstr "Modifier le profile"
+
+#: app/views.py:50
+msgid "Top Posts"
+msgstr "Meilleurs posts"
+
+#: app/views.py:66
+msgid "Latest Posts"
+msgstr "Derniers posts"
+
+#: app/views.py:128
+msgid "Submit Post"
+msgstr "Soumettre un post"
+
+#: app/views.py:178
+#, python-brace-format
+msgid "{username}'s Posts"
+msgstr "Posts de {username}"
+
+#: app/views.py:195
+#, python-brace-format
+msgid "{username}'s Comments"
+msgstr "Commentaires de {username}"

@@ -7,20 +7,20 @@
             <a href="{% url 'profile_edit' user.username %}">{% translate "Edit" %}</a>
         {% endif %}
         <p>
-            {% blocktranslate with age=profile.user.date_joined|timesince karma=profile.user.points %}
+            {% blocktranslate trimmed with age=profile.user.date_joined|timesince karma=profile.user.points %}
                 Joined {{ age }} ago 🞄 Karma: {{ karma }}
             {% endblocktranslate %}
         </p>
         {% if profile.bio %}<div>{{ profile.bio|linebreaks }}</div>{% endif %}
         <div hx-boost="true">
             <a href="{% url 'user_posts' profile.user.username %}">
-                {% blocktranslate with count=profile.user.posts.count %}
-                    Submissions ({{ count }})
+                {% blocktranslate trimmed with n=profile.user.posts.count %}
+                    Submissions ({{ n }})
                 {% endblocktranslate %}
             </a>
             <a href="{% url 'user_comments' profile.user.username %}">
-                {% blocktranslate with count=profile.user.comments.count %}
-                    Comments ({{ profile.user.comments.count }})
+                {% blocktranslate trimmed with n=profile.user.comments.count %}
+                    Comments ({{ n }})
                 {% endblocktranslate %}
             </a>
         </div>

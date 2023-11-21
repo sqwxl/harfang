@@ -3,7 +3,7 @@
 {% block content %}
     <section>
         <h1>
-            {% blocktranslate with username=parent.user.username %}
+            {% blocktranslate trimmed with username=parent.user.username %}
                 Reply to {{ username }}
             {% endblocktranslate %}
         </h1>

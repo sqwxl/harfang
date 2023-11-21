@@ -8,8 +8,8 @@
             </h1>
             <p>
                 {% url 'profile' post.user.username  as profile_url %}
-                {% blocktranslate with age=post.submit_date|timesince username=post.user.username %}
-                    posted {{ age }} ago by <a href="{{ profile_url }}">{{ username|escape }}</a>
+                {% blocktranslate trimmed with age=post.submit_date|timesince username=post.user.username|escape %}
+                    posted {{ age }} ago by <a href="{{ profile_url }}">{{ username }}</a>
                 {% endblocktranslate %}
             </p>
             <p>

@@ -9,7 +9,7 @@
     <div>
         <div class="text-sm text-muted">
             <span>
-                {% blocktranslate count n=comment.points %}
+                {% blocktranslate trimmed count n=comment.points %}
                     {{ n }} point
                 {% plural %}
                     {{ n }} points
@@ -19,7 +19,7 @@
                  {% if user == comment.user %}class="text-orange"{% endif %}>{{ comment.user.username }}</a>
             🞄
             <span>
-                {% blocktranslate with age=comment.submit_date|timesince %}
+                {% blocktranslate trimmed with age=comment.submit_date|timesince %}
                     {{ age }} ago
                 {% endblocktranslate %}
             </span>

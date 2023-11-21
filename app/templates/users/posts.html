@@ -17,7 +17,7 @@
                         <div class="text-sm text-muted">
                             <a href="{% url 'profile' post.user %}" class="no-link text-muted">{{ post.user.username }}</a> 🞄
                             <span>
-                                {% blocktranslate with age=post.submit_date|timesince %}
+                                {% blocktranslate trimmed with age=post.submit_date|timesince %}
                                     {{ age }} ago
                                 {% endblocktranslate %}
                             </span>
