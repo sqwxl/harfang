@@ -2,7 +2,7 @@
 
 ![Snowy owl emoji](static/images/harfang_emoji-sm.png)
 
-# 🪶 Harfang
+# Harfang
 
 A news aggregation and web content rating and discussion site with a focus on simplicity and accessibility.\
 Inspired by Hacker News and Reddit.\
