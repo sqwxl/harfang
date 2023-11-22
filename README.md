@@ -1,8 +1,11 @@
 <div align="center">
 
+![Snowy owl emoji](static/images/harfang_emoji-sm.png)
+
 # 🪶 Harfang
 
-A social network/forum inspired by Hacker News and Reddit.\
+A news aggregation and web content rating and discussion site with a focus on simplicity and accessibility.\
+Inspired by Hacker News and Reddit.\
 Built with Django, HTMX, Alpine.js, Tailwind CSS
 
 </div>
@@ -26,11 +29,12 @@ Next up:
 - SEO
 - Email system
 - Dark/Light color-schemes
+- Site identity (icons, logos, etc)
 
 ## Dev Quick Start
 
-Use [`just`](https://github.com/casey/just).\
-If you don't feel like installing it, you can take a look inside the [justfile](justfile) to see what commands you should run)
+"[`just`](https://github.com/casey/just)" use the taskrunner.\
+Or take a look inside [the justfile](justfile) to see the actual commands.
 
 ```shell
 # install requirements
@@ -39,19 +43,11 @@ just setup
 just populate
 # run the dev server
 just serve
-```
-
-If you're editing styles, run the following in another terminal:
-
-```shell
-# run tailwind binary to watch for changes & update the output.css
+# If you're editing styles, the tailwind binary can watch for changes
 just css
 ```
 
-## Nix Quick Start
+### Reproducible Dev Environment
 
-Optional dev environment set up with [`nix`](https://nixos.org/) to ensure reproducibility across machines.
-
-install [`devenv`](https://devenv.sh/getting-started/) and [`direnv`](https://devenv.sh/automatic-shell-activation/) with the shell hook
-
-clone the repo and run `direnv allow` in the directory to enable automatic shell (and virtualenv) activation
+To ensure consistency, you can optionally use [`devenv`](https://devenv.sh/getting-started/)
+and [`direnv`](https://devenv.sh/automatic-shell-activation/).
