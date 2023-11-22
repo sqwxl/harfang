@@ -3,10 +3,7 @@
 <html lang="en" class="scroll-smooth">
     <head>
         <meta charset="utf-8">
-        <title>
-            🪶 Harfang |&nbsp;
-            {% block page_title %}{{ page_title }}{% endblock %}
-        </title>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="application-name" content="Harfang">
         <meta name="description"
               content="Harfang is simple forum/user content site with a focus on simplicity and accessibility">
@@ -15,18 +12,16 @@
         <meta name="author" content="Harfang">
         <meta name="referrer" content="same-origin">
         <meta name="theme-color" content="#282828">
-        <meta name="color-scheme" content="dark">
         <!-- TODO: support light color-scheme  -->
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <script src="https://unpkg.com/htmx.org@1.9.3"
-                integrity="sha384-lVb3Rd/Ca0AxaoZg5sACe8FJKF0tnUgR2Kd7ehUOG5GCcROv5uBIZsOqovBAcWua"
-                crossorigin="anonymous"></script>
-        <script src="https://unpkg.com/htmx.org/dist/ext/preload.js"></script>
-        <script defer
-                src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
-        <script defer src="{% static 'js/cn.js' %}"></script>
+        <meta name="color-scheme" content="dark">
         <link rel="stylesheet" href="{% static 'css/output.css' %}">
-        {% block extrahead %}{% endblock %}
+        <script defer src="{% static 'js/htmx/htmx.min.js' %}"></script>
+        <script defer src="{% static 'js/htmx/ext/preload.js' %}"></script>
+        <script defer src="{% static 'js/alpine.min.js' %}"></script>
+        <title>
+            🪶 Harfang |&nbsp;
+            {% block page_title %}{{ page_title }}{% endblock %}
+        </title>
     </head>
     <body hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'
           hx-ext="preload"
