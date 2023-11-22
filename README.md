@@ -41,7 +41,7 @@ just populate
 just serve
 ```
 
-if you're editing styles, run the following in another terminal:
+If you're editing styles, run the following in another terminal:
 
 ```shell
 # run tailwind binary to watch for changes & update the output.css
