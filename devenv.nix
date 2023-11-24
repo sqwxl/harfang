@@ -30,7 +30,7 @@
         enable = true;
         name = "djlint-reformat-django";
         files = ".*/templates/.*\.html$";
-        entry = "${pkgs.djlint}/bin/djlint --reformat --profile=django";
+        entry = "${pkgs.djlint}/bin/djlint --reformat --profile django --configuration ${./pyproject.toml}";
       };
     };
   };
