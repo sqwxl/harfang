@@ -82,7 +82,7 @@ class CommentForm(forms.ModelForm):
                     )
                     % get_text_list(
                         [
-                            f"\"{i[0]}{'-' * (len(i) - 2)}{i[-1]}\""
+                            f"\"{i[0]}{'*' * (len(i) - 2)}{i[-1]}\""
                             for i in bad_words
                         ],
                         gettext("and"),
