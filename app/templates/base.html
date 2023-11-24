@@ -12,22 +12,26 @@
         <meta name="author" content="Harfang">
         <meta name="referrer" content="same-origin">
         <meta name="theme-color" content="#282828">
-        <!-- TODO: support light color-scheme  -->
+        {% comment %} TODO: Support for light/dark schemes {% endcomment %}
         <meta name="color-scheme" content="dark">
         <link rel="stylesheet" href="{% static 'css/output.css' %}">
         <script defer src="{% static 'js/htmx/htmx.min.js' %}"></script>
+        <meta name="htmx-config" content='{"scrollIntoViewOnBoost": false}'>
         <script defer src="{% static 'js/_hyperscript.min.js' %}"></script>
         <script defer src="{% static 'js/htmx/ext/preload.js' %}"></script>
         <script defer src="{% static 'js/alpine.min.js' %}"></script>
         <title>
             🪶 Harfang |&nbsp;
-            {% block page_title %}{{ page_title }}{% endblock %}
+            {% block page_title %}
+                {{ page_title }}
+            {% endblock page_title %}
         </title>
     </head>
     <body hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'
           hx-ext="preload"
           class="flex flex-col min-h-screen text-fg bg-bg">
-        {% block body %}{% endblock %}
+        {% block body %}
+        {% endblock body %}
         {% if debug %}
             <script>
                 if (typeof window.htmx !== "undefined") {
