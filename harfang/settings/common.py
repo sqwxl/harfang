@@ -18,6 +18,8 @@ INSTALLED_APPS = [
     # 3rd-party apps
     "mptt",
     "django_extensions",
+    "django_htmx",
+    "template_partials",
     # apps
     "app",
     "app.comments",
@@ -32,6 +34,7 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    "django_htmx.middleware.HtmxMiddleware",
 ]
 
 ROOT_URLCONF = "harfang.urls"

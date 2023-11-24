@@ -1,18 +1,13 @@
 {% extends "base_page.html" %}
 {% load i18n %}
+
 {% block content %}
     <section>
         <h1>
-            {% blocktranslate trimmed with username=parent.user.username %}
-                Reply to {{ username }}
-            {% endblocktranslate %}
+            {{ page_title }}
         </h1>
         {% include "comments/fragments/detail.html" with comment=parent %}
         <br>
-        <form action="" method="post">
-            {% csrf_token %}
-            {% include "comments/fragments/form.html" %}
-            <button>{% translate "Save" %}</button>
-        </form>
+        {% include "comments/fragments/form.html" %}
     </section>
 {% endblock content %}

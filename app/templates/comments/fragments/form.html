@@ -1,10 +1,54 @@
+{% load i18n partials %}
+
+{% partialdef fields %}
 {% for field in form %}
-    {% if field.name == "body" %}
-        {% if field.errors %}{{ field.errors }}{% endif %}
-        <p {% if field.errors %}class="error"{% endif %}>{{ field.label_tag }} {{ field }}</p>
-    {% elif field.name == "honeypot" %}
-        <p hidden>{{ field.label_tag }} {{ field }}</p>
+    <input type="hidden" name="next" value="{{ next|default:request.path }}" />
+    {% if field.is_hidden %}
+        <div>
+            {{ field }}
+        </div>
     {% else %}
-        {{ field }}
+        <div {% if field.name == "honeypot" %}hidden{% endif %}>
+            {{ field.label_tag }}
+            {% if field.errors %}
+                {{ field.errors }}
+            {% endif %}
+            {{ field }}
+        </div>
     {% endif %}
 {% endfor %}
+{% endpartialdef %}
+
+<form id="{{ form_id|default:'comment-form' }}"
+      class="not-prose"
+      method="post"
+      action="{% url 'comments:post' %}"
+      hx-boost="true"
+      {% if hx_attrs.target %}
+          hx-target="{{ hx_attrs.target }}"
+      {% endif %}
+      {% if hx_attrs.swap %}
+          hx-swap="{{ hx_attrs.swap }}"
+      {% endif %}
+      {% if hx_attrs.push_url %}
+          hx-push-url="{{ hx_attrs.push_url }}"
+      {% endif %}
+      _="on commentPosted reset() me">
+    {% csrf_token %}
+    <div id="fields">
+        {% partial fields %}
+    </div>
+    <div class="flex">
+        <button>
+            {% translate "Save" %}
+        </button>
+        {% if can_cancel %}
+            <button type="button"
+                {# djlint:off #}
+                    _="on click confirm('{% translate 'Are you sure? Your comment will be lost.' %}') if result remove the closest <form/>"
+                {# djlint:on #}>
+                {% translate "Cancel" %}
+            </button>
+        {% endif %}
+    </div>
+</form>

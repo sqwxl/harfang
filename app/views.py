@@ -10,7 +10,7 @@ from django.views.decorators.http import require_POST
 from app.comments.forms import CommentForm
 from app.comments.models import Comment
 from app.utils import get_page_by_request
-from app.utils.htmx import for_htmx, getify, is_htmx
+from app.utils.htmx import for_htmx
 
 from .forms import PostForm, ProfileForm, UserCreationForm
 from .models import CommentVote, Post, PostVote, Profile, User
@@ -68,33 +68,15 @@ def posts_latest(request):
     )
 
 
-@for_htmx(use_block_from_params=True)
 def posts_detail(request, pk):
-    return _posts_detail(request, pk)
-
-
-def _posts_detail(request, pk):
     post = get_object_or_404(Post, pk=pk)
-    form = None
-    comments = post.comments.all()
 
     if request.user.is_authenticated:
-        # annotate comments w user's vote status
-        comments = comments.filter(post=post)
-
         form = CommentForm(initial={"post": post})
-
-        if request.method == "POST":
-            form = CommentForm(request.POST)
-            print(form.errors)
-            if form.is_valid():
-                comment = form.save(commit=False)
-                comment.user = request.user
-                comment.save()
-            if is_htmx(request):
-                return _posts_detail(getify(request), pk)
-
-            return HttpResponseRedirect("")
+        comments = post.comments.with_user_vote_status(request.user)
+    else:
+        form = None
+        comments = post.comments.all()
 
     return TemplateResponse(
         request,

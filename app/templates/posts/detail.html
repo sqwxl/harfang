@@ -1,5 +1,6 @@
 {% extends "base_page.html" %}
 {% load i18n %}
+
 {% block content %}
     <article>
         <section>
@@ -7,7 +8,7 @@
                 <a href="{% url 'post' post.id %}" class="no-link">{{ post.title }}</a>
             </h1>
             <p>
-                {% url 'profile' post.user.username  as profile_url %}
+                {% url "profile" post.user.username as profile_url %}
                 {% blocktranslate trimmed with age=post.submit_date|timesince username=post.user.username|escape %}
                     posted {{ age }} ago by <a href="{{ profile_url }}">{{ username }}</a>
                 {% endblocktranslate %}
@@ -21,23 +22,20 @@
         </section>
         <br>
         <br>
-        <section id="comments">
-            {% block comments %}
-                {% if form %}
-                    <form class="not-prose"
-                          action=""
-                          method="post"
-                          hx-post=""
-                          hx-vals='{"use_block": "comments"}'
-                          hx-target="#comments">
-                        {% csrf_token %}
-                        {% include "comments/fragments/form.html" %}
-                        <button>{% translate "Add Comment" %}</button>
-                    </form>
-                {% endif %}
-                <h3>{% translate "Comments" %}</h3>
-                {% include "comments/tree.html" %}
-            {% endblock %}
+        <section hx-vals='{"tree": true}'>
+            {% if form %}
+                <div hx-target="#comment-tree" hx-swap="beforeend" hx-push-url="false">
+                    {% include "comments/fragments/form.html" %}
+                </div>
+            {% else %}
+                <p>
+                    {% translate "Log in to join the discussion." %}
+                </p>
+            {% endif %}
+            <h3>
+                {% translate "Comments" %}
+            </h3>
+            {% include "comments/tree.html" %}
         </section>
     </article>
-{% endblock %}
+{% endblock content %}
