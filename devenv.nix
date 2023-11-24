@@ -4,7 +4,6 @@
   name = "Harfang";
 
   packages = [
-    pkgs.djhtml
     pkgs.djlint
     pkgs.gettext
     pkgs.just
@@ -27,11 +26,11 @@
     hooks = {
       nixpkgs-fmt.enable = true;
       ruff.enable = true;
-      djhtml = {
+      djlint = {
         enable = true;
-        name = "djhtml";
+        name = "djlint-reformat-django";
         files = ".*/templates/.*\.html$";
-        entry = "${pkgs.djhtml}/bin/djhtml";
+        entry = "${pkgs.djlint}/bin/djlint --reformat --profile=django";
       };
     };
   };
