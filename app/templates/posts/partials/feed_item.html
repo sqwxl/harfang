@@ -14,7 +14,7 @@
             hx-post="{% url 'post_vote' post.id %}"
             hx-target="#post-{{ post.id }}"
             hx-swap="outerHTML">
-        {% include "fragments/votearrow_svg.html" %}
+        {% include "partials/votearrow_svg.html" %}
     </button>
     <div>
         <a href="{% url 'post' post.id %}"

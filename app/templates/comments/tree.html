@@ -3,7 +3,7 @@
 {% partialdef list-item %}
     <li>
         {% with tree_context=True %}
-            {% include "comments/fragments/detail.html" with comment=node %}
+            {% include "comments/partials/detail.html" with comment=node %}
         {% endwith %}
         <div class="ml-4 border-l-2 border-l-solid border-l-grey">
             <div x-ref="c{{ node.id }}">

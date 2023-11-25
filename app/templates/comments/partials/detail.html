@@ -12,7 +12,7 @@
             hx-post="{% url 'comment_vote' comment.id %}"
             hx-target="#comment-{{ comment.id }}"
             hx-swap="outerHTML">
-        {% include "fragments/votearrow_svg.html" %}
+        {% include "partials/votearrow_svg.html" %}
     </button>
     <div>
         <div class="text-sm text-muted">

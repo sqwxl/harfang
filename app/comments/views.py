@@ -52,7 +52,7 @@ def post_htmx(request):
         else:
             response = TemplateResponse(
                 request,
-                "comments/fragments/detail.html",
+                "comments/partials/detail.html",
                 {"comment": comment},
             )
 
@@ -63,7 +63,7 @@ def post_htmx(request):
         retarget(
             TemplateResponse(
                 request,
-                "comments/fragments/form.html#fields",
+                "comments/partials/form.html#fields",
                 {"form": form},
             ),
             request.htmx.trigger + ">#fields",
@@ -87,7 +87,7 @@ def reply(request, parent_id):
         }
         return TemplateResponse(
             request,
-            "comments/fragments/form.html",
+            "comments/partials/form.html",
             {
                 "form": form,
                 "form_id": f"inline-form-{parent_id}",

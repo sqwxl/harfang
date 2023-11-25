@@ -218,7 +218,7 @@ def post_vote(request, pk):
 
     # TODO generalize to handle votes coming from elsewhere than the feed view
     return TemplateResponse(
-        request, "posts/fragments/feed_item.html", {"post": post}
+        request, "posts/partials/feed_item.html", {"post": post}
     )
 
 
@@ -242,5 +242,5 @@ def comment_vote(request, pk):
     comment.refresh_from_db()
 
     return TemplateResponse(
-        request, "comments/fragments/detail.html", {"comment": comment}
+        request, "comments/partials/detail.html", {"comment": comment}
     )
