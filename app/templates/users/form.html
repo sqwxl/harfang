@@ -1,10 +1,16 @@
 {% extends "base_page.html" %}
+
 {% load i18n %}
+
 {% block content %}
-    <h1>{% trans "Register" %}</h1>
+    <h1>
+        {% trans "Register" %}
+    </h1>
     <form method="post">
         {% csrf_token %}
         {{ form }}
-        <button>{% trans "Save" %}</button>
+        <button>
+            {% trans "Save" %}
+        </button>
     </form>
-{% endblock %}
+{% endblock content %}

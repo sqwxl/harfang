@@ -1,19 +1,28 @@
 {% extends "base_page.html" %}
+
 {% load i18n static %}
+
 {% block content %}
     <section class="not-prose">
         {% if page_obj.paginator.count == 0 %}
+
             {% block no-items %}
-                <p>{% translate "No comments are available." %}</p>
+                <p>
+                    {% translate "No comments are available." %}
+                </p>
             {% endblock no-items %}
+
         {% else %}
+
             {% block page-and-paging-controls %}
                 {% for comment in page_obj %}
                     <div class="mx-2 mb-6">
                         <a href="{% url 'post' comment.post.id %}#comment-{{ comment.id }}"
                            preload="mouseover"
                            class="no-link">
-                            <div class="max-w-full">{{ comment.body|truncatewords:40 }}</div>
+                            <div class="max-w-full">
+                                {{ comment.body|truncatewords:40 }}
+                            </div>
                         </a>
                         <div class="text-sm text-muted">
                             <a href="{% url 'profile' comment.user %}" class="no-link text-muted">{{ comment.user.username }}</a> 🞄
@@ -28,9 +37,12 @@
                 {% if page_obj.has_next %}
                     {% include "fragments/paging_control.html" %}
                 {% else %}
-                    <p class="text-center">* * *</p>
+                    <p class="text-center">
+                        * * *
+                    </p>
                 {% endif %}
             {% endblock %}
+
         {% endif %}
     </section>
 {% endblock %}

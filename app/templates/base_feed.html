@@ -1,19 +1,32 @@
 {% extends "base_page.html" %}
+
 {% load i18n static %}
+
 {% block content %}
     <section>
-        {% block menu %}{% endblock %}
+
+        {% block menu %}
+        {% endblock menu %}
+
         {% block page-and-paging-controls %}
             {% if page_obj.paginator.count == 0 %}
-                <p>{% translate "No posts available." %}</p>
+                <p>
+                    {% translate "No posts available." %}
+                </p>
             {% else %}
-                {% block feed %}{% endblock %}
+
+                {% block feed %}
+                {% endblock feed %}
+
                 {% if page_obj.has_next %}
                     {% include "fragments/paging_control.html" %}
                 {% else %}
-                    <p class="text-center">* * *</p>
+                    <p class="text-center">
+                        * * *
+                    </p>
                 {% endif %}
             {% endif %}
-        {% endblock %}
+        {% endblock page-and-paging-controls %}
+
     </section>
-{% endblock %}
+{% endblock content %}

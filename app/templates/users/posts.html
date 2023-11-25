@@ -1,19 +1,28 @@
 {% extends "base_page.html" %}
+
 {% load i18n static %}
+
 {% block content %}
     <section class="not-prose">
         {% if page_obj.paginator.count == 0 %}
+
             {% block no-items %}
-                <p>{% translate "No posts are available." %}</p>
+                <p>
+                    {% translate "No posts are available." %}
+                </p>
             {% endblock no-items %}
+
         {% else %}
+
             {% block page-and-paging-controls %}
                 {% for post in page_obj %}
                     <div class="mx-2 mb-6">
                         <h4 class="font-bold">
                             <a href="{% url 'post' post.id %}">{{ post.title }}</a>
                         </h4>
-                        <div class="max-w-full">{{ post.body|truncatewords:40 }}</div>
+                        <div class="max-w-full">
+                            {{ post.body|truncatewords:40 }}
+                        </div>
                         <div class="text-sm text-muted">
                             <a href="{% url 'profile' post.user %}" class="no-link text-muted">{{ post.user.username }}</a> 🞄
                             <span>
@@ -27,9 +36,12 @@
                 {% if page_obj.has_next %}
                     {% include "fragments/paging_control.html" %}
                 {% else %}
-                    <p class="text-center">* * *</p>
+                    <p class="text-center">
+                        * * *
+                    </p>
                 {% endif %}
-            {% endblock %}
+            {% endblock page-and-paging-controls %}
+
         {% endif %}
     </section>
-{% endblock %}
+{% endblock content %}

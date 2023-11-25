@@ -1,12 +1,18 @@
 {% extends "base_page.html" %}
+
 {% load i18n %}
+
 {% block content %}
     <section>
-        <h1>{% translate "Edit Profile" %}</h1>
+        <h1>
+            {% translate "Edit Profile" %}
+        </h1>
         <form method="post">
             {% csrf_token %}
             {{ form }}
-            <button>{% translate "Save" %}</button>
+            <button>
+                {% translate "Save" %}
+            </button>
         </form>
     </section>
-{% endblock %}
+{% endblock content %}

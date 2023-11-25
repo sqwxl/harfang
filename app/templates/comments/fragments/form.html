@@ -1,22 +1,24 @@
 {% load i18n partials %}
 
 {% partialdef fields %}
-{% for field in form %}
-    <input type="hidden" name="next" value="{{ next|default:request.path }}" />
-    {% if field.is_hidden %}
-        <div>
-            {{ field }}
-        </div>
-    {% else %}
-        <div {% if field.name == "honeypot" %}hidden{% endif %}>
-            {{ field.label_tag }}
-            {% if field.errors %}
-                {{ field.errors }}
-            {% endif %}
-            {{ field }}
-        </div>
-    {% endif %}
-{% endfor %}
+    <div>
+        <input type="hidden" name="next" value="{{ next|default:request.path }}" />
+    </div>
+    {% for field in form %}
+        {% if field.is_hidden %}
+            <div>
+                {{ field }}
+            </div>
+        {% else %}
+            <div {% if field.name == "honeypot" %}hidden{% endif %}>
+                {{ field.label_tag }}
+                {% if field.errors %}
+                    {{ field.errors }}
+                {% endif %}
+                {{ field }}
+            </div>
+        {% endif %}
+    {% endfor %}
 {% endpartialdef %}
 
 <form id="{{ form_id|default:'comment-form' }}"

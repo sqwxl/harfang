@@ -1,16 +1,24 @@
 {% extends "base_page.html" %}
+
 {% load i18n %}
-{% translate "Login" as login %}
-{% block page_title %}{{ login }}{% endblock %}
+
+{% block page_title %}
+    {% translate "Login" %}
+{% endblock page_title %}
+
 {% block content %}
-    <h1>{{ login }}</h1>
+    <h1>
+        {% translate "Login" %}
+    </h1>
     <form method="post">
         {% csrf_token %}
         {{ form.as_div }}
-        <button>{{ login }}</button>
+        <button>
+            {% translate "Login" %}
+        </button>
     </form>
     <!-- TODO <a href="">Forgot your password?</a> -->
     <div>
         <a href="{% url 'signup' %}">{% translate "Register" %}</a>
     </div>
-{% endblock %}
+{% endblock content %}

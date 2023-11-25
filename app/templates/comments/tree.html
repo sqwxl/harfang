@@ -1,20 +1,22 @@
 {% load mptt_tags partials %}
+
 {% partialdef list-item %}
-<li>
-    {% include "comments/fragments/detail.html" with comment=node %}
-    <div class="ml-4 border-l-2 border-l-solid border-l-grey">
-        <div x-ref="c{{ node.id }}">
-            <ul id="comment-{{ node.id }}-children" class="p-0 m-0 mt-4 list-none">
-                {{ children }}
-            </ul>
+    <li>
+        {% with tree_context=True %}
+            {% include "comments/fragments/detail.html" with comment=node %}
+        {% endwith %}
+        <div class="ml-4 border-l-2 border-l-solid border-l-grey">
+            <div x-ref="c{{ node.id }}">
+                <ul id="comment-{{ node.id }}-children" class="p-0 m-0 mt-4 list-none">
+                    {{ children }}
+                </ul>
+            </div>
         </div>
-    </div>
-</li>
+    </li>
 {% endpartialdef %}
+
 <ul id="comment-tree" x-data class="p-0 m-0 mt-4 list-none">
     {% recursetree comments %}
-    {% with tree_context=True %}
         {% partial list-item %}
-    {% endwith %}
-{% endrecursetree %}
+    {% endrecursetree %}
 </ul>

@@ -1,8 +1,16 @@
 {% extends "base_page.html" %}
+
 {% load i18n %}
-{% translate "About" as about %}
-{% block page_title %}{{ about }}{% endblock %}
+
+{% block page_title %}
+    {% translate "About" %}
+{% endblock page_title %}
+
 {% block content %}
-    <h1>{{ about }}</h1>
-    <p>{% translate "This is a news app" %}</p>
-{% endblock %}
+    <h1>
+        {% translate "About" %}
+    </h1>
+    <p>
+        {% translate "This is a news app" %}
+    </p>
+{% endblock content %}

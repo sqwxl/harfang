@@ -5,7 +5,7 @@ ignore = ["F405"]
 [tool.djlint]
 blank_line_after_tag = "load,extends,endblock,endpartialdef"
 blank_line_before_tag = "block,partialdef"
-custom_blocks = "partialdef"
+custom_blocks = "partialdef,recursetree"
 format_attribute_template_tags = true
 line_break_after_multiline_tag = true
 max_line_length = 80
