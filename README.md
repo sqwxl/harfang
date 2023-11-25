@@ -24,6 +24,7 @@ Next up:
 - Public API (for bot accounts)
 - Optimize accessibility
 - Media Posts
+- Gracefully degrades for JS-less clients
 - User DMs/Chat
 - Host an MVP
 - SEO
