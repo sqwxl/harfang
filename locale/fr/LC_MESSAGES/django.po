@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-11-25 13:32+0000\n"
+"POT-Creation-Date: 2023-11-26 22:39+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -106,7 +106,7 @@ msgid "body"
 msgstr "corps"
 
 #: app/templates/about.html:6 app/templates/about.html:11
-#: app/templates/partials/footer.html:7
+#: app/templates/partials/footer.html:6
 msgid "About"
 msgstr "À propos"
 
@@ -114,7 +114,7 @@ msgstr "À propos"
 msgid "This is a news app"
 msgstr "Ceci est une application de nouvelles"
 
-#: app/templates/base_feed.html:14 app/templates/posts/feed.html:42
+#: app/templates/base_feed.html:13 app/templates/posts/feed.html:42
 msgid "No posts available."
 msgstr "Aucun post disponible."
 
@@ -122,7 +122,7 @@ msgstr "Aucun post disponible."
 msgid "New Comment"
 msgstr "Nouveau commentaire"
 
-#: app/templates/comments/partials/detail.html:20
+#: app/templates/comments/detail.html:20
 #: app/templates/posts/partials/feed_item.html:25
 #, python-format
 msgid "%(n)s point"
@@ -130,47 +130,47 @@ msgid_plural "%(n)s points"
 msgstr[0] ""
 msgstr[1] ""
 
-#: app/templates/comments/partials/detail.html:32
-#: app/templates/posts/partials/feed_item.html:37
-#: app/templates/users/comments.html:30 app/templates/users/posts.html:29
+#: app/templates/comments/detail.html:30
+#: app/templates/posts/partials/feed_item.html:35
+#: app/templates/users/comments.html:29 app/templates/users/posts.html:24
 #, python-format
 msgid "%(age)s ago"
 msgstr "il y a %(age)s"
 
-#: app/templates/comments/partials/detail.html:38
+#: app/templates/comments/detail.html:36
 msgid "root"
 msgstr "racine"
 
-#: app/templates/comments/partials/detail.html:39
+#: app/templates/comments/detail.html:37
 msgid "parent"
 msgstr ""
 
-#: app/templates/comments/partials/detail.html:64
+#: app/templates/comments/detail.html:60
 msgid "reply"
 msgstr "repondre"
 
-#: app/templates/comments/partials/detail.html:67
+#: app/templates/comments/detail.html:63
 msgid "edit"
 msgstr "modifier"
 
-#: app/templates/comments/partials/detail.html:72
+#: app/templates/comments/detail.html:68
 msgid "delete"
 msgstr "supprimer"
 
-#: app/templates/comments/partials/form.html:45
-#: app/templates/users/form.html:13 app/templates/users/profile_edit.html:14
+#: app/templates/comments/form.html:44 app/templates/users/form.html:13
+#: app/templates/users/profile_edit.html:15
 msgid "Save"
 msgstr "Sauvegarder"
 
-#: app/templates/comments/partials/form.html:50
+#: app/templates/comments/form.html:49
 msgid "Are you sure? Your comment will be lost."
 msgstr ""
 
-#: app/templates/comments/partials/form.html:52
+#: app/templates/comments/form.html:51
 msgid "Cancel"
 msgstr ""
 
-#: app/templates/partials/footer.html:10
+#: app/templates/partials/footer.html:9
 msgid "Contact"
 msgstr ""
 
@@ -201,20 +201,27 @@ msgstr ""
 msgid "Load More Items"
 msgstr "Charger plus d'éléments"
 
-#: app/templates/posts/detail.html:13
-#, python-format
-msgid "posted %(age)s ago by <a href=\"%(profile_url)s\">%(username)s</a>"
-msgstr "posté il y a %(age)s par <a href=\"%(profile_url)s\">%(username)s</a>"
+#: app/templates/posts/detail.html:15
+#, fuzzy, python-format
+#| msgid "%(age)s ago"
+msgid "Posted %(age)s ago"
+msgstr "il y a %(age)s"
 
 #: app/templates/posts/detail.html:18
+#, fuzzy
+#| msgid "body"
+msgid "by"
+msgstr "corps"
+
+#: app/templates/posts/detail.html:22
 msgid "Link"
 msgstr "Lien"
 
-#: app/templates/posts/detail.html:33
+#: app/templates/posts/detail.html:37
 msgid "Log in to join the discussion."
 msgstr ""
 
-#: app/templates/posts/detail.html:37
+#: app/templates/posts/detail.html:41
 msgid "Comments"
 msgstr "Commentaires"
 
@@ -246,7 +253,7 @@ msgstr "Tout"
 msgid "New Post"
 msgstr "Nouveau post"
 
-#: app/templates/posts/partials/feed_item.html:43
+#: app/templates/posts/partials/feed_item.html:41
 #, python-format
 msgid "%(n)s comment"
 msgid_plural "%(n)s comments"
@@ -258,29 +265,29 @@ msgstr[1] "%(n)s commentaires"
 msgid "Register"
 msgstr "S'inscrire"
 
-#: app/templates/users/comments.html:11
+#: app/templates/users/comments.html:10
 msgid "No comments are available."
 msgstr "Aucun commentaire disponible."
 
-#: app/templates/users/posts.html:11
+#: app/templates/users/posts.html:10
 msgid "No posts are available."
 msgstr "Aucun post disponible."
 
-#: app/templates/users/profile.html:11
-msgid "Edit"
-msgstr "Modifier"
-
-#: app/templates/users/profile.html:14
+#: app/templates/users/profile.html:12
 #, python-format
 msgid "Joined %(age)s ago 🞄 Karma: %(karma)s"
 msgstr "Membre depuis %(age)s 🞄 Karma : %(karma)s"
 
-#: app/templates/users/profile.html:25
+#: app/templates/users/profile.html:16
+msgid "Edit"
+msgstr "Modifier"
+
+#: app/templates/users/profile.html:26
 #, python-format
 msgid "Submissions (%(n)s)"
 msgstr "Posts (%(n)s))"
 
-#: app/templates/users/profile.html:30
+#: app/templates/users/profile.html:31
 #, fuzzy, python-format
 #| msgid "Comments"
 msgid "Comments (%(n)s)"
@@ -311,6 +318,11 @@ msgstr "Posts de {username}"
 #, python-brace-format
 msgid "{username}'s Comments"
 msgstr "Commentaires de {username}"
+
+#, python-format
+#~ msgid "posted %(age)s ago by <a href=\"%(profile_url)s\">%(username)s</a>"
+#~ msgstr ""
+#~ "posté il y a %(age)s par <a href=\"%(profile_url)s\">%(username)s</a>"
 
 #~ msgid "Reply"
 #~ msgstr "Répondre"
