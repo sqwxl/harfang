@@ -1,9 +1,11 @@
 {% extends "base.html" %}
 
 {% block body %}
-    {% include "partials/nav.html" %}
-    {% include "partials/flash.html" %}
-    <main class="overflow-x-hidden px-1 mx-auto w-full max-w-7xl sm:px-4 prose grow">
+    <header>
+        {% include "partials/nav.html" %}
+        {% include "partials/flash.html" %}
+    </header>
+    <main class="overflow-x-hidden px-1 mx-auto w-full max-w-7xl sm:px-4 grow">
 
         {% block content %}
         {% endblock content %}

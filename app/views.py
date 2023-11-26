@@ -242,5 +242,5 @@ def comment_vote(request, pk):
     comment.refresh_from_db()
 
     return TemplateResponse(
-        request, "comments/partials/detail.html", {"comment": comment}
+        request, "comments/detail.html", {"comment": comment}
     )

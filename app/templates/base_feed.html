@@ -3,30 +3,27 @@
 {% load i18n static %}
 
 {% block content %}
-    <section>
 
-        {% block menu %}
-        {% endblock menu %}
+    {% block menu %}
+    {% endblock menu %}
 
-        {% block page-and-paging-controls %}
-            {% if page_obj.paginator.count == 0 %}
-                <p>
-                    {% translate "No posts available." %}
-                </p>
+    {% block page-and-paging-controls %}
+        {% if page_obj.paginator.count == 0 %}
+            <p>
+                {% translate "No posts available." %}
+            </p>
+        {% else %}
+
+            {% block feed %}
+            {% endblock feed %}
+
+            {% if page_obj.has_next %}
+                {% include "partials/paging_control.html" %}
             {% else %}
-
-                {% block feed %}
-                {% endblock feed %}
-
-                {% if page_obj.has_next %}
-                    {% include "partials/paging_control.html" %}
-                {% else %}
-                    <p class="text-center">
-                        * * *
-                    </p>
-                {% endif %}
+                <p class="text-center">
+                    * * *
+                </p>
             {% endif %}
-        {% endblock page-and-paging-controls %}
-
-    </section>
+        {% endif %}
+    {% endblock page-and-paging-controls %}
 {% endblock content %}

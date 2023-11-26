@@ -3,30 +3,34 @@
 {% load i18n %}
 
 {% block content %}
-    <article>
-        <section>
-            <h1>
-                <a href="{% url 'post' post.id %}" class="no-link">{{ post.title }}</a>
-            </h1>
-            <p>
-                {% url "profile" post.user.username as profile_url %}
-                {% blocktranslate trimmed with age=post.submit_date|timesince username=post.user.username|escape %}
-                    posted {{ age }} ago by <a href="{{ profile_url }}">{{ username }}</a>
-                {% endblocktranslate %}
-            </p>
-            <p>
-                <a href="{{ post.url }}" target="_blank" rel="noreferrer">{% translate "Link" %}</a>
-            </p>
-        </section>
-        <section>
+    <article itemid="{% url 'post' post.id %}"
+             itemscope
+             itemtype="https://schema.org/DiscussionForumPosting">
+        <header class="max-w-none prose">
+            <hgroup>
+                <h1 itemprop="headline">
+                    <a href="{% url 'post' post.id %}" class="no-link">{{ post.title }}</a>
+                </h1>
+                <p>
+                    {% blocktranslate trimmed with age=post.submit_date|timesince %}
+                        Posted {{ age }} ago
+                    {% endblocktranslate %}
+                    {% translate "by" %}
+                    {% include "partials/profile_link.html" with username=post.user.username %}
+                </p>
+                <p>
+                    <a href="{{ post.url }}" target="_blank" rel="noreferrer">{% translate "Link" %}</a>
+                    <link href="{{ post.url }}">
+                </p>
+            </hgroup>
             {{ post.body|linebreaks }}
-        </section>
+        </header>
         <br>
         <br>
-        <section hx-vals='{"tree": true}'>
+        <section class="max-w-none prose" hx-vals='{"tree": true}'>
             {% if form %}
                 <div hx-target="#comment-tree" hx-swap="beforeend" hx-push-url="false">
-                    {% include "comments/partials/form.html" %}
+                    {% include "comments/form.html" %}
                 </div>
             {% else %}
                 <p>
@@ -34,7 +38,7 @@
                 </p>
             {% endif %}
             <h3>
-                {% translate "Comments" %}
+                {% translate "Comments" %} ({{ post.comments.count }})
             </h3>
             {% include "comments/tree.html" %}
         </section>

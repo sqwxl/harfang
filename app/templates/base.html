@@ -5,19 +5,21 @@
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <meta name="application-name" content="Harfang">
         <meta name="description"
-              content="Harfang is simple forum/user content site with a focus on simplicity and accessibility">
+              content="A news aggregation and web content rating and discussion site with a focus on simplicity and accessibility.">
         <meta name="keywords"
-              content="forum, user content, social media, discussion">
-        <meta name="author" content="Harfang">
+              content="forum,user content,social media,discussion,news,posts,media">
         <meta name="referrer" content="same-origin">
-        <meta name="theme-color" content="#282828">
-        {% comment %} TODO: Support for light/dark schemes {% endcomment %}
-        <meta name="color-scheme" content="dark">
+        <meta name="theme-color"
+              content="#282828"
+              media="(prefers-color-scheme: dark)">
+        <meta name="theme-color"
+              content="#fbf1c7"
+              media="(prefers-color-scheme: light)">
+        <meta name="color-scheme" content="dark light">
+        <meta name="htmx-config" content='{"scrollIntoViewOnBoost": false}'>
         <link rel="stylesheet" href="{% static 'css/output.css' %}">
         <script defer src="{% static 'js/htmx/htmx.min.js' %}"></script>
-        <meta name="htmx-config" content='{"scrollIntoViewOnBoost": false}'>
         <script defer src="{% static 'js/_hyperscript.min.js' %}"></script>
         <script defer src="{% static 'js/htmx/ext/preload.js' %}"></script>
         <script defer src="{% static 'js/alpine.min.js' %}"></script>

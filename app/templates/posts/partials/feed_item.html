@@ -1,6 +1,6 @@
 {% load i18n %}
 
-<article id="post-{{ post.id }}" class="flex m-2 h-16 not-prose">
+<article id="post-{{ post.id }}" class="flex m-2 h-16">
     <button class="flex-none p-2 w-8 bg-transparent hover:bg-transparent
                    {% if post.has_voted or post.user == user %}
                        opacity-25
@@ -28,10 +28,8 @@
                     {{ n }} points
                 {% endblocktranslate %}
             </span>
-            🞄 <a href="{% url 'profile' post.user.username %}"
-    {% if user == post.user %}
-        class="text-orange"
-    {% endif %}>{{ post.user.username }}</a>
+            🞄
+            {% include "partials/profile_link.html" with username=post.user.username %}
             🞄
             <span>
                 {% blocktranslate trimmed with age=comment.submit_date|timesince %}

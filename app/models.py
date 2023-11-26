@@ -28,7 +28,7 @@ class Profile(models.Model):
         on_delete=models.CASCADE,
         related_name="profile",
     )
-    bio = models.TextField(_("bio"), blank=True)
+    bio = models.CharField(_("bio"), blank=True, max_length=4)
 
     def __str__(self):
         return f"{self.user.username}'s profile"

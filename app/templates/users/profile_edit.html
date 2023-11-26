@@ -3,16 +3,16 @@
 {% load i18n %}
 
 {% block content %}
-    <section>
+    <header class="prose">
         <h1>
             {% translate "Edit Profile" %}
         </h1>
-        <form method="post">
-            {% csrf_token %}
-            {{ form }}
-            <button>
-                {% translate "Save" %}
-            </button>
-        </form>
-    </section>
+    </header>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_div }}
+        <button>
+            {% translate "Save" %}
+        </button>
+    </form>
 {% endblock content %}

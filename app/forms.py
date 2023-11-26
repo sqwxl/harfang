@@ -1,19 +1,23 @@
-from django.contrib.auth import forms, get_user_model
+from django import forms
+from django.contrib.auth import get_user_model
+from django.contrib.auth.forms import UserCreationForm
 from django.forms import ModelForm
 
 from .models import Post, Profile
 
 
-class UserCreationForm(forms.UserCreationForm):
-    class Meta(forms.UserCreationForm.Meta):
+class UserCreationForm(UserCreationForm):
+    class Meta(UserCreationForm.Meta):
         model = get_user_model()
-        fields = forms.UserCreationForm.Meta.fields
+        fields = UserCreationForm.Meta.fields
 
 
-class ProfileForm(ModelForm):
+class ProfileForm(forms.ModelForm):
     class Meta:
         model = Profile
-        fields = ["bio"]
+        exclude = ["user"]
+
+    bio = forms.CharField(widget=forms.Textarea)
 
 
 class PostForm(ModelForm):

@@ -1,7 +1,7 @@
 {% load i18n %}
 
-<article id="comment-{{ comment.id }}" class="flex">
-    <button class="inline-block flex-none p-2 w-8 h-8 bg-transparent hover:bg-transparent
+<div id="comment-{{ comment.id }}-vote-container" class="flex">
+    <button class="inline-block flex-none -ml-3 p-2 w-8 h-8 bg-transparent hover:bg-transparent
                    {% if comment.has_voted or comment.user == user or not user.is_authenticated %}
                        opacity-25
                    {% endif %}"
@@ -10,12 +10,12 @@
                 disabled
             {% endif %}
             hx-post="{% url 'comment_vote' comment.id %}"
-            hx-target="#comment-{{ comment.id }}"
+            hx-target="#comment-{{ comment.id }}-vote-container"
             hx-swap="outerHTML">
         {% include "partials/votearrow_svg.html" %}
     </button>
-    <div>
-        <div class="text-sm text-muted">
+    <article id="comment-{{ comment.id }}">
+        <header class="text-sm text-muted">
             <span>
                 {% blocktranslate trimmed count n=comment.points %}
                     {{ n }} point
@@ -23,10 +23,8 @@
                     {{ n }} points
                 {% endblocktranslate %}
             </span>
-            🞄 <a href="{% url 'profile' comment.user.username %}"
-    {% if user == comment.user %}
-        class="text-orange"
-    {% endif %}>{{ comment.user.username }}</a>
+            🞄
+            {% include "partials/profile_link.html" with username=comment.user.username %}
             🞄
             <span>
                 {% blocktranslate trimmed with age=comment.submit_date|timesince %}
@@ -49,19 +47,17 @@
                     </button>
                 {% endif %}
             {% endif %}
+        </header>
+        <div id="comment-{{ comment.id }}-body">
+            {{ comment.body }}
         </div>
-        <div id="comment-{{ comment.id }}-text">
-            <div>
-                {{ comment.body }}
-            </div>
-        </div>
-        <div class="ml-5 text-sm text-muted">
+        <footer class="ml-5 text-sm text-muted">
             {% if user.is_authenticated %}
                 <a href="{% url 'comments:reply' comment.id %}"
                    hx-boost="true"
                    hx-push-url="false"
-                   hx-swap="afterbegin"
-                   hx-target="#comment-{{ comment.id }}-children">{% translate "reply" %}</a>
+                   hx-swap="innerHTML"
+                   hx-target="#comment-{{ comment.id }}-reply-form-wrapper">{% translate "reply" %}</a>
                 {% if user == comment.user or user.is_staff %}
                     🞄
                     <a href="{% url 'comments:edit' comment.id %}">{% translate "edit" %}</a>
@@ -72,6 +68,6 @@
                        hx-swap="outerHTML">{% translate "delete" %}</a>
                 {% endif %}
             {% endif %}
-        </div>
-    </div>
-</article>
+        </footer>
+    </article>
+</div>

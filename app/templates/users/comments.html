@@ -3,46 +3,44 @@
 {% load i18n static %}
 
 {% block content %}
-    <section class="not-prose">
-        {% if page_obj.paginator.count == 0 %}
+    {% if page_obj.paginator.count == 0 %}
 
-            {% block no-items %}
-                <p>
-                    {% translate "No comments are available." %}
-                </p>
-            {% endblock no-items %}
+        {% block no-items %}
+            <p>
+                {% translate "No comments are available." %}
+            </p>
+        {% endblock no-items %}
 
-        {% else %}
+    {% else %}
 
-            {% block page-and-paging-controls %}
-                {% for comment in page_obj %}
-                    <div class="mx-2 mb-6">
-                        <a href="{% url 'post' comment.post.id %}#comment-{{ comment.id }}"
-                           preload="mouseover"
-                           class="no-link">
-                            <div class="max-w-full">
-                                {{ comment.body|truncatewords:40 }}
-                            </div>
-                        </a>
-                        <div class="text-sm text-muted">
-                            <a href="{% url 'profile' comment.user %}" class="no-link text-muted">{{ comment.user.username }}</a> 🞄
-                            <span>
-                                {% blocktranslate trimmed with age=comment.submit_date|timesince %}
-                                    {{ age }} ago
-                                {% endblocktranslate %}
-                            </span>
+        {% block page-and-paging-controls %}
+            {% for comment in page_obj %}
+                <div class="mx-2 mb-6">
+                    <a href="{% url 'post' comment.post.id %}#comment-{{ comment.id }}"
+                       preload="mouseover"
+                       class="no-link">
+                        <div class="max-w-full">
+                            {{ comment.body|truncatewords:40 }}
                         </div>
+                    </a>
+                    <div class="text-sm text-muted">
+                        {% include "partials/profile_link.html" with username=comment.user.username %}
+                        <span>
+                            {% blocktranslate trimmed with age=comment.submit_date|timesince %}
+                                {{ age }} ago
+                            {% endblocktranslate %}
+                        </span>
                     </div>
-                {% endfor %}
-                {% if page_obj.has_next %}
-                    {% include "partials/paging_control.html" %}
-                {% else %}
-                    <p class="text-center">
-                        * * *
-                    </p>
-                {% endif %}
-            {% endblock %}
+                </div>
+            {% endfor %}
+            {% if page_obj.has_next %}
+                {% include "partials/paging_control.html" %}
+            {% else %}
+                <p class="text-center">
+                    * * *
+                </p>
+            {% endif %}
+        {% endblock page-and-paging-controls %}
 
-        {% endif %}
-    </section>
-{% endblock %}
+    {% endif %}
+{% endblock content %}

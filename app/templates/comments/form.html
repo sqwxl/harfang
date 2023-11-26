@@ -22,7 +22,6 @@
 {% endpartialdef %}
 
 <form id="{{ form_id|default:'comment-form' }}"
-      class="not-prose"
       method="post"
       action="{% url 'comments:post' %}"
       hx-boost="true"

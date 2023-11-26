@@ -3,12 +3,10 @@
 {% load i18n %}
 
 {% block content %}
-    <section>
-        <h1>
-            {{ page_title }}
-        </h1>
-        {% include "comments/partials/detail.html" with comment=parent %}
-        <br>
-        {% include "comments/partials/form.html" %}
-    </section>
+    <h1>
+        {{ page_title }}
+    </h1>
+    {% include "comments/detail.html" with comment=parent %}
+    <br>
+    {% include "comments/form.html" %}
 {% endblock content %}

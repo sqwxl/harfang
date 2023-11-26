@@ -3,34 +3,34 @@
 {% load i18n %}
 
 {% block content %}
-    <section>
-        <h1>
-            {{ profile.user.username }}
-        </h1>
-        {% if user == profile.user %}
-            <a href="{% url 'profile_edit' user.username %}">{% translate "Edit" %}</a>
-        {% endif %}
-        <p>
-            {% blocktranslate trimmed with age=profile.user.date_joined|timesince karma=profile.user.points %}
-                Joined {{ age }} ago 🞄 Karma: {{ karma }}
+    <header class="max-w-none prose">
+        <hgroup>
+            <h1>
+                {{ profile.user.username }}
+            </h1>
+            <p>
+                {% blocktranslate trimmed with age=profile.user.date_joined|timesince karma=profile.user.points %}
+                    Joined {{ age }} ago 🞄 Karma: {{ karma }}
+                {% endblocktranslate %}
+                {% if user == profile.user %}
+                    🞄 <span><a href="{% url 'profile_edit' user.username %}">{% translate "Edit" %}</a></span>
+                {% endif %}
+            </p>
+        </hgroup>
+    </header>
+    {% if profile.bio %}
+        {{ profile.bio|linebreaks }}
+    {% endif %}
+    <div hx-boost="true">
+        <a href="{% url 'user_posts' profile.user.username %}">
+            {% blocktranslate trimmed with n=profile.user.posts.count %}
+                Submissions ({{ n }})
             {% endblocktranslate %}
-        </p>
-        {% if profile.bio %}
-            <div>
-                {{ profile.bio|linebreaks }}
-            </div>
-        {% endif %}
-        <div hx-boost="true">
-            <a href="{% url 'user_posts' profile.user.username %}">
-                {% blocktranslate trimmed with n=profile.user.posts.count %}
-                    Submissions ({{ n }})
-                {% endblocktranslate %}
-            </a>
-            <a href="{% url 'user_comments' profile.user.username %}">
-                {% blocktranslate trimmed with n=profile.user.comments.count %}
-                    Comments ({{ n }})
-                {% endblocktranslate %}
-            </a>
-        </div>
-    </section>
-{% endblock %}
+        </a>
+        <a href="{% url 'user_comments' profile.user.username %}">
+            {% blocktranslate trimmed with n=profile.user.comments.count %}
+                Comments ({{ n }})
+            {% endblocktranslate %}
+        </a>
+    </div>
+{% endblock content %}

@@ -3,14 +3,15 @@
 {% partialdef list-item %}
     <li>
         {% with tree_context=True %}
-            {% include "comments/partials/detail.html" with comment=node %}
+            {% include "comments/detail.html" with comment=node %}
         {% endwith %}
-        <div class="ml-4 border-l-2 border-l-solid border-l-grey">
-            <div x-ref="c{{ node.id }}">
-                <ul id="comment-{{ node.id }}-children" class="p-0 m-0 mt-4 list-none">
-                    {{ children }}
-                </ul>
-            </div>
+        <div class="pl-2 ml-2 border-l-2 border-l-solid border-l-grey"
+             x-ref="c{{ node.id }}">
+            <ul id="comment-{{ node.id }}-children" class="p-0 m-0 mt-4 list-none">
+                <li id="comment-{{ node.id }}-reply-form-wrapper">
+                </li>
+                {{ children }}
+            </ul>
         </div>
     </li>
 {% endpartialdef %}

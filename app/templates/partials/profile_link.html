@@ -1,0 +1,7 @@
+<span itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <a itemprop="name"
+       href="{% url 'profile' username %}"
+       {% if user.username == username %}
+           class="text-orange"
+       {% endif %}>{{ username }}</a>
+</span>
