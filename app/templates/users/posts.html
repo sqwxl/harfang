@@ -18,7 +18,7 @@
                 <article class="mx-2 mb-6 max-w-none prose">
                     <header>
                         <h3>
-                            <a href="{% url 'post' post.id %}" class="no-link">{{ post.title }}</a>
+                            <a href="{% url 'post' post.id %}" class="no-anchor">{{ post.title }}</a>
                         </h3>
                         <small>
                             {% blocktranslate trimmed with age=post.submit_date|timesince %}

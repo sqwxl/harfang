@@ -18,7 +18,7 @@
                 <div class="mx-2 mb-6">
                     <a href="{% url 'post' comment.post.id %}#comment-{{ comment.id }}"
                        preload="mouseover"
-                       class="no-link">
+                       class="no-anchor">
                         <div class="max-w-full">
                             {{ comment.body|truncatewords:40 }}
                         </div>

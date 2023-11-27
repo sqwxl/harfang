@@ -56,12 +56,6 @@
   a {
     @apply text-blue no-underline visited:text-purple hover:underline;
   }
-
-  nav a,
-  nav a:visited,
-  nav a:hover {
-    @apply text-fg no-underline;
-  }
 }
 
 @layer components {
@@ -71,8 +65,8 @@
 }
 
 @layer utilities {
-  .no-link {
-    @apply text-inherit no-underline visited:text-inherit hover:no-underline;
+  .no-anchor {
+    @apply text-inherit no-underline visited:text-inherit;
   }
 }
 

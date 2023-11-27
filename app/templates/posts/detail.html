@@ -7,7 +7,7 @@
         <header class="max-w-none prose">
             <hgroup>
                 <h1>
-                    <a href="{% url 'post' post.id %}" class="no-link">{{ post.title }}</a>
+                    <a href="{% url 'post' post.id %}" class="no-anchor">{{ post.title }}</a>
                 </h1>
                 <p>
                     {% blocktranslate trimmed with age=post.submit_date|timesince %}

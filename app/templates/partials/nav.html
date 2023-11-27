@@ -3,33 +3,31 @@
 <nav class="flex items-center py-2 px-4 mb-4 whitespace-nowrap sm:mb-10 full bg-bg0_h"
      hx-boost="true"
      preload="mouseover">
-    <a href="{% url 'home' %}"
-       class="mr-4 text-xl text-red_d visited:text-red_d hover:text-red_d">🪶</a>
+    <a href="{% url 'home' %}" class="mr-4 text-xl">🪶</a>
     <ul class="flex flex-wrap items-center grow">
-        <li class="py-2 px-4">
-            <a href="{% url 'top' %}">{% translate "Top" %}</a>
+        <li class="px-4">
+            <a href="{% url 'top' %}" class="no-anchor">{% translate "Top" %}</a>
         </li>
-        <li class="py-2 px-4">
-            <a href="{% url 'latest' %}">{% translate "Latest" %}</a>
+        <li class="px-4">
+            <a href="{% url 'latest' %}" class="no-anchor">{% translate "Latest" %}</a>
         </li>
         {% if user.is_authenticated %}
-            <li class="py-2 px-4">
-                {% comment %}Translators: 'Submit' as in 'Submit new post'{% endcomment %}
-                <a href="{% url 'submit' %}">{% translate "Submit" %}</a>
+            <li class="px-4">
+                <a href="{% url 'submit' %}" class="no-anchor">{% translate "Submit" %}</a>
             </li>
         {% endif %}
         <li class="grow">
         </li>
         {% if user.is_authenticated %}
-            <li class="py-2 px-4">
-                <a href="{% url 'profile' user.username %}">{{ user.username }}</a>
+            <li class="px-4 !text-fg">
+                {% include "partials/profile_link.html" with username=user.username %}
             </li>
-            <li class="py-2 px-4">
-                <a href="{% url 'logout' %}">{% translate "Logout" %}</a>
+            <li class="px-4">
+                <a href="{% url 'logout' %}" class="no-anchor">{% translate "Logout" %}</a>
             </li>
         {% else %}
-            <li class="py-2 px-4">
-                <a href="{% url 'login' %}">{% translate "Login" %}</a>
+            <li class="px-4">
+                <a href="{% url 'login' %}" class="no-anchor">{% translate "Login" %}</a>
             </li>
         {% endif %}
     </ul>

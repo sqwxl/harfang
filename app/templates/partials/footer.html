@@ -1,12 +1,12 @@
 {% load i18n %}
 
-<footer class="flex relative inset-x-0 bottom-0 justify-around items-center py-4 mt-4 text-sm bg-bg0_h">
-    <ul class="flex justify-around items-center">
+<footer class="relative inset-x-0 bottom-0 py-4 mt-4 bg-bg0_h">
+    <ul class="flex justify-center items-center text-sm">
         <li class="px-4">
-            <a href="{% url 'about' %}">{% translate "About" %}</a>
+            <a href="{% url 'about' %}" class="no-anchor">{% translate "About" %}</a>
         </li>
         <li class="px-4">
-            <a href="mailto:todo@todo.todo">{% translate "Contact" %}</a>
+            <a href="mailto:todo@todo.todo" class="no-anchor">{% translate "Contact" %}</a>
         </li>
     </ul>
 </footer>

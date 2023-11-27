@@ -19,7 +19,7 @@
     <div>
         <a href="{% url 'post' post.id %}"
            preload="mouseover"
-           class="text-lg font-bold no-link">{{ post.title|title }}</a>
+           class="text-lg font-bold no-anchor">{{ post.title|title }}</a>
         <div class="text-sm text-muted">
             <span>
                 {% blocktranslate trimmed count n=post.points %}
