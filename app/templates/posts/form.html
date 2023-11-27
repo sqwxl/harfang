@@ -3,9 +3,12 @@
 {% load i18n %}
 
 {% block content %}
-    <h1>
-        {% translate "New Post" %}
-    </h1>
+    <hgroup class="prose">
+        <h1>
+            {% translate "New Post" %}
+        </h1>
+    </hgroup>
+    <br>
     <form method="post">
         {% csrf_token %}
         {{ form.as_div }}

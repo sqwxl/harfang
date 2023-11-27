@@ -3,12 +3,10 @@
 {% load i18n %}
 
 {% block content %}
-    <article itemid="{% url 'post' post.id %}"
-             itemscope
-             itemtype="https://schema.org/DiscussionForumPosting">
+    <article>
         <header class="max-w-none prose">
             <hgroup>
-                <h1 itemprop="headline">
+                <h1>
                     <a href="{% url 'post' post.id %}" class="no-link">{{ post.title }}</a>
                 </h1>
                 <p>
@@ -18,13 +16,14 @@
                     {% translate "by" %}
                     {% include "partials/profile_link.html" with username=post.user.username %}
                 </p>
-                <p>
-                    <a href="{{ post.url }}" target="_blank" rel="noreferrer">{% translate "Link" %}</a>
-                    <link href="{{ post.url }}">
-                </p>
             </hgroup>
-            {{ post.body|linebreaks }}
         </header>
+        <div>
+            <a href="{{ post.url }}" target="_blank" rel="noreferrer">{% translate "Link" %}</a>
+        </div>
+        <div>
+            {{ post.body|linebreaks }}
+        </div>
         <br>
         <br>
         <section class="max-w-none prose" hx-vals='{"tree": true}'>

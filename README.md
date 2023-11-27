@@ -27,7 +27,7 @@ Next up:
 - Gracefully degrades for JS-less clients
 - User DMs/Chat
 - Host an MVP
-- SEO
+- SEO (w/ microdata?)
 - Email system
 - Dark/Light color-schemes
 - Site identity (icons, logos, etc)

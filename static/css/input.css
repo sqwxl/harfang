@@ -68,22 +68,22 @@
   .btn {
     @apply text-inherit visited:text-inherit bg-red_d hover:bg-red mr-2 px-2 rounded no-underline hover:no-underline;
   }
-
-  .error {
-    @apply text-red;
-  }
-
-  .errorlist {
-    @apply text-red text-sm;
-  }
-
-  .helptext {
-    @apply text-fg4 text-sm;
-  }
 }
 
 @layer utilities {
   .no-link {
     @apply text-inherit no-underline visited:text-inherit hover:no-underline;
   }
+}
+
+.error {
+  @apply text-red;
+}
+
+.helptext {
+  @apply text-fg4 text-sm;
+}
+
+.errorlist {
+  @apply text-red text-sm;
 }
