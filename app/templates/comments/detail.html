@@ -26,13 +26,11 @@
                 {% if not comment.is_leaf_node %}
                     <button class="font-bold bg-transparent transition-colors text-fg hover:bg-bg2 hover:text-bg"
                             type="button"
-                            aria-label="Fold/Unfold discussion"
-                            x-data="{ open: true }"
-                            @click="$refs.c{{ comment.id }}.classList.toggle('hidden'); open = !open">
-                        <span x-show="open">－</span>
-                        <span x-show="!open">＋</span>
-                    </button>
-                {% endif %}
+                            aria-label="Fold/unfold discussion"
+                            _="on click toggle @hidden on <span/> in me and #comment-{{ comment.id }}-children">
+                    <span>－</span>
+                    <span hidden>＋</span>
+                </button>
             {% endif %}
         </header>
         <p id="comment-{{ comment.id }}-body">

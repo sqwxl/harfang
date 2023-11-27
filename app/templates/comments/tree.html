@@ -16,7 +16,7 @@
     </li>
 {% endpartialdef %}
 
-<ul id="comment-tree" x-data class="p-0 m-0 mt-4 list-none">
+<ul id="comment-tree">
     {% recursetree comments %}
         {% partial list-item %}
     {% endrecursetree %}
