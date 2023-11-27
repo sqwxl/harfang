@@ -216,10 +216,14 @@ def post_vote(request, pk):
 
     post.refresh_from_db()
 
-    # TODO generalize to handle votes coming from elsewhere than the feed view
-    return TemplateResponse(
-        request, "posts/partials/feed_item.html", {"post": post}
-    )
+    if request.htmx:
+        return TemplateResponse(
+            request,
+            "partials/vote_form.html",
+            {"item": post},
+        )
+    else:
+        return HttpResponseRedirect(request.META.get("HTTP_REFERER", "/"))
 
 
 @login_required
@@ -241,6 +245,11 @@ def comment_vote(request, pk):
 
     comment.refresh_from_db()
 
-    return TemplateResponse(
-        request, "comments/detail.html", {"comment": comment}
-    )
+    if request.htmx:
+        return TemplateResponse(
+            request,
+            "partials/vote_form.html",
+            {"item": comment},
+        )
+    else:
+        return HttpResponseRedirect(request.META.get("HTTP_REFERER", "/"))
