@@ -1,15 +1,9 @@
 {% load i18n partials %}
 
 {% partialdef comment %}
-    <article class="max-w-none prose" id="comment-{{ comment.id }}">
+    <article id="comment-{{ comment.id }}">
         <header class="text-sm text-muted">
-            <span>
-                {% blocktranslate trimmed count n=comment.points %}
-                    {{ n }} point
-                {% plural %}
-                    {{ n }} points
-                {% endblocktranslate %}
-            </span>
+            {% include "partials/vote_form.html#points" with item=comment %}
             🞄
             {% include "partials/profile_link.html" with username=comment.user.username %}
             🞄
@@ -24,7 +18,7 @@
                     🞄 <a href="#comment-{{ comment.parent.id }}">{% translate "parent" %}{{ " " }}</a>
                 {% endif %}
                 {% if not comment.is_leaf_node %}
-                    <button class="font-bold bg-transparent transition-colors text-fg hover:bg-bg2 hover:text-bg"
+                    <button class="font-bold bg-transparent transition-colors no-js-hide text-fg hover:bg-bg2 hover:text-bg"
                             type="button"
                             aria-label="Fold/unfold discussion"
                             _="on click toggle @hidden on <span/> in me and #comment-{{ comment.id }}-children">
@@ -32,32 +26,33 @@
                     <span hidden>＋</span>
                 </button>
             {% endif %}
-        </header>
-        <p id="comment-{{ comment.id }}-body">
-            {{ comment.body }}
-        </p>
-        <footer class="text-sm text-muted">
-            {% if user.is_authenticated %}
-                <a href="{% url 'comments:reply' comment.id %}"
-                   hx-boost="true"
-                   hx-push-url="false"
-                   hx-swap="innerHTML"
-                   hx-target="#comment-{{ comment.id }}-reply-form-wrapper">{% translate "reply" %}</a>
-                {% if user == comment.user or user.is_staff %}
-                    🞄
-                    <a href="{% url 'comments:edit' comment.id %}">{% translate "edit" %}</a>
-                    🞄
-                    <a href="#"
-                       hx-delete="{% url 'comments:delete' comment.id %}"
-                       hx-target="#comment-{{ comment.id }}"
-                       hx-swap="outerHTML">{% translate "delete" %}</a>
-                {% endif %}
+        {% endif %}
+    </header>
+    <p id="comment-{{ comment.id }}-body" class="max-w-none prose">
+        {{ comment.body }}
+    </p>
+    <footer class="text-sm text-muted">
+        {% if user.is_authenticated %}
+            <a href="{% url 'comments:reply' comment.id %}"
+               hx-boost="true"
+               hx-push-url="false"
+               hx-swap="innerHTML"
+               hx-target="#comment-{{ comment.id }}-reply-form-wrapper">{% translate "reply" %}</a>
+            {% if user == comment.user or user.is_staff %}
+                🞄
+                <a href="{% url 'comments:edit' comment.id %}">{% translate "edit" %}</a>
+                🞄
+                <a href="#"
+                   hx-delete="{% url 'comments:delete' comment.id %}"
+                   hx-target="#comment-{{ comment.id }}"
+                   hx-swap="outerHTML">{% translate "delete" %}</a>
             {% endif %}
-        </footer>
-    </article>
+        {% endif %}
+    </footer>
+</article>
 {% endpartialdef %}
 
-<div id="comment-{{ comment.id }}-vote-wrapper" class="flex">
+<div id="comment-{{ comment.id }}-wrapper" class="flex">
     {% include "partials/vote_form.html#form" with item=comment %}
     {% partial comment %}
 </div>

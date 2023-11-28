@@ -1,6 +1,6 @@
 {% extends "base_page.html" %}
 
-{% load i18n static %}
+{% load i18n %}
 
 {% block content %}
 
@@ -20,8 +20,8 @@
             {% if page_obj.has_next %}
                 {% include "partials/paging_control.html" %}
             {% else %}
-                <p class="text-center">
-                    * * *
+                <p class="text-2xl tracking-widest leading-10 text-center">
+                    *⁎*
                 </p>
             {% endif %}
         {% endif %}

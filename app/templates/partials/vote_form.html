@@ -7,19 +7,17 @@
           hx-push-url="false"
           hx-boost="true">
         {% csrf_token %}
-        <button class="flex-none -ml-3 p-2 w-8 h-8 bg-transparent hover:bg-transparent
-                       {% if item.user == user or not user.is_authenticated %}
-                           opacity-25
-                       {% endif %}"
+        <button class="flex-none p-2 m-0 w-8 bg-transparent hover:bg-transparent"
                 aria-label="Upvote"
                 {% if item.user == user or not user.is_authenticated %}
                     disabled
                 {% endif %}>
-            <svg class="
-                        {% if item.has_voted %}
-                            fill-green_d
+            <svg class="{% if item.has_voted %}
+                            fill-green
+                        {% elif item.user == user or not user.is_authenticated %}
+                            fill-bg2
                         {% else %}
-                            fill-fg
+                            fill-bg4
                         {% endif %}"
                  viewBox="0 0 30 26">
                 <polygon points="15,0 30,26 0,26" />
@@ -28,12 +26,16 @@
     </form>
 {% endpartialdef %}
 
+{% partialdef points %}
+    <span id="{{ item|class_name|lower }}-{{ item.id }}-points"
+          hx-swap-oob="true">
+        {% blocktranslate trimmed count n=item.points %}
+            {{ n }} point
+        {% plural %}
+            {{ n }} points
+        {% endblocktranslate %}
+    </span>
+{% endpartialdef %}
+
 {% partial form %}
-<span id="{{ item|class_name|lower }}-{{ item.id }}-points"
-      hx-swap-oob="true">
-    {% blocktranslate trimmed count n=item.points %}
-        {{ n }} point
-    {% plural %}
-        {{ n }} points
-    {% endblocktranslate %}
-</span>
+{% partial points %}

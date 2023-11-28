@@ -1,18 +1,17 @@
 {% load mptt_tags partials %}
 
 {% partialdef list-item %}
-    <li>
+    <li class="mb-4">
         {% with tree_context=True %}
             {% include "comments/detail.html" with comment=node %}
         {% endwith %}
-        <div class="pl-2 ml-2 border-l-2 border-l-solid border-l-grey"
-             x-ref="c{{ node.id }}">
-            <ul id="comment-{{ node.id }}-children" class="p-0 m-0 mt-4 list-none">
-                <li id="comment-{{ node.id }}-reply-form-wrapper">
-                </li>
-                {{ children }}
-            </ul>
-        </div>
+        <ul id="comment-{{ node.id }}-children"
+            class="my-4 ml-2 border-l-2 border-l-solid border-l-bg3"
+            x-ref="c{{ node.id }}">
+            <li id="comment-{{ node.id }}-reply-form-wrapper">
+            </li>
+            {{ children }}
+        </ul>
     </li>
 {% endpartialdef %}
 

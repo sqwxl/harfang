@@ -3,8 +3,12 @@
 {% load i18n %}
 
 {% block content %}
-    <h1>
-        {% translate "Edit Comment" %}
-    </h1>
-    {% include "comments/form.html" %}
+    <hgroup class="prose">
+        <h1>
+            {% translate "Edit Comment" %}
+        </h1>
+    </hgroup>
+    <p class="my-4">
+        {% include "comments/form.html" %}
+    </p>
 {% endblock content %}

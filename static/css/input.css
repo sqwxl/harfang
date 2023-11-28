@@ -68,6 +68,12 @@
   .no-anchor {
     @apply text-inherit no-underline visited:text-inherit;
   }
+
+  @media (scripting: none) {
+    .no-js-hide {
+      display: none;
+    }
+  }
 }
 
 .error {

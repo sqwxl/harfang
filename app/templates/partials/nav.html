@@ -4,7 +4,7 @@
      hx-boost="true"
      preload="mouseover">
     <a href="{% url 'home' %}" class="mr-4 text-xl">🪶</a>
-    <ul class="flex flex-wrap items-center grow">
+    <menu class="flex flex-wrap items-center grow">
         <li class="px-4">
             <a href="{% url 'top' %}" class="no-anchor">{% translate "Top" %}</a>
         </li>
@@ -30,5 +30,5 @@
                 <a href="{% url 'login' %}" class="no-anchor">{% translate "Login" %}</a>
             </li>
         {% endif %}
-    </ul>
+    </menu>
 </nav>

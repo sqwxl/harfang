@@ -4,9 +4,9 @@
 
 # Harfang
 
-A news aggregation and web content rating and discussion site with a focus on simplicity and accessibility.\
+A social media posting and discussion site with a focus on simplicity and accessibility.\
 Inspired by Hacker News and Reddit.\
-Built with Django, HTMX, Alpine.js, Tailwind CSS
+Built with Django, HTMX, Hyperscript & Tailwind CSS
 
 </div>
 
@@ -23,6 +23,7 @@ Next up:
 - Admin operations (moderation)
 - Public API (for bot accounts)
 - Optimize accessibility
+- Search
 - Media Posts
 - Gracefully degrades for JS-less clients
 - User DMs/Chat

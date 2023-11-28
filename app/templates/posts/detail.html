@@ -4,41 +4,43 @@
 
 {% block content %}
     <article>
-        <header class="max-w-none prose">
-            <hgroup>
-                <h1>
-                    <a href="{% url 'post' post.id %}" class="no-anchor">{{ post.title }}</a>
-                </h1>
-                <p>
-                    {% blocktranslate trimmed with age=post.submit_date|timesince %}
-                        Posted {{ age }} ago
-                    {% endblocktranslate %}
-                    {% translate "by" %}
-                    {% include "partials/profile_link.html" with username=post.user.username %}
-                </p>
-            </hgroup>
-        </header>
-        <div>
-            <a href="{{ post.url }}" target="_blank" rel="noreferrer">{% translate "Link" %}</a>
+        <div class="max-w-none prose">
+            <header>
+                <hgroup>
+                    <h1>
+                        <a href="{% url 'post' post.id %}" class="no-anchor">{{ post.title }}</a>
+                    </h1>
+                    <p>
+                        {% blocktranslate trimmed with age=post.submit_date|timesince %}
+                            Posted {{ age }} ago
+                        {% endblocktranslate %}
+                        {% translate "by" %}
+                        {% include "partials/profile_link.html" with username=post.user.username %}
+                    </p>
+                </hgroup>
+            </header>
+            <p>
+                <a href="{{ post.url }}" target="_blank" rel="noreferrer">{% translate "Link" %}</a>
+            </p>
+            <p>
+                {{ post.body|linebreaks }}
+            </p>
         </div>
-        <div>
-            {{ post.body|linebreaks }}
-        </div>
-        <br>
-        <br>
-        <section class="max-w-none prose" hx-vals='{"tree": true}'>
-            {% if form %}
-                <div hx-target="#comment-tree" hx-swap="beforeend" hx-push-url="false">
-                    {% include "comments/form.html" %}
-                </div>
-            {% else %}
-                <p>
-                    {% translate "Log in to join the discussion." %}
-                </p>
-            {% endif %}
-            <h3>
-                {% translate "Comments" %} ({{ post.comments.count }})
-            </h3>
+        <section hx-vals='{"tree": true}'>
+            <div class="mb-4 max-w-none prose">
+                {% if form %}
+                    <div hx-target="#comment-tree" hx-swap="beforeend" hx-push-url="false">
+                        {% include "comments/form.html" %}
+                    </div>
+                {% else %}
+                    <p>
+                        {% translate "Log in to join the discussion." %}
+                    </p>
+                {% endif %}
+                <h2>
+                    {% translate "Comments" %} ({{ post.comments.count }})
+                </h2>
+            </div>
             {% include "comments/tree.html" %}
         </section>
     </article>
