@@ -17,17 +17,16 @@ Features so far:
 - Votes and points system for posts and comments
 - User profiles
 - Internationalization
+- Gracefully degrades for JS-less clients
 
 Next up:
 
 - Admin operations (moderation)
 - Public API (for bot accounts)
-- Optimize accessibility
+- Optimized accessibility
 - Search
 - Media Posts
-- Gracefully degrades for JS-less clients
-- User DMs/Chat
-- Host an MVP
+- User DMs
 - SEO (w/ microdata?)
 - Email system
 - Dark/Light color-schemes
