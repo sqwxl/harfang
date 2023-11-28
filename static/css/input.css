@@ -7,18 +7,6 @@
     @apply font-sans antialiased;
   }
 
-  figure {
-    @apply flex flex-col items-center my-4;
-  }
-
-  figure img {
-    @apply mb-3;
-  }
-
-  figcaption {
-    @apply text-sm text-muted;
-  }
-
   input:not(
       [type="submit"],
       [type="button"],
@@ -59,20 +47,11 @@
 }
 
 @layer components {
-  .btn {
-    @apply text-inherit visited:text-inherit bg-red_d hover:bg-red mr-2 px-2 rounded no-underline hover:no-underline;
-  }
 }
 
 @layer utilities {
   .no-anchor {
     @apply text-inherit no-underline visited:text-inherit;
-  }
-
-  @media (scripting: none) {
-    .no-js-hide {
-      display: none;
-    }
   }
 }
 
@@ -86,4 +65,10 @@
 
 .errorlist {
   @apply text-red text-sm;
+}
+
+@media (scripting: none) {
+  .no-js-hide {
+    display: none;
+  }
 }
