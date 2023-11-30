@@ -6,7 +6,7 @@ from django.forms import ModelForm
 from .models import Post, Profile
 
 
-class UserCreationForm(UserCreationForm):
+class UserForm(UserCreationForm):
     class Meta(UserCreationForm.Meta):
         model = get_user_model()
         fields = UserCreationForm.Meta.fields

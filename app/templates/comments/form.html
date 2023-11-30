@@ -1,4 +1,4 @@
-{% load i18n partials %}
+{% load app_extras i18n partials %}
 
 {% partialdef fields %}
     <div>
@@ -23,18 +23,14 @@
 
 <form id="{{ form_id|default:'comment-form' }}"
       method="post"
-      action="{% url 'comments:post' %}"
+      {% if action %}
+          action="{{ action }}"
+      {% else %}
+          action="{% url 'comments:post' %}"
+      {% endif %}
       hx-boost="true"
-      {% if hx_attrs.target %}
-          hx-target="{{ hx_attrs.target }}"
-      {% endif %}
-      {% if hx_attrs.swap %}
-          hx-swap="{{ hx_attrs.swap }}"
-      {% endif %}
-      {% if hx_attrs.push_url %}
-          hx-push-url="{{ hx_attrs.push_url }}"
-      {% endif %}
-      _="on commentPosted reset() me">
+      {% hx_attrs %}
+      _="on commentCreated reset() me on commentUpdated remove me">
     {% csrf_token %}
     <div id="fields">
         {% partial fields %}
@@ -46,7 +42,7 @@
         {% if can_cancel %}
             <button type="button"
                 {# djlint:off #}
-                    _="on click confirm('{% translate 'Are you sure? Your comment will be lost.' %}') if result remove the closest <form/>"
+                    _="on click confirm('{% translate 'Are you sure? All data will be lost.' %}') if result remove the closest <form/>"
                 {# djlint:on #}>
                 {% translate "Cancel" %}
             </button>

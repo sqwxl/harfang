@@ -14,6 +14,10 @@ from .common.mixins import PointsMixin
 
 
 class User(PointsMixin, AbstractUser):
+    @property
+    def is_moderator(self):
+        return self.groups.filter(name="Moderator").exists()
+
     def __str__(self):
         return self.username
 

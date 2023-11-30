@@ -1,13 +1,22 @@
-from django.contrib.auth.decorators import login_required, permission_required
+from django.contrib.auth.decorators import login_required
+from django.core.exceptions import PermissionDenied
 from django.http import HttpResponseRedirect
-from django.shortcuts import get_object_or_404, reverse
+from django.shortcuts import get_object_or_404
 from django.template.response import TemplateResponse
+from django.urls import reverse
 from django.utils.translation import gettext as _
 from django.views.decorators.http import require_GET, require_POST
 from django_htmx.http import reswap, retarget, trigger_client_event
 
 from .forms import CommentForm
 from .models import Comment
+
+
+def enforce_comment_moderation(request, comment):
+    if request.user != comment.user and not request.user.has_perm(
+        "comments.can_moderate"
+    ):
+        raise PermissionDenied
 
 
 @login_required
@@ -29,9 +38,6 @@ def post(request):
         "comments/create.html",
         {
             "form": form,
-            "cancel_url": reverse(
-                "post", kwargs={"pk": request.POST.get("post")}
-            ),
             "page_title": _("Post Comment"),
         },
     )
@@ -56,7 +62,7 @@ def post_htmx(request):
                 {"comment": comment},
             )
 
-        return trigger_client_event(response, "commentPosted")
+        return trigger_client_event(response, "commentCreated")
 
     # replace the form fields with the errors
     return reswap(
@@ -74,13 +80,120 @@ def post_htmx(request):
 
 @login_required
 @require_GET
+def edit(request, pk):
+    comment = get_object_or_404(Comment, pk=pk)
+    try:
+        enforce_comment_moderation(request, comment)
+    except PermissionDenied:
+        # TODO flash user
+        return HttpResponseRedirect(comment.get_post_url())
+
+    form = CommentForm(instance=comment)
+
+    if request.htmx:
+        hx_attrs = {
+            # form should replace itself with the comment body
+            "target": f"#comment-{comment.pk}-body",
+            "select": f"#comment-{comment.pk}-body",
+            "push-url": "false",
+        }
+        return TemplateResponse(
+            request,
+            "comments/form.html",
+            {
+                "form": form,
+                "form_id": f"comment-{pk}-edit-form",
+                "action": reverse("comments:update", kwargs={"pk": pk}),
+                "hx_attrs": hx_attrs,
+                "can_cancel": True,
+            },
+        )
+    return TemplateResponse(
+        request,
+        "comments/edit.html",
+        {
+            "form": form,
+            "page_title": _("Edit Comment"),
+        },
+    )
+
+
+@login_required
+@require_POST
+def update(request, pk):
+    comment = get_object_or_404(Comment, pk=pk)
+
+    try:
+        enforce_comment_moderation(request, comment)
+    except PermissionDenied:
+        # TODO flash user
+        return HttpResponseRedirect(comment.get_post_url())
+
+    form = CommentForm(request.POST, instance=comment)
+
+    if request.htmx:
+        return update_htmx(request, form)
+
+    if form.is_valid() and form.has_changed():
+        comment = form.save(commit=False)
+        comment.is_edited = True
+        comment.save()
+        return HttpResponseRedirect(comment.get_post_url())
+
+    return TemplateResponse(
+        request,
+        "comments/edit.html",
+        {
+            "form": form,
+            "page_title": _("Edit Comment"),
+        },
+    )
+
+
+def update_htmx(request, form):
+    if form.is_valid() and form.has_changed:
+        comment = form.save(commit=False)
+        comment.is_edited = True
+        comment.save()
+        if request.POST.get("tree"):
+            response = TemplateResponse(
+                request,
+                "comments/tree.html#list-item",
+                {"node": comment, "tree_context": True},
+            )
+        else:
+            response = TemplateResponse(
+                request,
+                "comments/detail.html",
+                {"comment": comment},
+            )
+
+        return trigger_client_event(response, "commentUpdated")
+
+    # replace the form fields with the errors
+    print(form.errors)
+    return reswap(
+        retarget(
+            TemplateResponse(
+                request,
+                "comments/form.html#fields",
+                {"form": form},
+            ),
+            request.htmx.trigger + ">#fields",
+        ),
+        "innerHTML",
+    )
+
+
+@login_required
+@require_GET
 def reply(request, parent_id):
     parent = get_object_or_404(Comment, id=parent_id)
     form = CommentForm(initial={"parent": parent})
 
     if request.htmx:
         hx_attrs = {
-            # replace the inline form with the comment
+            # form should replace itself with the comment
             "target": "this",
             "swap": "outerHTML",
             "push_url": "false",
@@ -110,59 +223,39 @@ def reply(request, parent_id):
 
 
 @login_required
-@permission_required("comments.change_comment")
-def update(request, pk):
+def delete(request, pk):
     comment = get_object_or_404(Comment, pk=pk)
-    if request.method == "POST":
-        form = CommentForm(request.POST)
-        if form.is_valid() and form.has_changed():
-            comment = form.save(commit=False)
-            comment.save()
-            return HttpResponseRedirect(comment.get_post_url())
-    else:
-        form = CommentForm(instance=comment)
+    try:
+        enforce_comment_moderation(request, comment)
+    except PermissionDenied:
+        # TODO flash user
+        return HttpResponseRedirect(comment.get_post_url())
 
-    return TemplateResponse(
-        request,
-        "comments/edit.html",
-        {
-            "form": form,
-            "page_title": _("Edit Comment"),
-        },
-    )
+    comment.is_removed = True
+    comment.save()
+
+    if request.htmx:
+        return TemplateResponse(
+            request, "comments/detail.html", {"comment": comment}
+        )
+
+    return HttpResponseRedirect(comment.get_post_url())
 
 
 @login_required
-@permission_required("comments.can_moderate")
-def delete(request, pk):
-    # FIXME
+def restore(request, pk):
     comment = get_object_or_404(Comment, pk=pk)
-    if request.method == "POST":
-        post_url = comment.get_post_url()
-        comment.delete()
-        return HttpResponseRedirect(post_url)
 
-    return TemplateResponse(
-        request,
-        "comments/delete.html",
-        {
-            "comment": comment,
-        },
-    )
+    if not request.user.is_moderator:
+        # TODO flash user
+        return HttpResponseRedirect(comment.get_post_url())
 
+    comment.is_removed = False
+    comment.save()
 
-# def create(request, app_label, model_name, object_id):
-#     content_type, target_object = get_content_objects_or_404(app_label, model_name, object_id)
-#     form = CommentForm(request.POST)
-#
-#     if request.method == "POST" and form.is_valid():
-#         reply = form.get_comment_object()
-#         reply.user = request.user
-#         reply.content_type = content_type
-#         reply.object_pk = object_id
-#         reply.save()
-#         return HttpResponseRedirect(target_object.get_absolute_url())  # type: ignore
-#
-#     return TemplateResponse(request, "comments/create.html", {"form": form})
-#
-#
+    if request.htmx:
+        return TemplateResponse(
+            request, "comments/detail.html", {"comment": comment}
+        )
+
+    return HttpResponseRedirect(comment.get_post_url())

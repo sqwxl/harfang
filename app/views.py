@@ -12,7 +12,7 @@ from app.comments.models import Comment
 from app.utils import get_page_by_request
 from app.utils.htmx import for_htmx
 
-from .forms import PostForm, ProfileForm, UserCreationForm
+from .forms import PostForm, ProfileForm, UserForm
 from .models import CommentVote, Post, PostVote, Profile, User
 
 
@@ -181,12 +181,12 @@ def user_comments(request, username):
 
 def user_create(request):
     if request.method == "POST":
-        form = UserCreationForm(request.POST)
+        form = UserForm(request.POST)
         if form.is_valid():
             form.save()
             return HttpResponseRedirect(reverse("login"))
     else:
-        form = UserCreationForm()
+        form = UserForm()
     return TemplateResponse(
         request,
         "users/form.html",

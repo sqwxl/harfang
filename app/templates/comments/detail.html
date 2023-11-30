@@ -1,4 +1,4 @@
-{% load i18n partials %}
+{% load comments_extras i18n partials %}
 
 {% partialdef comment %}
     <article id="comment-{{ comment.id }}">
@@ -32,23 +32,48 @@
             {% endif %}
         </header>
         <p id="comment-{{ comment.id }}-body" class="max-w-none prose">
-            {{ comment.body }}
+            {% if comment.is_removed %}
+                <span class="italic text-muted">{% translate "deleted" %}</span>
+            {% else %}
+                {{ comment.body }}
+                {% if comment.is_edited %}
+                    <em class="italic text-muted">{% translate "edited" %}</em>
+                {% endif %}
+            {% endif %}
         </p>
-        <footer class="text-sm text-muted">
+        <p id="comment-{{ comment.id }}-edit-form-wrapper" hx-push-url="false">
+        </p>
+        <footer id="comment-{{ comment.id }}-footer"
+                class="text-sm text-muted"
+                hx-boost="true"
+                hx-push-url="false">
             {% if user.is_authenticated %}
                 <a href="{% url 'comments:reply' comment.id %}"
-                   hx-boost="true"
-                   hx-push-url="false"
-                   hx-swap="innerHTML"
                    hx-target="#comment-{{ comment.id }}-reply-form-wrapper">{% translate "reply" %}</a>
-                {% if user == comment.user or user.is_staff %}
+                {% if user|can_moderate:comment %}
                     🞄
-                    <a href="{% url 'comments:edit' comment.id %}">{% translate "edit" %}</a>
-                    🞄
-                    <a href="#"
-                       hx-delete="{% url 'comments:delete' comment.id %}"
-                       hx-target="#comment-{{ comment.id }}"
-                       hx-swap="outerHTML">{% translate "delete" %}</a>
+                    <a href="{% url 'comments:edit' comment.id %}"
+                       hx-target="#comment-{{ comment.id }}-edit-form-wrapper">{% translate "edit" %}</a>
+                    {% if not comment.is_removed %}
+                        🞄
+                        <a href="{% url 'comments:delete' comment.id %}"
+                           id="comment-{{ comment.id }}-delete"
+                           hx-select="#comment-{{ comment.id }}-body"
+                           hx-confirm="{% translate 'Are you sure you want to delete this comment? Only a moderator can undo this action.' %}"
+                           hx-select-oob="#comment-{{ comment.id }}-delete"
+                           hx-target="#comment-{{ comment.id }}-body">
+                            {% translate "delete" %}
+                        </a>
+                    {% elif user.is_moderator %}
+                        🞄
+                        <a href="{% url 'comments:restore' comment.id %}"
+                           id="comment-{{ comment.id }}-delete"
+                           hx-select="#comment-{{ comment.id }}-body"
+                           hx-select-oob="#comment-{{ comment.id }}-footer"
+                           hx-target="#comment-{{ comment.id }}-body">
+                            {% translate "restore" %}
+                        </a>
+                    {% endif %}
                 {% endif %}
             {% endif %}
         </footer>

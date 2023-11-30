@@ -25,6 +25,9 @@ class Comment(MPTTModel, PointsMixin):
         permissions = [("can_moderate", "Can moderate comments")]
         verbose_name = _("comment")
         verbose_name_plural = _("comments")
+        indexes = [
+            models.Index(fields=["submit_date"]),
+        ]
 
     class MPTTMeta:
         order_insertion_by = ["submit_date"]
@@ -50,14 +53,9 @@ class Comment(MPTTModel, PointsMixin):
 
     submit_date = models.DateTimeField(default=timezone.now, editable=False)
 
-    is_removed = models.BooleanField(
-        _("is removed"),
-        default=False,
-        db_index=True,
-        help_text=_(
-            'Check this box if the comment is inappropriate. A "This comment has been removed" message will be displayed instead.'
-        ),
-    )
+    is_removed = models.BooleanField(_("is removed"), default=False)
+
+    is_edited = models.BooleanField(_("was edited"), default=False)
 
     objects = CommentManager()
 

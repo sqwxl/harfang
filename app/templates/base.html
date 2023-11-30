@@ -19,8 +19,13 @@
         <meta name="color-scheme" content="dark light">
         <meta name="htmx-config" content='{"scrollIntoViewOnBoost": false}'>
         <link rel="stylesheet" href="{% static 'css/output.css' %}">
-        <script defer src="{% static 'js/htmx/htmx.min.js' %}"></script>
-        <script defer src="{% static 'js/_hyperscript.min.js' %}"></script>
+        {% if debug %}
+            <script defer src="{% static 'js/htmx/htmx.js' %}"></script>
+            <script defer src="{% static 'js/_hyperscript.js' %}"></script>
+        {% else %}
+            <script defer src="{% static 'js/htmx/htmx.min.js' %}"></script>
+            <script defer src="{% static 'js/_hyperscript.min.js' %}"></script>
+        {% endif %}
         <script defer src="{% static 'js/htmx/ext/preload.js' %}"></script>
         <title>
             🪶 Harfang |&nbsp;
