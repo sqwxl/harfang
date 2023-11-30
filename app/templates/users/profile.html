@@ -13,7 +13,7 @@
                     Joined {{ age }} ago 🞄 Karma: {{ karma }}
                 {% endblocktranslate %}
                 {% if user == profile.user %}
-                    🞄 <span><a href="{% url 'profile_edit' user.username %}">{% translate "Edit" %}</a></span>
+                    🞄 <span><a href="{% url 'users:profile_edit' user.username %}">{% translate "Edit" %}</a></span>
                 {% endif %}
             </p>
         </hgroup>
@@ -22,12 +22,12 @@
         {{ profile.bio|linebreaks }}
     {% endif %}
     <div hx-boost="true">
-        <a href="{% url 'user_posts' profile.user.username %}">
+        <a href="{% url 'users:posts' profile.user.username %}">
             {% blocktranslate trimmed with n=profile.user.posts.count %}
                 Submissions ({{ n }})
             {% endblocktranslate %}
         </a>
-        <a href="{% url 'user_comments' profile.user.username %}">
+        <a href="{% url 'users:comments' profile.user.username %}">
             {% blocktranslate trimmed with n=profile.user.comments.count %}
                 Comments ({{ n }})
             {% endblocktranslate %}

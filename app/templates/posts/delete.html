@@ -1,0 +1,26 @@
+{% extends "base_edit.html" %}
+
+{% load i18n %}
+
+{% block form %}
+    <form method="post" action="{% url 'posts:delete' post.id %}">
+        {% csrf_token %}
+        {% url "posts:detail" post.id as post_url %}
+        <p>
+            {% blocktranslate trimmed with post_url=post_url post_title=post.title %}
+                Are you sure you want to delete <a href="{{ post_url }}">{{ post_title }}</a>?
+                This action cannot be undone.
+            {% endblocktranslate %}
+        </p>
+        <div class="flex">
+            <button>
+                Confirm
+            </button>
+            <a href="{% url 'posts:detail' post.id %}" class="no-anchor">
+                <button type="button">
+                    Cancel
+                </button>
+            </a>
+        </div>
+    </form>
+{% endblock form %}

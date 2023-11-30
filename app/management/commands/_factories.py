@@ -5,8 +5,10 @@ import faker
 from django.db.models.signals import post_save
 from django.utils import timezone
 
-from app.comments.models import Comment
-from app.models import CommentVote, Post, PostVote, Profile, User
+from app.comments.models import Comment, CommentVote
+from app.posts.models import Post, PostVote
+from app.users.models import Profile, User
+
 
 fake = faker.Faker()
 
@@ -32,7 +34,9 @@ class UserFactory(factory.django.DjangoModelFactory):
     password = factory.django.Password("password")
     email = factory.Faker("email")
     date_joined = factory.Faker(
-        "date_time_between", start_date=datetime(2023, 8, 1), tzinfo=timezone.get_current_timezone()
+        "date_time_between",
+        start_date=datetime(2023, 8, 1),
+        tzinfo=timezone.get_current_timezone(),
     )
     first_name = factory.Faker("first_name")
     last_name = factory.Faker("last_name")
@@ -41,7 +45,9 @@ class UserFactory(factory.django.DjangoModelFactory):
 
     # We pass in 'user' to link the generated Profile to our just-generated User
     # This will call ProfileFactory(user=our_new_user), thus skipping the SubFactory.
-    profile = factory.RelatedFactory(ProfileFactory, factory_related_name="user")
+    profile = factory.RelatedFactory(
+        ProfileFactory, factory_related_name="user"
+    )
 
 
 class PostFactory(factory.django.DjangoModelFactory):
@@ -50,7 +56,9 @@ class PostFactory(factory.django.DjangoModelFactory):
 
     user = factory.SubFactory(UserFactory)
     title = factory.Faker("sentence")
-    body = factory.Faker("paragraph", nb_sentences=10, variable_nb_sentences=True)
+    body = factory.Faker(
+        "paragraph", nb_sentences=10, variable_nb_sentences=True
+    )
     url = factory.Faker("url")
     submit_date = factory.Faker(
         "date_time_between",
@@ -69,11 +77,17 @@ class CommentFactory(factory.django.DjangoModelFactory):
     post = factory.SubFactory(PostFactory)
     parent = factory.SubFactory("harfang._factories.CommentFactory")
 
-    body = factory.Faker("paragraph", nb_sentences=10, variable_nb_sentences=True)
+    body = factory.Faker(
+        "paragraph", nb_sentences=10, variable_nb_sentences=True
+    )
 
     @factory.lazy_attribute
     def submit_date(self):
-        start_date = self.post.submit_date if not self.parent else self.parent.submit_date
+        start_date = (
+            self.post.submit_date
+            if not self.parent
+            else self.parent.submit_date
+        )
         if start_date < self.user.date_joined:
             start_date = self.user.date_joined
 

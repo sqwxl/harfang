@@ -1,29 +1,26 @@
 from django.contrib.auth.decorators import login_required
-from django.core.exceptions import PermissionDenied
 from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404
 from django.template.response import TemplateResponse
 from django.urls import reverse
+from django.utils import timezone
 from django.utils.translation import gettext as _
 from django.views.decorators.http import require_GET, require_POST
 from django_htmx.http import reswap, retarget, trigger_client_event
 
+from app.utils.decorators import AccessDecorators
+
 from .forms import CommentForm
-from .models import Comment
+from .models import Comment, CommentVote
 
-
-def enforce_comment_moderation(request, comment):
-    if request.user != comment.user and not request.user.has_perm(
-        "comments.can_moderate"
-    ):
-        raise PermissionDenied
+can = AccessDecorators(Comment)
 
 
 @login_required
 @require_POST
-def post(request):
+def create(request):
     if request.htmx:
-        return post_htmx(request)
+        return create_htmx(request)
 
     form = CommentForm(request.POST)
 
@@ -43,7 +40,7 @@ def post(request):
     )
 
 
-def post_htmx(request):
+def create_htmx(request):
     form = CommentForm(request.POST)
     if form.is_valid():
         comment = form.save(commit=False)
@@ -58,7 +55,7 @@ def post_htmx(request):
         else:
             response = TemplateResponse(
                 request,
-                "comments/detail.html",
+                "comments/detail.html#comment",
                 {"comment": comment},
             )
 
@@ -72,27 +69,43 @@ def post_htmx(request):
                 "comments/form.html#fields",
                 {"form": form},
             ),
-            request.htmx.trigger + ">#fields",
+            f"#{request.htmx.trigger}>#fields",
         ),
         "outerHTML",
     )
 
 
-@login_required
-@require_GET
-def edit(request, pk):
+def detail(request, pk):
     comment = get_object_or_404(Comment, pk=pk)
-    try:
-        enforce_comment_moderation(request, comment)
-    except PermissionDenied:
-        # TODO flash user
-        return HttpResponseRedirect(comment.get_post_url())
+
+    return TemplateResponse(
+        request,
+        "posts/detail.html",
+        {
+            "post": comment,
+            "page_title": _("{username}'s comment").format(
+                username=comment.user.username
+            ),
+        },
+    )
+
+
+@login_required
+@can.edit
+def update(request, pk):
+    if request.method == "POST":
+        return _update_post(request, pk)
+    return _update_get(request, pk)
+
+
+@require_GET
+def _update_get(request, pk):
+    comment = get_object_or_404(Comment, pk=pk)
 
     form = CommentForm(instance=comment)
 
     if request.htmx:
         hx_attrs = {
-            # form should replace itself with the comment body
             "target": f"#comment-{comment.pk}-body",
             "select": f"#comment-{comment.pk}-body",
             "push-url": "false",
@@ -118,21 +131,14 @@ def edit(request, pk):
     )
 
 
-@login_required
 @require_POST
-def update(request, pk):
+def _update_post(request, pk):
     comment = get_object_or_404(Comment, pk=pk)
-
-    try:
-        enforce_comment_moderation(request, comment)
-    except PermissionDenied:
-        # TODO flash user
-        return HttpResponseRedirect(comment.get_post_url())
 
     form = CommentForm(request.POST, instance=comment)
 
     if request.htmx:
-        return update_htmx(request, form)
+        return _update_post_htmx(request, form)
 
     if form.is_valid() and form.has_changed():
         comment = form.save(commit=False)
@@ -150,7 +156,7 @@ def update(request, pk):
     )
 
 
-def update_htmx(request, form):
+def _update_post_htmx(request, form):
     if form.is_valid() and form.has_changed:
         comment = form.save(commit=False)
         comment.is_edited = True
@@ -164,25 +170,25 @@ def update_htmx(request, form):
         else:
             response = TemplateResponse(
                 request,
-                "comments/detail.html",
+                "comments/detail.html#comment",
                 {"comment": comment},
             )
 
         return trigger_client_event(response, "commentUpdated")
 
     # replace the form fields with the errors
-    print(form.errors)
-    return reswap(
-        retarget(
-            TemplateResponse(
-                request,
-                "comments/form.html#fields",
-                {"form": form},
-            ),
-            request.htmx.trigger + ">#fields",
+    response = retarget(
+        TemplateResponse(
+            request,
+            "comments/form.html",
+            {"form": form},
         ),
-        "innerHTML",
+        f"#{request.htmx.trigger}>#fields",
     )
+
+    response["HX-Reselect"] = "#fields"
+
+    return response
 
 
 @login_required
@@ -223,39 +229,63 @@ def reply(request, parent_id):
 
 
 @login_required
+@can.delete
 def delete(request, pk):
     comment = get_object_or_404(Comment, pk=pk)
-    try:
-        enforce_comment_moderation(request, comment)
-    except PermissionDenied:
-        # TODO flash user
-        return HttpResponseRedirect(comment.get_post_url())
 
     comment.is_removed = True
     comment.save()
 
     if request.htmx:
         return TemplateResponse(
-            request, "comments/detail.html", {"comment": comment}
+            request, "comments/detail.html#comment", {"comment": comment}
         )
 
-    return HttpResponseRedirect(comment.get_post_url())
+    return TemplateResponse(
+        request, "comments/delete.html", {"comment": comment}
+    )
 
 
 @login_required
+@can.restore
 def restore(request, pk):
     comment = get_object_or_404(Comment, pk=pk)
-
-    if not request.user.is_moderator:
-        # TODO flash user
-        return HttpResponseRedirect(comment.get_post_url())
 
     comment.is_removed = False
     comment.save()
 
     if request.htmx:
         return TemplateResponse(
-            request, "comments/detail.html", {"comment": comment}
+            request, "comments/detail.html#comment", {"comment": comment}
         )
 
     return HttpResponseRedirect(comment.get_post_url())
+
+
+@login_required
+@require_POST
+def vote(request, pk):
+    comment = get_object_or_404(Comment, pk=pk)
+    try:
+        vote = comment.votes.get(user=request.user)
+        vote.delete()
+        comment.has_voted = False
+    except CommentVote.DoesNotExist:
+        CommentVote(
+            user=request.user, comment=comment, submit_date=timezone.now()
+        ).save()
+        comment.has_voted = True
+    except CommentVote.MultipleObjectsReturned as e:
+        # TODO handle this case (should never happen since unique_together is set on CommentVote)
+        print(e)
+
+    comment.refresh_from_db()
+
+    if request.htmx:
+        return TemplateResponse(
+            request,
+            "partials/vote_form.html",
+            {"item": comment},
+        )
+    else:
+        return HttpResponseRedirect(request.META.get("HTTP_REFERER", "/"))

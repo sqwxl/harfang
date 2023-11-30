@@ -1,7 +1,6 @@
 from django.contrib import admin
-from django.contrib.auth.admin import UserAdmin
 
-from .models import Post, User
+from .models import Post
 
 
 class PostAdmin(admin.ModelAdmin):
@@ -10,4 +9,3 @@ class PostAdmin(admin.ModelAdmin):
 
 
 admin.site.register(Post, PostAdmin)
-admin.site.register(User, UserAdmin)

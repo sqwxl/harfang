@@ -18,10 +18,10 @@ Features so far:
 - User profiles
 - Internationalization
 - Gracefully degrades for JS-less clients
+- Admin operations (moderation)
 
 Next up:
 
-- Admin operations (moderation)
 - Public API (for bot accounts)
 - Optimized accessibility
 - Search

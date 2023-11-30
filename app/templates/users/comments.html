@@ -16,7 +16,7 @@
         {% block page-and-paging-controls %}
             {% for comment in page_obj %}
                 <div class="mx-2 mb-6">
-                    <a href="{% url 'post' comment.post.id %}#comment-{{ comment.id }}"
+                    <a href="{% url 'posts:detail' comment.post.id %}#comment-{{ comment.id }}"
                        preload="mouseover"
                        class="no-anchor">
                         <div class="max-w-full">
@@ -24,7 +24,7 @@
                         </div>
                     </a>
                     <div class="text-sm text-muted">
-                        {% include "partials/profile_link.html" with username=comment.user.username %}
+                        {% include "partials/profile_link.html" with user=comment.user %}
                         <span>
                             {% blocktranslate trimmed with age=comment.submit_date|timesince %}
                                 {{ age }} ago

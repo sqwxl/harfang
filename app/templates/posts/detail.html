@@ -8,14 +8,24 @@
             <header>
                 <hgroup>
                     <h1>
-                        <a href="{% url 'post' post.id %}" class="no-anchor">{{ post.title }}</a>
+                        <a href="{% url 'posts:detail' post.id %}" class="no-anchor">{{ post.title }}</a>
                     </h1>
                     <p>
                         {% blocktranslate trimmed with age=post.submit_date|timesince %}
                             Posted {{ age }} ago
                         {% endblocktranslate %}
                         {% translate "by" %}
-                        {% include "partials/profile_link.html" with username=post.user.username %}
+                        {% include "partials/profile_link.html" with user=post.user %}
+                        {% if user == post.user or user.is_moderator %}
+                            🞄
+                            <a href="{% url 'posts:update' post.id %}">
+                                {% translate "edit" %}
+                            </a>
+                            🞄
+                            <a href="{% url 'posts:delete' post.id %}">
+                                {% translate "delete" %}
+                            </a>
+                        {% endif %}
                     </p>
                 </hgroup>
             </header>

@@ -7,18 +7,22 @@
 {% endblock page_title %}
 
 {% block content %}
-    <h1>
-        {% translate "Login" %}
-    </h1>
-    <form method="post">
-        {% csrf_token %}
-        {{ form.as_div }}
-        <button>
+    <hgroup>
+        <h1>
             {% translate "Login" %}
-        </button>
-    </form>
+        </h1>
+    </hgroup>
+    <p class="my-4">
+        <form method="post">
+            {% csrf_token %}
+            {{ form.as_div }}
+            <button>
+                {% translate "Login" %}
+            </button>
+        </form>
+    </p>
     <!-- TODO <a href="">Forgot your password?</a> -->
-    <div>
-        <a href="{% url 'signup' %}">{% translate "Register" %}</a>
-    </div>
+    <p class="my-4">
+        <a href="{% url 'users:create' %}">{% translate "Register" %}</a>
+    </p>
 {% endblock content %}

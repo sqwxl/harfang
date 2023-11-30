@@ -6,21 +6,21 @@
     <a href="{% url 'home' %}" class="mr-4 text-xl">🪶</a>
     <menu class="flex flex-wrap items-center grow">
         <li class="px-4">
-            <a href="{% url 'top' %}" class="no-anchor">{% translate "Top" %}</a>
+            <a href="{% url 'posts:top' %}" class="no-anchor">{% translate "Top" %}</a>
         </li>
         <li class="px-4">
-            <a href="{% url 'latest' %}" class="no-anchor">{% translate "Latest" %}</a>
+            <a href="{% url 'posts:latest' %}" class="no-anchor">{% translate "Latest" %}</a>
         </li>
         {% if user.is_authenticated %}
             <li class="px-4">
-                <a href="{% url 'submit' %}" class="no-anchor">{% translate "Submit" %}</a>
+                <a href="{% url 'posts:submit' %}" class="no-anchor">{% translate "Submit" %}</a>
             </li>
         {% endif %}
         <li class="grow">
         </li>
         {% if user.is_authenticated %}
             <li class="px-4 !text-fg">
-                {% include "partials/profile_link.html" with username=user.username %}
+                {% include "partials/profile_link.html" with user=user %}
             </li>
             <li class="px-4">
                 <a href="{% url 'logout' %}" class="no-anchor">{% translate "Logout" %}</a>

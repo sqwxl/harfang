@@ -1,9 +1,8 @@
 from django import forms
 from django.contrib.auth import get_user_model
 from django.contrib.auth.forms import UserCreationForm
-from django.forms import ModelForm
 
-from .models import Post, Profile
+from .models import Profile
 
 
 class UserForm(UserCreationForm):
@@ -18,9 +17,3 @@ class ProfileForm(forms.ModelForm):
         exclude = ["user"]
 
     bio = forms.CharField(widget=forms.Textarea)
-
-
-class PostForm(ModelForm):
-    class Meta:
-        model = Post
-        fields = ["title", "url", "body"]

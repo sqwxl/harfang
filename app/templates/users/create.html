@@ -1,16 +1,13 @@
-{% extends "base_page.html" %}
+{% extends "base_edit.html" %}
 
 {% load i18n %}
 
-{% block content %}
-    <h1>
-        {% trans "Register" %}
-    </h1>
+{% block form %}
     <form method="post">
         {% csrf_token %}
-        {{ form }}
+        {{ form.as_div }}
         <button>
             {% trans "Save" %}
         </button>
     </form>
-{% endblock content %}
+{% endblock form %}

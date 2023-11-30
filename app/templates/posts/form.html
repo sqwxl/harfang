@@ -1,20 +1,9 @@
-{% extends "base_page.html" %}
-
 {% load i18n %}
 
-{% block content %}
-    <hgroup class="prose">
-        <h1>
-            {% translate "New Post" %}
-        </h1>
-    </hgroup>
-    <p class="my-4">
-        <form method="post">
-            {% csrf_token %}
-            {{ form.as_div }}
-            <button>
-                {% translate "Submit" %}
-            </button>
-        </form>
-    </p>
-{% endblock content %}
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_div }}
+    <button>
+        {% translate "Submit" %}
+    </button>
+</form>
