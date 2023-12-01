@@ -2,8 +2,8 @@
 
 {% partialdef list-item %}
     <li id="comment-{{ node.id }}-node" class="mb-4">
-        <div id="comment-{{ comment.id }}-wrapper" class="flex">
-            {% include "partials/vote_form.html#form" with item=comment %}
+        <div id="comment-{{ node.id }}-wrapper" class="flex">
+            {% include "partials/vote_form.html#form" with item=node %}
             {% with tree_context=True %}
                 {% include "comments/detail.html#comment" with comment=node %}
             {% endwith %}
@@ -18,7 +18,8 @@
     </li>
 {% endpartialdef %}
 
-<ul id="comment-tree">
+<ul id="comment-tree"
+    hx-vals='{"tree": true, "commentFormEvent": "inlineFormPosted"}'>
     {% recursetree comments %}
         {% partial list-item %}
     {% endrecursetree %}

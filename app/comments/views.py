@@ -17,18 +17,20 @@ can = AccessDecorators(Comment)
 
 
 @login_required
-@require_POST
 def create(request):
-    if request.htmx:
-        return create_htmx(request)
+    if request.method == "POST":
+        if request.htmx:
+            return create_htmx(request)
 
-    form = CommentForm(request.POST)
+        form = CommentForm(request.POST)
 
-    if form.is_valid():
-        comment = form.save(commit=False)
-        comment.user = request.user
-        comment.save()
-        return HttpResponseRedirect(comment.get_post_url())
+        if form.is_valid():
+            comment = form.save(commit=False)
+            comment.user = request.user
+            comment.save()
+            return HttpResponseRedirect(comment.get_post_url())
+
+    form = CommentForm()
 
     return TemplateResponse(
         request,
@@ -38,6 +40,40 @@ def create(request):
             "page_title": _("Post Comment"),
         },
     )
+
+
+@login_required
+@require_GET
+def create_reply(request, parent_id):
+    parent = get_object_or_404(Comment, id=parent_id)
+    form = CommentForm(initial={"parent": parent})
+
+    if request.htmx:
+        hx_attrs = {
+            "target": f"#comment-{parent_id}-children",
+            "swap": "afterbegin",
+        }
+        return TemplateResponse(
+            request,
+            "comments/form.html",
+            {
+                "form": form,
+                "form_id": f"reply-form-{parent_id}",
+                "hx_attrs": hx_attrs,
+                "can_cancel": True,
+            },
+        )
+    else:
+        return TemplateResponse(
+            request,
+            "comments/reply.html",
+            {
+                "form": form,
+                "page_title": _("Reply to {username}").format(
+                    username=parent.user.username
+                ),
+            },
+        )
 
 
 def create_htmx(request):
@@ -58,8 +94,9 @@ def create_htmx(request):
                 "comments/detail.html#comment",
                 {"comment": comment},
             )
-
-        return trigger_client_event(response, "commentCreated")
+        if event := request.POST.get("commentFormEvent"):
+            trigger_client_event(response, event)
+        return response
 
     # replace the form fields with the errors
     return reswap(
@@ -108,7 +145,6 @@ def _update_get(request, pk):
         hx_attrs = {
             "target": f"#comment-{comment.pk}-body",
             "select": f"#comment-{comment.pk}-body",
-            "push-url": "false",
         }
         return TemplateResponse(
             request,
@@ -174,7 +210,9 @@ def _update_post_htmx(request, form):
                 {"comment": comment},
             )
 
-        return trigger_client_event(response, "commentUpdated")
+        if event := request.POST.get("commentFormEvent"):
+            trigger_client_event(response, event)
+        return response
 
     # replace the form fields with the errors
     response = retarget(
@@ -189,43 +227,6 @@ def _update_post_htmx(request, form):
     response["HX-Reselect"] = "#fields"
 
     return response
-
-
-@login_required
-@require_GET
-def reply(request, parent_id):
-    parent = get_object_or_404(Comment, id=parent_id)
-    form = CommentForm(initial={"parent": parent})
-
-    if request.htmx:
-        hx_attrs = {
-            # form should replace itself with the comment
-            "target": "this",
-            "swap": "outerHTML",
-            "push_url": "false",
-        }
-        return TemplateResponse(
-            request,
-            "comments/form.html",
-            {
-                "form": form,
-                "form_id": f"inline-form-{parent_id}",
-                "hx_attrs": hx_attrs,
-                "can_cancel": True,
-            },
-        )
-    else:
-        return TemplateResponse(
-            request,
-            "comments/reply.html",
-            {
-                "parent": parent,
-                "form": form,
-                "page_title": _("Reply to {username}").format(
-                    username=parent.user.username
-                ),
-            },
-        )
 
 
 @login_required
@@ -275,9 +276,6 @@ def vote(request, pk):
             user=request.user, comment=comment, submit_date=timezone.now()
         ).save()
         comment.has_voted = True
-    except CommentVote.MultipleObjectsReturned as e:
-        # TODO handle this case (should never happen since unique_together is set on CommentVote)
-        print(e)
 
     comment.refresh_from_db()
 

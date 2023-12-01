@@ -29,8 +29,9 @@
           action="{% url 'comments:create' %}"
       {% endif %}
       hx-boost="true"
+      hx-push-url="false"
       {% hx_attrs %}
-      _="on commentCreated reset() me on commentUpdated remove me">
+      _="on rootFormPosted reset() me on inlineFormPosted remove me">
     {% csrf_token %}
     <div id="fields">
         {% partial fields %}

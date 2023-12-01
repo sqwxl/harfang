@@ -36,10 +36,13 @@
                 {{ post.body|linebreaks }}
             </p>
         </div>
-        <section hx-vals='{"tree": true}'>
+        <section>
             <div class="mb-4 max-w-none prose">
                 {% if form %}
-                    <div hx-target="#comment-tree" hx-swap="beforeend" hx-push-url="false">
+                    <div hx-target="#comment-tree"
+                         hx-swap="afterbegin"
+                         hx-push-url="false"
+                         hx-vals='{"tree": "true","commentFormEvent": "rootFormPosted"}'>
                         {% include "comments/form.html" %}
                     </div>
                 {% else %}

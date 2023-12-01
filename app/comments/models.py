@@ -69,7 +69,7 @@ class Comment(MPTTModel, PointsMixin):
         return self.post.get_absolute_url()
 
     def get_vote_url(self):
-        return reverse("comments:vote", args=[str(self.pk)])
+        return reverse("comments:vote", kwargs={"pk": self.pk})
 
 
 class CommentVote(Vote):
