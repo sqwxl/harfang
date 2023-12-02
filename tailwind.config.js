@@ -43,6 +43,7 @@ module.exports = {
         DEFAULT: {
           css: {
             "--tw-prose-headings": theme("colors.fg"),
+            "--tw-prose-captions": theme("colors.muted"),
             color: theme("colors.fg"),
             strong: theme("colors.fg"),
             a: {

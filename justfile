@@ -1,14 +1,16 @@
-serve:
-    tailwindcss -i static/css/input.css -o static/css/output.css
+run:
+    just watch-css & just runserver & wait
+
+runserver:
     python3 manage.py migrate
     python3 manage.py runserver
+
+watch-css:
+    tailwindcss -i static/css/input.css -o static/css/output.css --watch
 
 run-containers:
     podman build -t harfang -f Dockerfile .
     podman-compose up -d
-
-css:
-    tailwindcss -i static/css/input.css -o static/css/output.css --watch
 
 migrate:
     python3 manage.py makemigrations

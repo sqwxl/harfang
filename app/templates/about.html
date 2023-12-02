@@ -1,18 +1,21 @@
 {% extends "base_page.html" %}
 
-{% load i18n %}
+{% load i18n static %}
 
 {% block page_title %}
     {% translate "About" %}
 {% endblock page_title %}
 
 {% block content %}
-    <div class="prose">
+    <div class="max-w-none prose">
         <h1>
             {% translate "About" %}
         </h1>
-        <p>
-            {% translate "This is a news app" %}
-        </p>
+        <figure class="mx-auto w-60">
+            <img src="{% static 'images/harfang_emoji-lg.png' alt='A snowy owl emoji' %}">
+            <figcaption>
+                {% translate "The snowy owl <em>(Bubo scandiacus)</em>, also known as the polar owl, the white owl and the Arctic owl, is a large, white owl of the true owl family." %}
+            </figcaption>
+        </figure>
     </div>
 {% endblock content %}
