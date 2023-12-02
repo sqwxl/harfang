@@ -1,8 +1,8 @@
-<a href="{% url 'users:profile' user.username %}"
+<a href="{% url 'users:profile' user %}"
    {% if request.user == user %}
        class="!text-orange"
    {% endif %}>
-    {{ user.username }}
+    {{ user }}
     {% if user.is_moderator %}
         ♛
     {% endif %}

@@ -20,14 +20,16 @@ def create(request):
         if form.is_valid():
             form.save()
             return HttpResponseRedirect(reverse("login"))
+    else:
+        form = UserForm()
 
-    form = UserForm()
     return TemplateResponse(
         request,
-        "users/create.html",
+        "base_form.html",
         {
             "form": form,
             "page_title": _("Register"),
+            "submit_text": _("Register"),
         },
     )
 
@@ -39,7 +41,7 @@ def profile(request, username):
         "users/profile.html",
         {
             "profile": profile,
-            "page_title": profile.user.username,
+            "page_title": str(profile),
         },
     )
 
@@ -57,7 +59,7 @@ def profile_edit(request, username):
             )
     return TemplateResponse(
         request,
-        "users/profile_edit.html",
+        "base_form.html",
         {
             "form": form,
             "page_title": _("Edit Profile"),

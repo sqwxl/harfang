@@ -1,3 +1,5 @@
+{% extends "base_form.html" %}
+
 {% load app_extras i18n partials %}
 
 {% partialdef fields %}
@@ -12,6 +14,11 @@
         {% else %}
             <div {% if field.name == "honeypot" %}hidden{% endif %}>
                 {{ field.label_tag }}
+                {% if field.help_text %}
+                    <div class="helptext">
+                        {{ field.help_text }}
+                    </div>
+                {% endif %}
                 {% if field.errors %}
                     {{ field.errors }}
                 {% endif %}
@@ -21,32 +28,33 @@
     {% endfor %}
 {% endpartialdef %}
 
-<form id="{{ form_id|default:'comment-form' }}"
-      method="post"
-      {% if action %}
-          action="{{ action }}"
-      {% else %}
-          action="{% url 'comments:create' %}"
-      {% endif %}
-      hx-boost="true"
-      hx-push-url="false"
-      {% hx_attrs %}
-      _="on rootFormPosted reset() me on inlineFormPosted remove me">
-    {% csrf_token %}
-    <div id="fields">
-        {% partial fields %}
-    </div>
-    <div class="flex">
-        <button>
-            {% translate "Save" %}
-        </button>
-        {% if can_cancel %}
-            <button type="button"
-                {# djlint:off #}
-                    _="on click confirm('{% translate 'Are you sure? All data will be lost.' %}') if result remove the closest <form/>"
-                {# djlint:on #}>
-                {% translate "Cancel" %}
+{% partialdef form %}
+    <form id="{{ form_id|default:'root-comment-form' }}"
+          method="post"
+          action="{% if action %} {{ action }} {% else %} {% url 'comments:create' %} {% endif %}"
+          hx-push-url="false"
+          {% hx_attrs %}
+          _="on rootFormPosted reset() me on inlineFormPosted remove me">
+        {% csrf_token %}
+        <div id="fields">
+            {% partial fields %}
+        </div>
+        <div class="flex">
+            <button>
+                {{ submit_text|default:"Save" }}
             </button>
-        {% endif %}
-    </div>
-</form>
+            {% if can_cancel %}
+                <button type="button"
+                    {# djlint:off #}
+                    _="on click confirm('{% translate 'Are you sure? All data will be lost.' %}') if result remove the closest <form/>"
+                    {# djlint:on #}>
+                    {% translate "Cancel" %}
+                </button>
+            {% endif %}
+        </div>
+    </form>
+{% endpartialdef %}
+
+{% block form %}
+    {% partial form %}
+{% endblock form %}

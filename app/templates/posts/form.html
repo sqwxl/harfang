@@ -1,9 +1,0 @@
-{% load i18n %}
-
-<form method="post">
-    {% csrf_token %}
-    {{ form.as_div }}
-    <button>
-        {% translate "Submit" %}
-    </button>
-</form>

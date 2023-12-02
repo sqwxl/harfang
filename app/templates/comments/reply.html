@@ -1,17 +1,12 @@
-{% extends "base_page.html" %}
+{% extends "base_form.html" %}
 
 {% load i18n %}
 
-{% block content %}
-    <hgroup class="prose">
-        <h1>
-            {{ page_title }}
-        </h1>
-    </hgroup>
+{% block form %}
     <p class="my-4">
         {% include "comments/detail.html#comment" with comment=parent %}
     </p>
     <p class="my-4">
-        {% include "comments/form.html" %}
+        {% include "comments/form.html#form" %}
     </p>
-{% endblock content %}
+{% endblock form %}

@@ -44,6 +44,7 @@ module.exports = {
           css: {
             "--tw-prose-headings": theme("colors.fg"),
             color: theme("colors.fg"),
+            strong: theme("colors.fg"),
             a: {
               color: theme("colors.blue"),
               textDecoration: "none",

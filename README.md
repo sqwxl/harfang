@@ -18,14 +18,16 @@ Features so far:
 - User profiles
 - Internationalization
 - Gracefully degrades for JS-less clients
-- Admin operations (moderation)
+- Admin operations (content moderation)
 
 Next up:
 
 - Public API (for bot accounts)
+- Extensive tests
 - Optimized accessibility
 - Search
 - Media Posts
+- Markdown syntax for posts
 - User DMs
 - SEO (w/ microdata?)
 - Email system

@@ -1,0 +1,30 @@
+{% extends "base_form.html" %}
+
+{% load i18n %}
+
+{% block extra %}
+    {% include "comments/detail.html#comment" %}
+{% endblock extra %}
+
+{% block form %}
+    <form method="post" action="{% url 'comments:delete' post.id %}">
+        {% csrf_token %}
+        <p>
+            {% blocktranslate trimmed %}
+                Are you sure you want to delete this comment?
+                <br>
+                <strong>Only a moderator can undo this action.</strong>
+            {% endblocktranslate %}
+        </p>
+        <div class="flex">
+            <button>
+                {% translate "Confirm" %}
+            </button>
+            <a href="{% url 'comments:detail' post.id %}" class="no-anchor">
+                <button type="button">
+                    Cancel
+                </button>
+            </a>
+        </div>
+    </form>
+{% endblock form %}

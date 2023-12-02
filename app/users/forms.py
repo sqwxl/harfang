@@ -1,6 +1,10 @@
 from django import forms
+from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.contrib.auth.forms import UserCreationForm
+from django.utils.translation import gettext_lazy as _
+
+from app.forms import AppModelForm
 
 from .models import Profile
 
@@ -8,12 +12,21 @@ from .models import Profile
 class UserForm(UserCreationForm):
     class Meta(UserCreationForm.Meta):
         model = get_user_model()
-        fields = UserCreationForm.Meta.fields
+        fields = ("username", "email")
+        help_texts = {
+            "email": _("Optional"),
+        }
 
 
-class ProfileForm(forms.ModelForm):
+class ProfileForm(AppModelForm):
     class Meta:
         model = Profile
         exclude = ["user"]
-
-    bio = forms.CharField(widget=forms.Textarea)
+        widgets = {
+            "bio": forms.Textarea(),
+        }
+        help_texts = {
+            "bio": _("Maximum {n} characters").format(
+                n=settings.BIO_MAX_LENGTH
+            ),
+        }

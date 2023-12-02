@@ -6,7 +6,7 @@
         <header>
             <a href="{% url 'posts:detail' post.id %}"
                preload="mouseover"
-               class="no-anchor">{{ post.title|title }}</a>
+               class="no-anchor">{{ post.title }}</a>
         </header>
         <footer class="text-sm text-muted">
             <span id="post-{{ post.id }}-points">
@@ -20,7 +20,7 @@
             {% include "partials/profile_link.html" with user=post.user %}
             🞄
             <span>
-                {% blocktranslate trimmed with age=comment.submit_date|timesince %}
+                {% blocktranslate trimmed with age=post.submit_date|timesince %}
                     {{ age }} ago
                 {% endblocktranslate %}
             </span>

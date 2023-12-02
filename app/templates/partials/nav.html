@@ -1,9 +1,10 @@
-{% load i18n %}
+{% load i18n static %}
 
 <nav class="flex items-center py-2 px-4 mb-4 whitespace-nowrap sm:mb-10 full bg-bg0_h"
-     hx-boost="true"
      preload="mouseover">
-    <a href="{% url 'home' %}" class="mr-4 text-xl">🪶</a>
+    <a href="{% url 'home' %}" class="mr-4 w-12">
+        <img alt="white feather emoji" src="{% static 'images/feather-sm.png' %}">
+    </a>
     <menu class="flex flex-wrap items-center grow">
         <li class="px-4">
             <a href="{% url 'posts:top' %}" class="no-anchor">{% translate "Top" %}</a>

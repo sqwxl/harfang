@@ -1,0 +1,28 @@
+{% extends "base_page.html" %}
+
+{% load i18n %}
+
+{% block content %}
+    <div class="max-w-none prose">
+        <hgroup>
+            <h1>
+                {{ page_title }}
+            </h1>
+        </hgroup>
+
+        {% block extra %}
+        {% endblock extra %}
+
+        {% block form %}
+            <form method="post" class="not-prose">
+                {% csrf_token %}
+                {{ form }}
+                <button>
+                    {% translate "Save" as save %}
+                    {{ submit_text|default:save }}
+                </button>
+            </form>
+        {% endblock form %}
+
+    </div>
+{% endblock content %}

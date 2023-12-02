@@ -53,7 +53,6 @@
         </p>
         <footer id="comment-{{ comment.id }}-footer"
                 class="text-sm text-muted"
-                hx-boost="true"
                 hx-push-url="false">
             {% if user.is_authenticated %}
                 <a href="{% url 'comments:reply' comment.id %}"

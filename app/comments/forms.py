@@ -6,10 +6,12 @@ from django.utils.translation import gettext_lazy as _
 from django.utils.translation import ngettext
 from mptt.fields import TreeNodeChoiceField
 
+from app.forms import AppModelForm
+
 from .models import Comment
 
 
-class CommentForm(forms.ModelForm):
+class CommentForm(AppModelForm):
     class Meta:
         model = Comment
         fields = ["body", "post", "parent", "honeypot"]
@@ -28,7 +30,11 @@ class CommentForm(forms.ModelForm):
     )
 
     body = forms.CharField(
-        label=_("Comment"), max_length=3000, widget=forms.Textarea
+        label=_("Comment"),
+        widget=forms.Textarea,
+        help_text=_("Maximum {n} characters").format(
+            n=settings.COMMENT_BODY_MAX_LENGTH
+        ),
     )
 
     honeypot = forms.CharField(

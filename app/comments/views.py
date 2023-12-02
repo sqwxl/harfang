@@ -34,46 +34,13 @@ def create(request):
 
     return TemplateResponse(
         request,
-        "comments/create.html",
+        "comments/form.html",
         {
             "form": form,
             "page_title": _("Post Comment"),
+            "submit_text": _("Post"),
         },
     )
-
-
-@login_required
-@require_GET
-def create_reply(request, parent_id):
-    parent = get_object_or_404(Comment, id=parent_id)
-    form = CommentForm(initial={"parent": parent})
-
-    if request.htmx:
-        hx_attrs = {
-            "target": f"#comment-{parent_id}-children",
-            "swap": "afterbegin",
-        }
-        return TemplateResponse(
-            request,
-            "comments/form.html",
-            {
-                "form": form,
-                "form_id": f"reply-form-{parent_id}",
-                "hx_attrs": hx_attrs,
-                "can_cancel": True,
-            },
-        )
-    else:
-        return TemplateResponse(
-            request,
-            "comments/reply.html",
-            {
-                "form": form,
-                "page_title": _("Reply to {username}").format(
-                    username=parent.user.username
-                ),
-            },
-        )
 
 
 def create_htmx(request):
@@ -112,16 +79,52 @@ def create_htmx(request):
     )
 
 
+@login_required
+@require_GET
+def create_reply(request, parent_id):
+    parent = get_object_or_404(Comment, id=parent_id)
+    form = CommentForm(initial={"parent": parent})
+
+    if request.htmx:
+        hx_attrs = {
+            "target": f"#comment-{parent_id}-children",
+            "swap": "afterbegin",
+        }
+        return TemplateResponse(
+            request,
+            "comments/form.html#form",
+            {
+                "form_id": f"comment-{parent_id}-reply-form",
+                "form": form,
+                "hx_attrs": hx_attrs,
+                "can_cancel": True,
+                "submit_text": _("Reply"),
+            },
+        )
+    else:
+        return TemplateResponse(
+            request,
+            "comments/reply.html",
+            {
+                "form": form,
+                "page_title": _("Reply to {username}").format(
+                    username=parent.user
+                ),
+                "submit_text": _("Reply"),
+            },
+        )
+
+
 def detail(request, pk):
     comment = get_object_or_404(Comment, pk=pk)
 
     return TemplateResponse(
         request,
-        "posts/detail.html",
+        "comments/detail.html",
         {
-            "post": comment,
+            "comment": comment,
             "page_title": _("{username}'s comment").format(
-                username=comment.user.username
+                username=comment.user
             ),
         },
     )
@@ -148,10 +151,10 @@ def _update_get(request, pk):
         }
         return TemplateResponse(
             request,
-            "comments/form.html",
+            "comments/form.html#form",
             {
+                "form_id": f"comment-{comment.pk}-edit-form",
                 "form": form,
-                "form_id": f"comment-{pk}-edit-form",
                 "action": reverse("comments:update", kwargs={"pk": pk}),
                 "hx_attrs": hx_attrs,
                 "can_cancel": True,
@@ -184,7 +187,7 @@ def _update_post(request, pk):
 
     return TemplateResponse(
         request,
-        "comments/edit.html",
+        "comments/form.html",
         {
             "form": form,
             "page_title": _("Edit Comment"),
@@ -193,7 +196,7 @@ def _update_post(request, pk):
 
 
 def _update_post_htmx(request, form):
-    if form.is_valid() and form.has_changed:
+    if form.is_valid() and form.has_changed():
         comment = form.save(commit=False)
         comment.is_edited = True
         comment.save()
@@ -218,7 +221,7 @@ def _update_post_htmx(request, form):
     response = retarget(
         TemplateResponse(
             request,
-            "comments/form.html",
+            "comments/form.html#form",
             {"form": form},
         ),
         f"#{request.htmx.trigger}>#fields",
@@ -234,22 +237,35 @@ def _update_post_htmx(request, form):
 def delete(request, pk):
     comment = get_object_or_404(Comment, pk=pk)
 
-    comment.is_removed = True
-    comment.save()
-
     if request.htmx:
+        # delete regardless of method used
+        # (confirm dialog is issued on the client-side)
+        comment.is_removed = True
+        comment.save()
         return TemplateResponse(
             request, "comments/detail.html#comment", {"comment": comment}
         )
 
+    if request.method == "POST":
+        comment.is_removed = True
+        comment.save()
+        return HttpResponseRedirect(comment.get_post_url())
+
     return TemplateResponse(
-        request, "comments/delete.html", {"comment": comment}
+        request,
+        "comments/delete.html",
+        {
+            "comment": comment,
+            "page_title": _("Delete Comment"),
+            "submit_text": _("Confirm"),
+        },
     )
 
 
 @login_required
 @can.restore
 def restore(request, pk):
+    # restore regardless of method used (no confirm)
     comment = get_object_or_404(Comment, pk=pk)
 
     comment.is_removed = False

@@ -23,7 +23,7 @@
     ),
   textarea,
   select {
-    @apply block w-full rounded mt-2 mb-4 mr-2 px-2 py-1 bg-fg text-bg;
+    @apply block w-full rounded mt-2 mb-4 mr-2 px-2 py-1 bg-fg text-bg shadow-inner shadow-bg4;
   }
 
   textarea {

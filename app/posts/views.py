@@ -103,10 +103,11 @@ def create(request):
 
     return TemplateResponse(
         request,
-        "posts/create.html",
+        "base_form.html",
         {
             "form": form,
             "page_title": _("Submit Post"),
+            "submit_text": _("Submit"),
         },
     )
 
@@ -123,7 +124,7 @@ def update(request, pk):
             return HttpResponseRedirect(post.get_absolute_url())
 
     return TemplateResponse(
-        request, "posts/edit.html", {"form": form, "page_title": _("Edit Post")}
+        request, "base_form.html", {"form": form, "page_title": _("Edit Post")}
     )
 
 
@@ -133,9 +134,10 @@ def delete(request, pk):
 
     if (
         request.user != post.user
-        or not request.user.is_staff
-        or not request.user.is_moderator
+        and not request.user.is_staff
+        and not request.user.is_moderator
     ):
+        print(request.user, post.user)
         # TODO flash user
         return HttpResponseRedirect(post.get_absolute_url())
 

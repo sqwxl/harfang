@@ -4,8 +4,7 @@
     <form action="{{ item.get_vote_url }}"
           method="post"
           hx-target="this"
-          hx-push-url="false"
-          hx-boost="true">
+          hx-push-url="false">
         {% csrf_token %}
         <button class="flex-none p-2 m-0 w-8 bg-transparent hover:bg-transparent"
                 aria-label="Upvote"

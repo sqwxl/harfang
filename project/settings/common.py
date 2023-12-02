@@ -15,6 +15,7 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     # "django.contrib.sites",
     "django.contrib.staticfiles",
+    "django.forms",
     # 3rd-party apps
     "mptt",
     "django_extensions",
@@ -39,7 +40,7 @@ MIDDLEWARE = [
     "django_htmx.middleware.HtmxMiddleware",
 ]
 
-ROOT_URLCONF = "harfang.urls"
+ROOT_URLCONF = "project.urls"
 
 TEMPLATES = [
     {
@@ -57,7 +58,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = "harfang.wsgi.application"
+WSGI_APPLICATION = "project.wsgi.application"
 
 DATABASES = {
     "default": {
@@ -106,3 +107,9 @@ PROFANITIES_LIST = []
 with open(BASE_DIR / "profanities.txt") as f:
     for line in f:
         PROFANITIES_LIST.append(line.strip())
+
+BIO_MAX_LENGTH = 500
+POST_TITLE_MAX_LENGTH = 200
+POST_URL_MAX_LENGTH = 255
+POST_BODY_MAX_LENGTH = 10000
+COMMENT_BODY_MAX_LENGTH = 4000

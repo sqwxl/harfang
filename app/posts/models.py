@@ -50,9 +50,17 @@ class Post(PointsMixin, models.Model):
         null=True,
         related_name="posts",
     )
-    title = models.CharField(_("title"), max_length=250)
-    url = models.CharField(_("url"), max_length=200, blank=True)
-    body = models.TextField(_("body"), blank=True)
+    title = models.CharField(
+        _("title"), max_length=settings.POST_TITLE_MAX_LENGTH
+    )
+    url = models.URLField(
+        _("url"),
+        blank=True,
+        max_length=settings.POST_URL_MAX_LENGTH,
+    )
+    body = models.CharField(
+        _("body"), blank=True, max_length=settings.POST_BODY_MAX_LENGTH
+    )
     submit_date = models.DateTimeField(default=timezone.now, editable=False)
     # TODO enable_comments = models.BooleanField(default=True)
 

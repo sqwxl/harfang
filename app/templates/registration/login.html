@@ -7,22 +7,26 @@
 {% endblock page_title %}
 
 {% block content %}
-    <hgroup>
-        <h1>
-            {% translate "Login" %}
-        </h1>
-    </hgroup>
-    <p class="my-4">
-        <form method="post">
-            {% csrf_token %}
-            {{ form.as_div }}
-            <button>
+    <div class="max-w-none prose">
+        <hgroup>
+            <h1>
                 {% translate "Login" %}
-            </button>
-        </form>
-    </p>
-    <!-- TODO <a href="">Forgot your password?</a> -->
-    <p class="my-4">
-        <a href="{% url 'users:create' %}">{% translate "Register" %}</a>
-    </p>
+            </h1>
+        </hgroup>
+        <p class="my-4">
+            <form method="post">
+                {% csrf_token %}
+                {{ form.as_div }}
+                <button>
+                    {% translate "Login" %}
+                </button>
+            </form>
+        </p>
+        {% comment %}
+          TODO: Add a link to the password reset page.
+        {% endcomment %}
+        <p>
+            <a href="{% url 'users:create' %}">{% translate "Register" %}</a>
+        </p>
+    </div>
 {% endblock content %}

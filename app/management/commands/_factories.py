@@ -22,7 +22,7 @@ class ProfileFactory(factory.django.DjangoModelFactory):
     # We pass in profile=None to prevent UserFactory from creating another profile
     # (this disables the RelatedFactory)
     # https://factoryboy.readthedocs.io/en/stable/recipes.html#example-django-s-profile
-    user = factory.SubFactory("harfang._factories.UserFactory", profile=None)
+    user = factory.SubFactory("app._factories.UserFactory", profile=None)
 
 
 @factory.django.mute_signals(post_save)
@@ -75,7 +75,7 @@ class CommentFactory(factory.django.DjangoModelFactory):
     user = factory.SubFactory(UserFactory)
 
     post = factory.SubFactory(PostFactory)
-    parent = factory.SubFactory("harfang._factories.CommentFactory")
+    parent = factory.SubFactory("app._factories.CommentFactory")
 
     body = factory.Faker(
         "paragraph", nb_sentences=10, variable_nb_sentences=True

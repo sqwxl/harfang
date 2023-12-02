@@ -18,6 +18,18 @@
               media="(prefers-color-scheme: light)">
         <meta name="color-scheme" content="dark light">
         <meta name="htmx-config" content='{"scrollIntoViewOnBoost": false}'>
+        <link rel="apple-touch-icon"
+              sizes="180x180"
+              href="{% static 'images/apple-touch-icon.png' %}">
+        <link rel="icon"
+              type="image/png"
+              sizes="32x32"
+              href="{% static 'images/favicon-32x32.png' %}">
+        <link rel="icon"
+              type="image/png"
+              sizes="16x16"
+              href="{% static 'images/favicon-16x16.png' %}">
+        <link rel="manifest" href="{% static 'manifest.json' %}">
         <link rel="stylesheet" href="{% static 'css/output.css' %}">
         {% if debug %}
             <script defer src="{% static 'js/htmx/htmx.js' %}"></script>
@@ -28,7 +40,7 @@
         {% endif %}
         <script defer src="{% static 'js/htmx/ext/preload.js' %}"></script>
         <title>
-            🪶 Harfang |&nbsp;
+            Harfang |
 
             {% block page_title %}
                 {{ page_title }}
@@ -38,6 +50,7 @@
     </head>
     <body hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'
           hx-ext="preload"
+          hx-boost="true"
           class="flex flex-col min-h-screen text-fg bg-bg">
 
         {% block body %}

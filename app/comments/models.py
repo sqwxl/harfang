@@ -38,9 +38,11 @@ class Comment(MPTTModel, PointsMixin):
         on_delete=models.SET_NULL,
         related_name="comments",
     )
+
     post = models.ForeignKey(
         "posts.Post", on_delete=models.CASCADE, related_name="comments"
     )
+
     parent = TreeForeignKey(
         "self",
         on_delete=models.CASCADE,
@@ -49,7 +51,9 @@ class Comment(MPTTModel, PointsMixin):
         related_name="children",
     )
 
-    body = models.TextField(_("comment"), max_length=3000)
+    body = models.CharField(
+        _("comment"), max_length=settings.COMMENT_BODY_MAX_LENGTH
+    )
 
     submit_date = models.DateTimeField(default=timezone.now, editable=False)
 
@@ -60,7 +64,7 @@ class Comment(MPTTModel, PointsMixin):
     objects = CommentManager()
 
     def __str__(self):
-        return f"{self.user.username}: {self.body[:40]}"
+        return f"{self.user}: {self.body[:40]}"
 
     def get_absolute_url(self):
         return reverse("comments:detail", kwargs={"pk": self.pk})
