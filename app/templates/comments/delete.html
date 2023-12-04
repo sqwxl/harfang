@@ -1,12 +1,12 @@
-{% extends "base_form.html" %}
+{% extends "base_page.html" %}
 
 {% load i18n %}
 
-{% block extra %}
-    {% include "comments/detail.html#comment" %}
-{% endblock extra %}
+{% block subtitle %}
+    {% include "comments/partials/article.html" %}
+{% endblock subtitle %}
 
-{% block form %}
+{% block content %}
     <form method="post" action="{% url 'comments:delete' post.id %}">
         {% csrf_token %}
         <p>
@@ -27,4 +27,4 @@
             </a>
         </div>
     </form>
-{% endblock form %}
+{% endblock content %}

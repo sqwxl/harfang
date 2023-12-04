@@ -55,16 +55,7 @@
 {% endblock menu %}
 
 {% block feed %}
-    {% if page_obj.paginator.count == 0 %}
-        <p>
-            {% translate "No posts available." %}
-        </p>
-    {% endif %}
     {% for post in page_obj %}
-        {% include "posts/partials/feed_item.html" %}
+        {% include "posts/partials/article.html" %}
     {% endfor %}
 {% endblock feed %}
-
-{% block page-and-paging-controls %}
-    {{ block.super }}
-{% endblock page-and-paging-controls %}

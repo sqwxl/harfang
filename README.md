@@ -17,7 +17,6 @@ Features so far:
 - Votes and points system for posts and comments
 - User profiles
 - Internationalization
-- Gracefully degrades for JS-less clients
 - Admin operations (content moderation)
 
 Next up:
@@ -45,9 +44,7 @@ just setup
 # create mock data
 just populate
 # run the dev server
-just serve
-# If you're editing styles, the tailwind binary can watch for changes
-just css
+just runserver
 ```
 
 ### Reproducible Dev Environment

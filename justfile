@@ -1,6 +1,3 @@
-run:
-    just watch-css & just runserver & wait
-
 runserver:
     python3 manage.py migrate
     python3 manage.py runserver

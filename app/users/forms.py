@@ -9,7 +9,7 @@ from app.forms import AppModelForm
 from .models import Profile
 
 
-class UserForm(UserCreationForm):
+class UserForm(UserCreationForm, AppModelForm):
     class Meta(UserCreationForm.Meta):
         model = get_user_model()
         fields = ("username", "email")

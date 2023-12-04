@@ -6,10 +6,30 @@
         {% include "partials/flash.html" %}
     </header>
     <main class="overflow-x-hidden px-1 mx-auto w-full max-w-7xl sm:px-4 grow">
+        <article>
+            <hgroup class="mb-4 max-w-none prose">
 
-        {% block content %}
-        {% endblock content %}
+                {% block title %}
+                    <h1>
+                        {{ page_title }}
+                    </h1>
+                {% endblock title %}
 
+                {% block subtitle %}
+                {% endblock subtitle %}
+
+            </hgroup>
+
+            {% block content %}
+            {% endblock content %}
+
+        </article>
+        <section id="discussion">
+
+            {% block discussion %}
+            {% endblock discussion %}
+
+        </section>
     </main>
     {% include "partials/footer.html" %}
 {% endblock body %}

@@ -53,7 +53,7 @@ module.exports = {
                 textDecoration: "underline",
               },
               "&:visited": {
-                color: theme("colors.purple"),
+                color: theme("colors.blue"),
               },
             },
           },

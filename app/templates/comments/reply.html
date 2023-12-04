@@ -4,7 +4,7 @@
 
 {% block form %}
     <p class="my-4">
-        {% include "comments/detail.html#comment" with comment=parent %}
+        {% include "comments/partials/article.html" with comment=parent %}
     </p>
     <p class="my-4">
         {% include "comments/form.html#form" %}

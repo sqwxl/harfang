@@ -1,61 +1,48 @@
 {% extends "base_page.html" %}
 
-{% load i18n partials %}
+{% load i18n %}
 
-{% partialdef article %}
+{% block subtitle %}
+    <p>
+        {% include "partials/vote_form.html" with item=post %}
+        🞄
+        {% blocktranslate trimmed with age=post.submit_date|timesince %}
+            Posted {{ age }} ago
+        {% endblocktranslate %}
+        {% translate "by" %}
+        {% include "partials/profile_link.html" with user=post.user %}
+        {% if user == post.user or user.is_moderator %}
+            🞄
+            <a href="{% url 'posts:update' post.id %}">
+                {% translate "edit" %}
+            </a>
+            🞄
+            <a href="{% url 'posts:delete' post.id %}">
+                {% translate "delete" %}
+            </a>
+        {% endif %}
+    </p>
+{% endblock subtitle %}
+
+{% block content %}
     <article class="max-w-none prose">
-        <header>
-            <hgroup>
-                <h1>
-                    <a href="{% url 'posts:detail' post.id %}" class="no-anchor">{{ post.title }}</a>
-                </h1>
-                <p>
-                    {% blocktranslate trimmed with age=post.submit_date|timesince %}
-                        Posted {{ age }} ago
-                    {% endblocktranslate %}
-                    {% translate "by" %}
-                    {% include "partials/profile_link.html" with user=post.user %}
-                    {% if user == post.user or user.is_moderator %}
-                        🞄
-                        <a href="{% url 'posts:update' post.id %}">
-                            {% translate "edit" %}
-                        </a>
-                        🞄
-                        <a href="{% url 'posts:delete' post.id %}">
-                            {% translate "delete" %}
-                        </a>
-                    {% endif %}
-                </p>
-            </hgroup>
-        </header>
         <p>
-            <a href="{{ post.url }}" target="_blank" rel="noreferrer">{% translate "Link" %}</a>
+            <a href="{{ post.url }}" target="_blank">{{ post.url }}</a>
         </p>
         <p>
             {{ post.body|linebreaks }}
         </p>
     </article>
-{% endpartialdef %}
-
-{% block content %}
-    {% partial article %}
-    <section>
-        <div class="mb-4 max-w-none prose">
-            {% if form %}
-                <div hx-target="#comment-tree"
-                     hx-swap="afterbegin"
-                     hx-vals='{"tree": "true","commentFormEvent": "rootFormPosted"}'>
-                    {% include "comments/form.html#form" %}
-                </div>
-            {% else %}
-                <p>
-                    {% translate "Log in to join the discussion." %}
-                </p>
-            {% endif %}
-            <h2>
-                {% translate "Comments" %} ({{ post.comments.count }})
-            </h2>
-        </div>
-        {% include "comments/tree.html" %}
-    </section>
 {% endblock content %}
+
+{% block discussion %}
+    {% include "comments/partials/discussion_form.html" %}
+    <div class="prose">
+        <h2>
+            {% blocktranslate trimmed with n=post.comments.count %}
+                Comments ({{ n }})
+            {% endblocktranslate %}
+        </h2>
+    </div>
+    {% include "comments/partials/tree.html" %}
+{% endblock discussion %}

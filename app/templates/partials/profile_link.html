@@ -1,9 +1,12 @@
 <a href="{% url 'users:profile' user %}"
-   {% if request.user == user %}
-       class="!text-orange"
-   {% endif %}>
+   class="{% if request.user == user %}
+              !text-orange
+          {% endif %}">
     {{ user }}
     {% if user.is_moderator %}
         ♛
+    {% endif %}
+    {% if user == comment.post.user %}
+        ✐
     {% endif %}
 </a>

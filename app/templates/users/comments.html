@@ -1,6 +1,6 @@
 {% extends "base_page.html" %}
 
-{% load i18n static %}
+{% load app_extras i18n static %}
 
 {% block content %}
     {% if page_obj.paginator.count == 0 %}
@@ -16,7 +16,7 @@
         {% block page-and-paging-controls %}
             {% for comment in page_obj %}
                 <div class="mx-2 mb-6">
-                    <a href="{% url 'posts:detail' comment.post.id %}#comment-{{ comment.id }}"
+                    <a href="{% url 'posts:detail' comment.post.id %}#{{ comment|element_id }}"
                        preload="mouseover"
                        class="no-anchor">
                         <div class="max-w-full">

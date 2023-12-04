@@ -2,91 +2,28 @@
 
 {% load app_extras comments_extras i18n partials %}
 
-{% partialdef comment %}
-    <article id="comment-{{ comment.id }}">
-        <header class="text-sm text-muted">
-            <span id="{{ comment|class_name|lower }}-{{ comment.id }}-points">
-                {% blocktranslate trimmed count n=comment.points %}
-                    {{ n }} point
-                {% plural %}
-                    {{ n }} points
-                {% endblocktranslate %}
-            </span>
-            🞄
-            {% include "partials/profile_link.html" with user=comment.user %}
-            🞄
-            <span>
-                {% blocktranslate trimmed with age=comment.submit_date|timesince %}
-                    {{ age }} ago
-                {% endblocktranslate %}
-            </span>
-            {% if tree_context %}
-                {% if comment.is_child_node %}
-                    🞄 <a href="#comment-{{ comment.get_root.id }}">{% translate "root" %}{{ " " }}</a>
-                    🞄 <a href="#comment-{{ comment.parent.id }}">{% translate "parent" %}{{ " " }}</a>
-                {% endif %}
-                {% if not comment.is_leaf_node %}
-                    <button class="font-bold bg-transparent hover:bg-transparent no-js-hide hover:text-fg"
-                        type="button"
-                        aria-label="Fold/unfold discussion"
-                        {# djlint: off #}
-                        _="on click toggle @hidden on <span/> in me then toggle @hidden on #comment-{{ comment.id }}-children"
-                        {# djlint: on #}
-                        >
-                        <span>－</span>
-                        <span hidden>＋</span>
-                    </button>
-                {% endif %}
-            {% endif %}
-        </header>
-        <p id="comment-{{ comment.id }}-body" class="max-w-none prose">
-            {% if comment.is_removed %}
-                <span class="italic text-muted">{% translate "deleted" %}</span>
-            {% else %}
-                {{ comment.body }}
-                {% if comment.is_edited %}
-                    <em class="italic text-muted">{% translate "edited" %}</em>
-                {% endif %}
-            {% endif %}
-        </p>
-        <p id="comment-{{ comment.id }}-edit-form-wrapper" hx-push-url="false">
-        </p>
-        <footer id="comment-{{ comment.id }}-footer"
-                class="text-sm text-muted"
-                hx-push-url="false">
-            {% if user.is_authenticated %}
-                <a href="{% url 'comments:reply' comment.id %}"
-                   hx-target="#comment-{{ comment.id }}-reply-form-wrapper">{% translate "reply" %}</a>
-                {% if not comment.is_removed %}
-                    {% if user|can_edit:comment %}
-                        🞄
-                        <a href="{% url 'comments:update' comment.id %}"
-                           hx-target="#comment-{{ comment.id }}-edit-form-wrapper">{% translate "edit" %}</a>
-                    {% endif %}
-                    {% if user|can_delete:comment %}
-                        🞄
-                        <a href="{% url 'comments:delete' comment.id %}"
-                           hx-target="#comment-{{ comment.id }}-body"
-                           hx-select="#comment-{{ comment.id }}-body"
-                           hx-select-oob="#comment-{{ comment.id }}-footer"
-                           hx-confirm="{% translate 'Are you sure you want to delete this comment? Only a moderator can undo this action.' %}">
-                            {% translate "delete" %}
-                        </a>
-                    {% endif %}
-                {% elif user|can_restore:comment %}
-                    🞄
-                    <a href="{% url 'comments:restore' comment.id %}"
-                       hx-target="#comment-{{ comment.id }}-body"
-                       hx-select="#comment-{{ comment.id }}-body"
-                       hx-select-oob="#comment-{{ comment.id }}-footer">
-                        {% translate "restore" %}
-                    </a>
-                {% endif %}
-            {% endif %}
-        </footer>
-    </article>
-{% endpartialdef %}
+{% block title %}
+    <a href="{% url 'posts:detail' comment.post.id %}">← {% translate "Return to" %} <em>{{ comment.post.title|truncatechars:80 }}</em></a>
+    {{ block.super }}
+{% endblock title %}
 
 {% block content %}
-    {% partial comment %}
+    <div class="flex">
+        {% include "partials/vote_form.html#form" with item=comment %}
+        <div>
+            {% include "comments/partials/article.html" %}
+            {% include "comments/partials/discussion_form.html" %}
+        </div>
+    </div>
 {% endblock content %}
+
+{% block discussion %}
+    <div class="prose">
+        <h2>
+            {% blocktranslate trimmed with n=comment.get_descendant_count %}
+                Replies ({{ n }})
+            {% endblocktranslate %}
+        </h2>
+    </div>
+    {% include "comments/partials/tree.html" with comments=comment.get_descendants %}
+{% endblock discussion %}

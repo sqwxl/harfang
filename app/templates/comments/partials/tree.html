@@ -1,0 +1,26 @@
+{% load app_extras mptt_tags partials %}
+
+{% partialdef list-item %}
+    <li id="{{ node|element_id }}-node" class="mb-4">
+        <div id="{{ node|element_id }}-wrapper" class="flex">
+            {% include "partials/vote_form.html#form" with item=node %}
+            {% with tree=True %}
+                {% include "comments/partials/article.html" with comment=node %}
+            {% endwith %}
+        </div>
+        <ul id="{{ node|element_id }}-children"
+            class="my-4 ml-2 border-l-2 border-l-solid border-l-bg3">
+            <li id="{{ node|element_id }}-reply-form-wrapper" class="ml-2">
+            </li>
+            {{ children }}
+        </ul>
+    </li>
+{% endpartialdef %}
+
+<ul id="comment-tree"
+    class="mt-4"
+    hx-vals='{"tree": true, "commentFormEvent": "inlineFormPosted"}'>
+    {% recursetree comments %}
+        {% partial list-item %}
+    {% endrecursetree %}
+</ul>

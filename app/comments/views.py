@@ -52,13 +52,13 @@ def create_htmx(request):
         if request.POST.get("tree"):
             response = TemplateResponse(
                 request,
-                "comments/tree.html#list-item",
+                "comments/partials/tree.html#list-item",
                 {"node": comment, "tree_context": True},
             )
         else:
             response = TemplateResponse(
                 request,
-                "comments/detail.html#comment",
+                "comments/partials/article.html",
                 {"comment": comment},
             )
         if event := request.POST.get("commentFormEvent"):
@@ -118,11 +118,17 @@ def create_reply(request, parent_id):
 def detail(request, pk):
     comment = get_object_or_404(Comment, pk=pk)
 
+    if request.user.is_authenticated:
+        form = CommentForm(initial={"parent": comment})
+    else:
+        form = None
+
     return TemplateResponse(
         request,
         "comments/detail.html",
         {
             "comment": comment,
+            "form": form,
             "page_title": _("{username}'s comment").format(
                 username=comment.user
             ),
@@ -203,13 +209,13 @@ def _update_post_htmx(request, form):
         if request.POST.get("tree"):
             response = TemplateResponse(
                 request,
-                "comments/tree.html#list-item",
+                "comments/partials/tree.html#list-item",
                 {"node": comment, "tree_context": True},
             )
         else:
             response = TemplateResponse(
                 request,
-                "comments/detail.html#comment",
+                "comments/partials/article.html",
                 {"comment": comment},
             )
 
@@ -243,7 +249,7 @@ def delete(request, pk):
         comment.is_removed = True
         comment.save()
         return TemplateResponse(
-            request, "comments/detail.html#comment", {"comment": comment}
+            request, "comments/partials/article.html", {"comment": comment}
         )
 
     if request.method == "POST":
@@ -273,7 +279,7 @@ def restore(request, pk):
 
     if request.htmx:
         return TemplateResponse(
-            request, "comments/detail.html#comment", {"comment": comment}
+            request, "comments/partials/article.html", {"comment": comment}
         )
 
     return HttpResponseRedirect(comment.get_post_url())

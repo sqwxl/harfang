@@ -42,7 +42,7 @@
   }
 
   a {
-    @apply text-blue no-underline visited:text-purple hover:underline;
+    @apply text-blue no-underline visited:text-blue hover:underline cursor-pointer;
   }
 
   a[href*="http"]:after {

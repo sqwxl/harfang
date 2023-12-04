@@ -1,17 +1,19 @@
 {% load app_extras i18n partials %}
 
 {% partialdef form %}
-    <form action="{{ item.get_vote_url }}"
-          method="post"
-          hx-target="this"
-          hx-push-url="false">
-        {% csrf_token %}
-        <button class="flex-none p-2 m-0 w-8 bg-transparent hover:bg-transparent"
+    <span>
+        <button id="{{ item|element_id }}-upvote-btn"
+                class="p-2 m-0 w-8 bg-transparent hover:bg-transparent"
                 aria-label="Upvote"
+                type="button"
+                hx-post="{{ item.get_vote_url }}"
+                hx-swap="outerHTML"
+                hx-select="#{{ item|element_id }}-upvote-btn"
+                hx-select-oob="#{{ item|element_id }}-points"
                 {% if item.user == user or not user.is_authenticated %}
                     disabled
                 {% endif %}>
-            <svg class="{% if item.has_voted %}
+            <svg class="{% if item|voted_on_by:user %}
                             fill-green
                         {% elif item.user == user or not user.is_authenticated %}
                             fill-bg2
@@ -22,12 +24,11 @@
                 <polygon points="15,0 30,26 0,26" />
             </svg>
         </button>
-    </form>
+    </span>
 {% endpartialdef %}
 
 {% partialdef points %}
-    <span id="{{ item|class_name|lower }}-{{ item.id }}-points"
-          hx-swap-oob="true">
+    <span id="{{ item|element_id }}-points">
         {% blocktranslate trimmed count n=item.points %}
             {{ n }} point
         {% plural %}

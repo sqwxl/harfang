@@ -2,17 +2,19 @@
 
 {% load i18n %}
 
-{% block extra %}
+{% block subtitle %}
     <p>
         {% translate "Are you sure you want to delete the following post?" %}
     </p>
-    <div class="p-4 rounded-md border opacity-75 border-fg">
-        {% include "posts/detail.html#article" %}
-    </div>
+    <a href="{% url 'posts:detail' post.id %}">
+        <p class="text-2xl">
+            {{ post.title }}
+        </p>
+    </a>
     <p>
-        <strong>{% translate "This action cannot be undone." %}</strong>
+        <strong>{% translate "This action cannot be undone!" %}</strong>
     </p>
-{% endblock extra %}
+{% endblock subtitle %}
 
 {% block form %}
     <form method="post" action="{% url 'posts:delete' post.id %}">
@@ -21,11 +23,6 @@
             <button>
                 {% translate "Confirm" %}
             </button>
-            <a href="{% url 'posts:detail' post.id %}" class="no-anchor">
-                <button type="button">
-                    Cancel
-                </button>
-            </a>
         </div>
     </form>
 {% endblock form %}

@@ -1,21 +1,19 @@
-{% load i18n %}
+{% load app_extras i18n partials %}
 
-<div id="post-{{ post.id }}" class="flex m-2 h-16">
+{% partialdef title %}
+    <a href="{% url 'posts:detail' post.id %}"
+       preload="mouseover"
+       class="no-anchor">{{ post.title }}</a>
+{% endpartialdef %}
+
+<div id="{{ post|element_id }}" class="flex m-2 h-16">
     {% include "partials/vote_form.html#form" with item=post %}
     <article>
         <header>
-            <a href="{% url 'posts:detail' post.id %}"
-               preload="mouseover"
-               class="no-anchor">{{ post.title }}</a>
+            {% partial title %}
         </header>
-        <footer class="text-sm text-muted">
-            <span id="post-{{ post.id }}-points">
-                {% blocktranslate trimmed count n=post.points %}
-                    {{ n }} point
-                {% plural %}
-                    {{ n }} points
-                {% endblocktranslate %}
-            </span>
+        <p class="text-sm text-muted">
+            {% include "partials/vote_form.html#points" with item=post %}
             🞄
             {% include "partials/profile_link.html" with user=post.user %}
             🞄
@@ -32,6 +30,6 @@
                     {{ n }} comments
                 {% endblocktranslate %}
             </span>
-        </footer>
+        </p>
     </article>
 </div>

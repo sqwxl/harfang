@@ -1,0 +1,53 @@
+{% load app_extras comments_extras i18n partials %}
+
+<article id="{{ comment|element_id }}">
+    <header class="text-sm text-muted">
+        {% include "partials/vote_form.html#points" with item=comment %}
+        🞄
+        {% include "partials/profile_link.html" with user=comment.user %}
+        🞄
+        <span>
+            {% blocktranslate trimmed with age=comment.submit_date|timesince %}
+                {{ age }} ago
+            {% endblocktranslate %}
+        </span>
+        {% if tree %}
+            {% comment %}
+        {% if comment.is_child_node %}
+            🞄 <a href="#comment-{{ comment.get_root.id }}">{% translate "root" %}{{ " " }}</a>
+            🞄 <a href="#comment-{{ comment.parent.id }}">{% translate "parent" %}{{ " " }}</a>
+        {% endif %}
+            {% endcomment %}
+            {% if not comment.is_leaf_node %}
+                <button class="font-bold bg-transparent hover:bg-transparent no-js-hide hover:text-fg"
+                    type="button"
+                    aria-label="Fold/unfold discussion"
+                    {# djlint: off #}
+_="on click toggle @hidden on <span/> in me then toggle @hidden on #{{ comment|element_id }}-children"
+                    {# djlint: on #}
+                    >
+                    <span>－</span>
+                    <span hidden>＋</span>
+                </button>
+            {% endif %}
+        {% endif %}
+    </header>
+    <a href="{% url 'comments:detail' comment.id %}"
+       class="hover:no-underline no-anchor">
+        <p id="{{ comment|element_id }}-body" class="max-w-none prose">
+            {% if comment.is_removed %}
+                <span class="italic text-muted">{% translate "deleted" %}</span>
+            {% else %}
+                {{ comment.body }}
+                {% if comment.is_edited %}
+                    <em class="italic text-muted">{% translate "edited" %}</em>
+                {% endif %}
+            {% endif %}
+        </p>
+    </a>
+    <p id="{{ comment|element_id }}-edit-form-wrapper" hx-push-url="false">
+    </p>
+    {% if tree %}
+        {% include "comments/partials/footer.html" %}
+    {% endif %}
+</article>

@@ -1,4 +1,4 @@
-{% extends "base_page.html" %}
+{% extends "base_form.html" %}
 
 {% load i18n %}
 
@@ -6,27 +6,20 @@
     {% translate "Login" %}
 {% endblock page_title %}
 
-{% block content %}
-    <div class="max-w-none prose">
-        <hgroup>
-            <h1>
-                {% translate "Login" %}
-            </h1>
-        </hgroup>
-        <p class="my-4">
-            <form method="post">
-                {% csrf_token %}
-                {{ form.as_div }}
-                <button>
-                    {% translate "Login" %}
-                </button>
-            </form>
-        </p>
-        {% comment %}
-          TODO: Add a link to the password reset page.
-        {% endcomment %}
-        <p>
-            <a href="{% url 'users:create' %}">{% translate "Register" %}</a>
-        </p>
+{% block title %}
+    <h1>
+        {% translate "Login" %}
+    </h1>
+{% endblock title %}
+
+{% block form %}
+    {% comment %}
+      No boost to ensure a full page refresh and a fresh csrf token for the user.
+    {% endcomment %}
+    <div hx-boost="false">
+        {{ block.super }}
     </div>
-{% endblock content %}
+    <p class="mt-4">
+        <a href="{% url 'users:create' %}">{% translate "Register" %}</a>
+    </p>
+{% endblock form %}

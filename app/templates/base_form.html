@@ -3,18 +3,10 @@
 {% load i18n %}
 
 {% block content %}
-    <div class="max-w-none prose">
-        <hgroup>
-            <h1>
-                {{ page_title }}
-            </h1>
-        </hgroup>
-
-        {% block extra %}
-        {% endblock extra %}
+    <div>
 
         {% block form %}
-            <form method="post" class="not-prose">
+            <form method="post">
                 {% csrf_token %}
                 {{ form }}
                 <button>
