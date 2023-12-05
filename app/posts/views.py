@@ -15,19 +15,10 @@ from .forms import PostForm
 from .models import Post, PostVote
 
 
-# redirect 'home' view to posts_top
-def home(_):
-    return HttpResponseRedirect(reverse("posts:top"))
-
-
 @for_htmx(use_block_from_params=True)
 def top(request):
     range = request.GET.get("range", "day")
-    # get annotated queryset with user's vote status
-    if request.user.is_authenticated:
-        posts = Post.objects.with_user_vote_status(request.user)
-    else:
-        posts = Post.objects.all()
+    posts = Post.objects.all()
     if range == "day":
         queryset = posts.day().top()
     elif range == "week":
@@ -53,10 +44,7 @@ def top(request):
 
 @for_htmx(use_block_from_params=True)
 def latest(request):
-    if request.user.is_authenticated:
-        posts = Post.objects.with_user_vote_status(request.user)
-    else:
-        posts = Post.objects.all()
+    posts = Post.objects.all()
     return TemplateResponse(
         request,
         "posts/feed.html",
@@ -70,12 +58,12 @@ def latest(request):
 def detail(request, pk):
     post = get_object_or_404(Post, pk=pk)
 
+    comments = post.comments.all()
+
     if request.user.is_authenticated:
         form = CommentForm(initial={"post": pk})
-        comments = post.comments.with_user_vote_status(request.user)
     else:
         form = None
-        comments = post.comments.all()
 
     return TemplateResponse(
         request,

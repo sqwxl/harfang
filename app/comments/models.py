@@ -11,14 +11,7 @@ from app.models import Vote
 
 
 class CommentManager(TreeManager):
-    def with_user_vote_status(self, user):
-        return self.get_queryset().annotate(
-            has_voted=models.Exists(
-                CommentVote.objects.filter(
-                    user=user, comment=models.OuterRef("pk")
-                )
-            )
-        )
+    pass
 
 
 class Comment(MPTTModel, PointsMixin):

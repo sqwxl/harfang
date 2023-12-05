@@ -11,13 +11,6 @@ from app.models import Vote
 
 
 class PostQuerySet(models.QuerySet):
-    def with_user_vote_status(self, user):
-        return self.annotate(
-            has_voted=models.Exists(
-                PostVote.objects.filter(user=user, post=models.OuterRef("pk"))
-            )
-        )
-
     def day(self):
         return self.filter(submit_date__gte=timezone.now() - timedelta(days=1))
 
@@ -70,9 +63,9 @@ class Post(PointsMixin, models.Model):
         return self.title
 
     def save(self, *args, **kwargs):
-        super().save(*args, **kwargs)
         if self._state.adding:
             self.user.increment_points()
+        super().save(*args, **kwargs)
 
     def delete(self, *args, **kwargs):
         self.user.decrement_points()

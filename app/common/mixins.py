@@ -1,17 +1,31 @@
-from django.db import models
+from django.db import models, transaction
+import logging
+
+logger = logging.getLogger(__name__)
 
 
 class PointsMixin(models.Model):
     class Meta:
         abstract = True
+        constraints = [
+            models.CheckConstraint(
+                check=models.Q(points__gte=0),
+                name="%(app_label)s_%(class)s_points_gte_0",
+            )
+        ]
 
     points = models.IntegerField(default=0)
 
     def increment_points(self):
-        self.points = models.F("points") + 1
-        self.save(update_fields=["points"])
+        obj = type(self).objects.select_for_update().get(pk=self.pk)
+        with transaction.atomic():
+            obj.points += 1
+            obj.save()
 
     def decrement_points(self):
-        if self.points > 0:
-            self.points = models.F("points") - 1
-            self.save(update_fields=["points"])
+        logger.debug("decrementing points")
+        obj = type(self).objects.select_for_update().get(pk=self.pk)
+        with transaction.atomic():
+            if obj.points > 0:
+                obj.points -= 1
+                obj.save()
