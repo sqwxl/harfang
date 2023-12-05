@@ -1,5 +1,6 @@
 from django.contrib.auth.decorators import login_required
-from django.http import HttpResponseRedirect
+from django.forms import ValidationError
+from django.http import HttpResponseForbidden, HttpResponseRedirect
 from django.shortcuts import get_object_or_404
 from django.template.response import TemplateResponse
 from django.urls import reverse
@@ -79,6 +80,7 @@ def detail(request, pk):
 
 @login_required
 def create(request):
+    status = 200
     if request.method == "POST":
         form = PostForm(request.POST)
         if form.is_valid():
@@ -86,6 +88,8 @@ def create(request):
             post.user = request.user
             post.save()
             return HttpResponseRedirect(post.get_absolute_url())
+        else:
+            status = 422
     else:
         form = PostForm()
 
@@ -97,22 +101,30 @@ def create(request):
             "page_title": _("Submit Post"),
             "submit_text": _("Submit"),
         },
+        status=status,
     )
 
 
 @login_required
 def update(request, pk):
     post = get_object_or_404(Post, pk=pk)
-    form = PostForm(instance=post)
+    status = 200
 
     if request.method == "POST":
         form = PostForm(request.POST, instance=post)
         if form.is_valid():
             form.save()
             return HttpResponseRedirect(post.get_absolute_url())
+        else:
+            status = 422
+    else:
+        form = PostForm(instance=post)
 
     return TemplateResponse(
-        request, "base_form.html", {"form": form, "page_title": _("Edit Post")}
+        request,
+        "base_form.html",
+        {"form": form, "page_title": _("Edit Post")},
+        status=status,
     )
 
 
@@ -125,9 +137,8 @@ def delete(request, pk):
         and not request.user.is_staff
         and not request.user.is_moderator
     ):
-        print(request.user, post.user)
         # TODO flash user
-        return HttpResponseRedirect(post.get_absolute_url())
+        return HttpResponseForbidden()
 
     if request.method == "POST":
         post.delete()
@@ -145,26 +156,23 @@ def delete(request, pk):
 @require_POST
 def vote(request, pk):
     post = get_object_or_404(Post, pk=pk)
+    status = 200
     try:
+        # delete vote if already voted
         vote = post.votes.get(user=request.user)
         vote.delete()
-        post.has_voted = False
     except PostVote.DoesNotExist:
-        PostVote(
-            user=request.user, post=post, submit_date=timezone.now()
-        ).save()
-        post.has_voted = True
-    except PostVote.MultipleObjectsReturned as e:
-        # TODO handle this case (should never happen since unique_together is set on PostVote)
-        print(e)
+        # create vote if not
+        try:
+            PostVote(
+                user=request.user, post=post, submit_date=timezone.now()
+            ).save()
+            status = 201
+        except ValidationError as e:
+            return HttpResponseForbidden(e)
 
     post.refresh_from_db()
 
-    if request.htmx:
-        return TemplateResponse(
-            request,
-            "partials/vote.html",
-            {"item": post},
-        )
-    else:
-        return HttpResponseRedirect(request.META.get("HTTP_REFERER", "/"))
+    return TemplateResponse(
+        request, "partials/vote.html", {"item": post}, status=status
+    )
