@@ -1,44 +1,25 @@
-{% extends "base_page.html" %}
+{% extends "base_feed.html" %}
 
 {% load i18n static %}
 
-{% block content %}
-    {% if page_obj.paginator.count == 0 %}
-
-        {% block no-items %}
-            <p>
-                {% translate "No posts are available." %}
-            </p>
-        {% endblock no-items %}
-
-    {% else %}
-
-        {% block page-and-paging-controls %}
-            {% for post in page_obj %}
-                <article class="mx-2 mb-6 max-w-none prose">
-                    <header>
-                        <h3>
-                            <a href="{% url 'posts:detail' post.id %}" class="no-anchor">{{ post.title }}</a>
-                        </h3>
-                        <small>
-                            {% blocktranslate trimmed with age=post.submit_date|timesince %}
-                                {{ age }} ago
-                            {% endblocktranslate %}
-                        </small>
-                    </header>
-                    <div class="max-w-full">
-                        {{ post.body|truncatewords:40 }}
-                    </div>
-                </article>
-            {% endfor %}
-            {% if page_obj.has_next %}
-                {% include "partials/paging_control.html" %}
-            {% else %}
-                <p class="text-center">
-                    * * *
+{% block feed %}
+    {% for post in page_obj %}
+        <article class="mx-2 mb-6">
+            <hgroup>
+                <h1 class="text-xl">
+                    <a href="{% url 'posts:detail' post.id %}">{{ post.title }}</a>
+                </h1>
+                <p class="text-sm text-muted">
+                    {% include "partials/vote.html" with item=post %}
+                    🞄
+                    {% blocktranslate trimmed with age=post.submit_date|timesince %}
+                        {{ age }} ago
+                    {% endblocktranslate %}
                 </p>
-            {% endif %}
-        {% endblock page-and-paging-controls %}
-
-    {% endif %}
-{% endblock content %}
+            </hgroup>
+            <p class="text-muted">
+                {{ post.body|truncatewords:40 }}
+            </p>
+        </article>
+    {% endfor %}
+{% endblock feed %}

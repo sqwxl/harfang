@@ -1,46 +1,27 @@
-{% extends "base_page.html" %}
+{% extends "base_feed.html" %}
 
 {% load app_extras i18n static %}
 
-{% block content %}
-    {% if page_obj.paginator.count == 0 %}
-
-        {% block no-items %}
-            <p>
-                {% translate "No comments are available." %}
-            </p>
-        {% endblock no-items %}
-
-    {% else %}
-
-        {% block page-and-paging-controls %}
-            {% for comment in page_obj %}
-                <div class="mx-2 mb-6">
-                    <a href="{% url 'posts:detail' comment.post.id %}#{{ comment|element_id }}"
-                       preload="mouseover"
-                       class="no-anchor">
-                        <div class="max-w-full">
-                            {{ comment.body|truncatewords:40 }}
-                        </div>
+{% block feed %}
+    {% for comment in page_obj %}
+        <article class="mx-2 mb-6">
+            <hgroup>
+                <h1 class="text-xl">
+                    <a href="{% url 'posts:detail' comment.post.id %}#{{ comment|element_id }}">
+                        {{ comment.post.title }}
                     </a>
-                    <div class="text-sm text-muted">
-                        {% include "partials/profile_link.html" with user=comment.user %}
-                        <span>
-                            {% blocktranslate trimmed with age=comment.submit_date|timesince %}
-                                {{ age }} ago
-                            {% endblocktranslate %}
-                        </span>
-                    </div>
-                </div>
-            {% endfor %}
-            {% if page_obj.has_next %}
-                {% include "partials/paging_control.html" %}
-            {% else %}
-                <p class="text-center">
-                    * * *
+                </h1>
+                <p class="text-sm text-muted">
+                    {% include "partials/vote.html" with item=comment %}
+                    🞄
+                    {% blocktranslate trimmed with age=comment.submit_date|timesince %}
+                        {{ age }} ago
+                    {% endblocktranslate %}
                 </p>
-            {% endif %}
-        {% endblock page-and-paging-controls %}
-
-    {% endif %}
-{% endblock content %}
+            </hgroup>
+            <p class="text-muted">
+                {{ comment.body|truncatewords:40 }}
+            </p>
+        </article>
+    {% endfor %}
+{% endblock feed %}

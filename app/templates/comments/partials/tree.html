@@ -3,7 +3,7 @@
 {% partialdef list-item %}
     <li id="{{ node|element_id }}-node" class="mb-4">
         <div id="{{ node|element_id }}-wrapper" class="flex">
-            {% include "partials/vote_form.html#form" with item=node %}
+            {% include "partials/vote.html#form" with item=node %}
             {% with tree=True %}
                 {% include "comments/partials/article.html" with comment=node %}
             {% endwith %}

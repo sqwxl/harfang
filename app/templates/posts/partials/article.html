@@ -7,13 +7,13 @@
 {% endpartialdef %}
 
 <div id="{{ post|element_id }}" class="flex m-2 h-16">
-    {% include "partials/vote_form.html#form" with item=post %}
+    {% include "partials/vote.html#form" with item=post %}
     <article>
         <header>
             {% partial title %}
         </header>
         <p class="text-sm text-muted">
-            {% include "partials/vote_form.html#points" with item=post %}
+            {% include "partials/vote.html#points" with item=post %}
             🞄
             {% include "partials/profile_link.html" with user=post.user %}
             🞄

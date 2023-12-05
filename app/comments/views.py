@@ -304,7 +304,7 @@ def vote(request, pk):
     if request.htmx:
         return TemplateResponse(
             request,
-            "partials/vote_form.html",
+            "partials/vote.html",
             {"item": comment},
         )
     else:

@@ -2,7 +2,7 @@
 
 <article id="{{ comment|element_id }}">
     <header class="text-sm text-muted">
-        {% include "partials/vote_form.html#points" with item=comment %}
+        {% include "partials/vote.html#points" with item=comment %}
         🞄
         {% include "partials/profile_link.html" with user=comment.user %}
         🞄

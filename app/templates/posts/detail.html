@@ -4,7 +4,7 @@
 
 {% block subtitle %}
     <p>
-        {% include "partials/vote_form.html" with item=post %}
+        {% include "partials/vote.html" with item=post %}
         🞄
         {% blocktranslate trimmed with age=post.submit_date|timesince %}
             Posted {{ age }} ago
@@ -36,7 +36,14 @@
 {% endblock content %}
 
 {% block discussion %}
-    {% include "comments/partials/discussion_form.html" %}
+    {% if form %}
+        <div class="prose">
+            <h2 id="comment-form">
+                {% translate "Leave a Comment" %}
+            </h2>
+        </div>
+        {% include "comments/partials/discussion_form.html" %}
+    {% endif %}
     <div class="prose">
         <h2>
             {% blocktranslate trimmed with n=post.comments.count %}

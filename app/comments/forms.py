@@ -30,7 +30,7 @@ class CommentForm(AppModelForm):
     )
 
     body = forms.CharField(
-        label=_("Comment"),
+        label="",
         widget=forms.Textarea,
         help_text=_("Maximum {n} characters").format(
             n=settings.COMMENT_BODY_MAX_LENGTH

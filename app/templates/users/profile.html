@@ -2,37 +2,52 @@
 
 {% load i18n %}
 
+{% block title %}
+    <h1>
+        {% include "partials/profile_link.html" with user=profile.user %}
+    </h1>
+{% endblock title %}
+
+{% block subtitle %}
+    <p>
+        {% blocktranslate trimmed with age=profile.user.date_joined|timesince karma=profile.user.points %}
+            Joined {{ age }} ago 🞄 Karma: {{ karma }}
+        {% endblocktranslate %}
+        {% if user == profile.user %}
+            🞄 <span><a href="{% url 'users:profile_edit' user %}">{% translate "edit" %}</a></span>
+        {% endif %}
+    </p>
+{% endblock subtitle %}
+
 {% block content %}
     <div class="max-w-none prose">
-        <header>
-            <hgroup>
-                <h1>
-                    {% include "partials/profile_link.html" with user=profile.user %}
-                </h1>
-                <p>
-                    {% blocktranslate trimmed with age=profile.user.date_joined|timesince karma=profile.user.points %}
-                        Joined {{ age }} ago 🞄 Karma: {{ karma }}
-                    {% endblocktranslate %}
-                    {% if user == profile.user %}
-                        🞄 <span><a href="{% url 'users:profile_edit' user %}">{% translate "edit" %}</a></span>
-                    {% endif %}
-                </p>
-            </hgroup>
-        </header>
         <p>
             {{ profile.bio|linebreaks }}
         </p>
-        <p>
-            <a href="{% url 'users:posts' profile.user %}">
+        <menu class="flex justify-around"
+              hx-target="#user-content"
+              hx-select="#main-content"
+              hx-push-url="false">
+            <li>
+                <a href="{% url 'users:posts' profile.user %}"
+                   class="no-anchor"
+                   _="on click add .font-bold to me then remove .font-bold from the next <a/>">
                 {% blocktranslate trimmed with n=profile.user.posts.count %}
                     Submissions ({{ n }})
                 {% endblocktranslate %}
             </a>
-            <a href="{% url 'users:comments' profile.user %}">
-                {% blocktranslate trimmed with n=profile.user.comments.count %}
-                    Comments ({{ n }})
-                {% endblocktranslate %}
-            </a>
-        </p>
-    </div>
+        </li>
+        <li>
+            <a href="{% url 'users:comments' profile.user %}"
+               class="no-anchor"
+               _="on click add .font-bold to me then remove .font-bold from the previous <a/>">
+            {% blocktranslate trimmed with n=profile.user.comments.count %}
+                Comments ({{ n }})
+            {% endblocktranslate %}
+        </a>
+    </li>
+</menu>
+</div>
+<section id="user-content">
+</section>
 {% endblock content %}

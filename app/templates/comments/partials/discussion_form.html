@@ -1,11 +1,9 @@
 {% load i18n %}
 
 <div class="my-4">
-    {% if form %}
-        <div hx-target="#comment-tree"
-             hx-swap="afterbegin"
-             hx-vals='{"tree": "true","commentFormEvent": "rootFormPosted"}'>
-            {% include "comments/form.html#form" %}
-        </div>
-    {% endif %}
+    <div hx-target="#comment-tree"
+         hx-swap="afterbegin"
+         hx-vals='{"tree": "true","commentFormEvent": "rootFormPosted"}'>
+        {% include "comments/form.html#form" %}
+    </div>
 </div>

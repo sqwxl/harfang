@@ -3,33 +3,24 @@
 {% load app_extras i18n partials %}
 
 {% partialdef fields %}
-    <div>
-        <input type="hidden" name="next" value="{{ next|default:request.path }}" />
-    </div>
     {% for field in form %}
         {% if field.is_hidden %}
             <div>
                 {{ field }}
             </div>
-        {% else %}
-            <div {% if field.name == "honeypot" %}hidden{% endif %}>
-                {{ field.label_tag }}
-                {% if field.help_text %}
-                    <div class="helptext">
-                        {{ field.help_text }}
-                    </div>
-                {% endif %}
-                {% if field.errors %}
-                    {{ field.errors }}
-                {% endif %}
+        {% elif field.name == "honeypot" %}
+            <div hidden>
                 {{ field }}
             </div>
+        {% else %}
+            {{ field.as_field_group }}
         {% endif %}
     {% endfor %}
 {% endpartialdef %}
 
 {% partialdef form %}
     <form id="{{ form_id|default:'root-comment-form' }}"
+          aria-labelledby="comment-form"
           method="post"
           action="{% if action %} {{ action }} {% else %} {% url 'comments:create' %} {% endif %}"
           hx-push-url="false"
