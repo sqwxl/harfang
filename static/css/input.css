@@ -38,7 +38,7 @@
   [type="button"],
   [type="reset"],
   button {
-    @apply bg-red_d hover:bg-red mr-2 px-2 rounded;
+    @apply bg-red_d hover:bg-red text-white mr-2 px-2 rounded;
   }
 
   a {
@@ -47,6 +47,10 @@
 
   a[href*="http"]:after {
     content: " ⭧";
+  }
+
+  hr {
+    @apply border-fg;
   }
 }
 
