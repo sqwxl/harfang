@@ -18,20 +18,22 @@ Features so far:
 - User profiles
 - Internationalization
 - Admin operations (content moderation)
+- Extensive tests
 
 Next up:
 
 - Public API (for bot accounts)
-- Extensive tests
+- Rich link previews
 - Optimized accessibility
 - Search
 - Media Posts
 - Markdown syntax for posts
 - User DMs
-- SEO (w/ microdata?)
+- SEO (django-meta)
 - Email system
 - Dark/Light color-schemes
 - Site identity (icons, logos, etc)
+- Cookiecutter version
 
 ## Dev Quick Start
 
