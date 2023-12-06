@@ -24,7 +24,7 @@
                 {% include "partials/profile_link.html" with user=user %}
             </li>
             <li class="px-4">
-                <a href="{% url 'logout' %}" class="no-anchor">{% translate "Logout" %}</a>
+                <a hx-post="{% url 'logout' %}" hx-target="body" class="no-anchor">{% translate "Logout" %}</a>
             </li>
         {% else %}
             <li class="px-4">
