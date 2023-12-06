@@ -1,6 +1,6 @@
 {% extends "base_page.html" %}
 
-{% load app_extras comments_extras i18n partials %}
+{% load app_extras comments_extras %}
 
 {% block title %}
     <a href="{% url 'posts:detail' comment.post.id %}">← {% translate "Return to" %} <em>{{ comment.post.title|truncatechars:80 }}</em></a>
