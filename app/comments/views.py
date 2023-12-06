@@ -19,16 +19,41 @@ can = AccessDecorators(Comment)
 @login_required
 def create(request):
     if request.method == "POST":
-        if request.htmx:
-            return create_htmx(request)
-
         form = CommentForm(request.POST)
-
         if form.is_valid():
             comment = form.save(commit=False)
             comment.user = request.user
             comment.save()
-            return HttpResponseRedirect(comment.get_post_url())
+            if request.POST.get("tree"):
+                response = TemplateResponse(
+                    request,
+                    "comments/partials/tree.html#list-item",
+                    {"node": comment, "tree_context": True},
+                    status=201,
+                )
+            else:
+                response = TemplateResponse(
+                    request,
+                    "comments/partials/article.html",
+                    {"comment": comment},
+                    status=201,
+                )
+            if event := request.POST.get("commentFormEvent"):
+                trigger_client_event(response, event)
+            return response
+
+        # replace the form fields with the errors
+        return reswap(
+            retarget(
+                TemplateResponse(
+                    request,
+                    "comments/form.html#fields",
+                    {"form": form},
+                ),
+                f"#{request.htmx.trigger}>#fields",
+            ),
+            "outerHTML",
+        )
 
     form = CommentForm()
 

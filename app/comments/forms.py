@@ -52,21 +52,6 @@ class CommentForm(AppModelForm):
             raise forms.ValidationError(self.fields["honeypot"].label)
         return value
 
-    def check_for_duplicate_comment(self, new):
-        possible_duplicates = Comment.objects.filter(
-            user=new.user,
-            post=new.post,
-            parent=new.parent,
-        )
-        for old in possible_duplicates:
-            if (
-                old.submit_date.date() == new.submit_date.date()
-                and old.body == new.body
-            ):
-                return old
-
-        return
-
     def clean_body(self):
         """
         If COMMENTS_BLOCK_PROFANITIES is True, check that the comment doesn't

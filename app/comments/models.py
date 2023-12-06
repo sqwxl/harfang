@@ -45,7 +45,8 @@ class Comment(MPTTModel, PointsMixin):
     )
 
     body = models.CharField(
-        _("comment"), max_length=settings.COMMENT_BODY_MAX_LENGTH
+        _("comment"),
+        max_length=settings.COMMENT_BODY_MAX_LENGTH,
     )
 
     submit_date = models.DateTimeField(default=timezone.now, editable=False)
