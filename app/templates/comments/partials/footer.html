@@ -14,7 +14,7 @@
             {% endif %}
             {% if user|can_delete:comment %}
                 🞄
-                <a href="{% url 'comments:delete' comment.id %}"
+                <a hx-post="{% url 'comments:delete' comment.id %}"
                    hx-target="#{{ comment|element_id }}-body"
                    hx-select="#{{ comment|element_id }}-body"
                    hx-select-oob="#{{ comment|element_id }}-footer"
@@ -24,7 +24,7 @@
             {% endif %}
         {% elif user|can_restore:comment %}
             🞄
-            <a href="{% url 'comments:restore' comment.id %}"
+            <a hx-post="{% url 'comments:restore' comment.id %}"
                hx-target="#{{ comment|element_id }}-body"
                hx-select="#{{ comment|element_id }}-body"
                hx-select-oob="#{{ comment|element_id }}-footer">
