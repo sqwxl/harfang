@@ -1,5 +1,7 @@
 from django.contrib.auth.decorators import login_required
+from django.forms import ValidationError
 from django.http import HttpResponseRedirect
+from django.http.response import HttpResponseForbidden
 from django.shortcuts import get_object_or_404
 from django.template.response import TemplateResponse
 from django.urls import reverse
@@ -7,11 +9,14 @@ from django.utils import timezone
 from django.utils.translation import gettext as _
 from django.views.decorators.http import require_GET, require_POST
 from django_htmx.http import reswap, retarget, trigger_client_event
+import logging
 
 from app.utils.decorators import AccessDecorators
 
 from .forms import CommentForm
 from .models import Comment, CommentVote
+
+logger = logging.getLogger(__name__)
 
 can = AccessDecorators(Comment)
 
@@ -49,6 +54,7 @@ def create(request):
                     request,
                     "comments/form.html#fields",
                     {"form": form},
+                    status=422,
                 ),
                 f"#{request.htmx.trigger}>#fields",
             ),
@@ -65,42 +71,6 @@ def create(request):
             "page_title": _("Post Comment"),
             "submit_text": _("Post"),
         },
-    )
-
-
-def create_htmx(request):
-    form = CommentForm(request.POST)
-    if form.is_valid():
-        comment = form.save(commit=False)
-        comment.user = request.user
-        comment.save()
-        if request.POST.get("tree"):
-            response = TemplateResponse(
-                request,
-                "comments/partials/tree.html#list-item",
-                {"node": comment, "tree_context": True},
-            )
-        else:
-            response = TemplateResponse(
-                request,
-                "comments/partials/article.html",
-                {"comment": comment},
-            )
-        if event := request.POST.get("commentFormEvent"):
-            trigger_client_event(response, event)
-        return response
-
-    # replace the form fields with the errors
-    return reswap(
-        retarget(
-            TemplateResponse(
-                request,
-                "comments/form.html#fields",
-                {"form": form},
-            ),
-            f"#{request.htmx.trigger}>#fields",
-        ),
-        "outerHTML",
     )
 
 
@@ -136,6 +106,7 @@ def create_reply(request, parent_id):
                     username=parent.user
                 ),
                 "submit_text": _("Reply"),
+                "parent": parent,
             },
         )
 
@@ -166,11 +137,6 @@ def detail(request, pk):
 def update(request, pk):
     if request.method == "POST":
         return _update_post(request, pk)
-    return _update_get(request, pk)
-
-
-@require_GET
-def _update_get(request, pk):
     comment = get_object_or_404(Comment, pk=pk)
 
     form = CommentForm(instance=comment)
@@ -180,7 +146,7 @@ def _update_get(request, pk):
             "target": f"#comment-{comment.pk}-body",
             "select": f"#comment-{comment.pk}-body",
         }
-        return TemplateResponse(
+        res = TemplateResponse(
             request,
             "comments/form.html#form",
             {
@@ -191,14 +157,16 @@ def _update_get(request, pk):
                 "can_cancel": True,
             },
         )
-    return TemplateResponse(
-        request,
-        "comments/edit.html",
-        {
-            "form": form,
-            "page_title": _("Edit Comment"),
-        },
-    )
+        return res
+    else:
+        return TemplateResponse(
+            request,
+            "comments/form.html",
+            {
+                "form": form,
+                "page_title": _("Edit Comment"),
+            },
+        )
 
 
 @require_POST
@@ -264,73 +232,53 @@ def _update_post_htmx(request, form):
 
 
 @login_required
+@require_POST
 @can.delete
 def delete(request, pk):
     comment = get_object_or_404(Comment, pk=pk)
-
-    if request.htmx:
-        # delete regardless of method used
-        # (confirm dialog is issued on the client-side)
-        comment.is_removed = True
-        comment.save()
-        return TemplateResponse(
-            request, "comments/partials/article.html", {"comment": comment}
-        )
-
-    if request.method == "POST":
-        comment.is_removed = True
-        comment.save()
-        return HttpResponseRedirect(comment.get_post_url())
-
+    comment.is_removed = True
+    comment.save()
     return TemplateResponse(
         request,
-        "comments/delete.html",
-        {
-            "comment": comment,
-            "page_title": _("Delete Comment"),
-            "submit_text": _("Confirm"),
-        },
+        "comments/partials/article.html",
+        {"comment": comment, "tree": True},
     )
 
 
 @login_required
+@require_POST
 @can.restore
 def restore(request, pk):
-    # restore regardless of method used (no confirm)
     comment = get_object_or_404(Comment, pk=pk)
 
     comment.is_removed = False
     comment.save()
 
-    if request.htmx:
-        return TemplateResponse(
-            request, "comments/partials/article.html", {"comment": comment}
-        )
-
-    return HttpResponseRedirect(comment.get_post_url())
+    return TemplateResponse(
+        request,
+        "comments/partials/article.html",
+        {"comment": comment, "tree": True},
+    )
 
 
 @login_required
 @require_POST
 def vote(request, pk):
     comment = get_object_or_404(Comment, pk=pk)
+    status = 200
     try:
         vote = comment.votes.get(user=request.user)
         vote.delete()
-        comment.has_voted = False
     except CommentVote.DoesNotExist:
         CommentVote(
             user=request.user, comment=comment, submit_date=timezone.now()
         ).save()
-        comment.has_voted = True
+        status = 201
+    except ValidationError as e:
+        return HttpResponseForbidden(e)
 
     comment.refresh_from_db()
 
-    if request.htmx:
-        return TemplateResponse(
-            request,
-            "partials/vote.html",
-            {"item": comment},
-        )
-    else:
-        return HttpResponseRedirect(request.META.get("HTTP_REFERER", "/"))
+    return TemplateResponse(
+        request, "partials/vote.html", {"item": comment}, status=status
+    )
