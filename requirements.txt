@@ -7,5 +7,6 @@ django-mptt==0.15.0
 django-render-block==0.9.2
 django-template-partials==23.4
 django-types==0.19.1
+extruct==0.16.0
 factory-boy==3.3.0
 gunicorn==21.2.0
