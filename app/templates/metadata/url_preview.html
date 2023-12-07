@@ -1,6 +1,30 @@
-<article class="flex p-4 mt-4 max-w-none rounded-md border cursor-pointer border-muted prose hover:border-fg"
+<article class="flex overflow-hidden flex-col rounded-lg prose prose-sm"
          id="url_preview">
-    <div>
+    <header>
+        <form method="post"
+              action="{% url 'posts:submit' %}"
+              class="p-2 text-center"
+              hx-confirm="{% translate 'Are you sure you want to use the information from the URL preview? This will discard any information you have entered manually.' %}">
+            {% csrf_token %}
+            <input type="hidden" name="url" value="{{ metadata.url }}">
+            <input type="hidden" name="title" value="{{ metadata.title }}">
+            <input type="hidden" name="body" value='"{{ metadata.description }}"'>
+            <input type="hidden" name="image_url" value="{{ metadata.image_url }}">
+            <input type="hidden" name="image_alt" value="{{ metadata.image_alt }}">
+            <button>
+                {% translate "Submit" %}
+            </button>
+            <button id="copy-data-btn" type="button">
+                {% translate "Copy to form" %}
+            </button>
+        </form>
+        {% if metadata.image_url %}
+            <img class="object-cover m-0 w-full aspect-video"
+                 src="{{ metadata.image_url }}"
+                 alt="{{ metadata.image_alt }}">
+        {% endif %}
+    </header>
+    <div class="flex-grow p-2 bg-bg">
         <hgroup>
             {% if metadata.title %}
                 <h1>
@@ -12,41 +36,50 @@
                     <strong>{{ metadata.site_name }}</strong>
                 </p>
             {% endif %}
-            <p>
-                <small>{{ url }}</small>
-            </p>
         </hgroup>
         {% if metadata.description %}
             <p>
                 {{ metadata.description }}
             </p>
         {% endif %}
+        <p>
+            <a href="{{ metadata.url }}" target="_blank"><small>{{ metadata.url }}</small></a>
+        </p>
     </div>
-    <div class="mx-4">
-        {% if metadata.image %}
-            <img src="{{ metadata.image }}" alt="{{ metadata.title }}">
-        {% endif %}
-    </div>
+    <footer class="text-center">
+        <small class="text-muted">
+            {% translate "URL Preview" %}
+        </small>
+    </footer>
 </article>
 <script>
+    var copyDataBtn = document.getElementById("copy-data-btn");
+
+    var urlInput = document.querySelector('input[name="url"]');
+    var imgInput = document.querySelector('input[name="image_url"]');
+    var imgAltInput = document.querySelector('input[name="image_alt"]');
     var titleInput = document.querySelector('input[name="title"]');
     var bodyInput = document.querySelector('textarea[name="body"]');
-    var imgInput = document.querySelector('input[name="image"]');
+
+    var url = "{{ metadata.url }}";
+    var img = "{{ metadata.image_url }}";
+    var imgAlt = "{{ metadata.image_alt|default:metadata.title }}";
     var title = "{{ metadata.title }}";
-    var body = "{{ metadata.description }}";
-    var img = "{{ metadata.image }}";
+    var body = "\"{{ metadata.description }}\"";
 
-    var urlPreview = document.getElementById('url_preview');
+    function setAttrs(attr, value) {
+        urlInput[attr] = value ?? url;
+        imgInput[attr] = value ?? img;
+        imgAltInput[attr] = value ?? imgAlt;
+        titleInput[attr] = value ?? title;
+        bodyInput[attr] = value ?? body;
+    }
 
-    urlPreview.addEventListener("click", function() {
-        if (titleInput.value == "") {
-            titleInput.value = title;
-        }
-        if (bodyInput.value == "") {
-            bodyInput.value = body;
-        }
-        if (imgInput?.value == "") {
-            imgInput.value = img;
+    copyDataBtn.addEventListener("mouseenter", () => setAttrs("placeholder"))
+    copyDataBtn.addEventListener("mouseleave", () => setAttrs("placeholder", ""))
+    copyDataBtn.addEventListener("click", () => {
+        if (confirm("{% translate 'Are you sure you want to copy the information from the URL preview? This will overwrite any information you have entered manually.' %}")) {
+            setAttrs("value");
         }
     });
 </script>

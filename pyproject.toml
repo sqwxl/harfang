@@ -7,6 +7,7 @@ blank_line_after_tag = "load,extends,endblock,endpartialdef"
 blank_line_before_tag = "block,partialdef"
 custom_blocks = "partialdef,recursetree"
 format_attribute_template_tags = true
+format_js = true
 line_break_after_multiline_tag = true
 max_line_length = 80
 profile = "django"

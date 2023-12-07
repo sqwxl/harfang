@@ -11,7 +11,10 @@ from .models import Post
 class PostForm(AppModelForm):
     class Meta:
         model = Post
-        fields = ["url", "title", "body"]
+        fields = ["url", "title", "body", "image_url", "image_alt"]
+        labels = {
+            "url": _("URL"),
+        }
         help_texts = {
             "title": _("Maximum {n} characters").format(
                 n=settings.POST_TITLE_MAX_LENGTH
@@ -25,7 +28,8 @@ class PostForm(AppModelForm):
         }
         widgets = {
             "body": forms.Textarea(),
-            "url": forms.TextInput(),
+            "image_url": forms.HiddenInput(),
+            "image_alt": forms.HiddenInput(),
         }
 
     def __init__(self, *args, **kwargs):
@@ -35,6 +39,6 @@ class PostForm(AppModelForm):
                 "hx-trigger": "change, keyup delay:250ms changed",
                 "hx-get": reverse("metadata:scrape"),
                 "hx-target": "#url-preview-wrapper",
-                "hx-include": "#id_body,#id_title",  # TODO: remove ?
+                "hx-indicator": "#url-preview-wrapper",
             }
         )

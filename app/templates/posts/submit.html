@@ -1,13 +1,24 @@
 {% extends "base_form.html" %}
 
 {% block form %}
-    <form method="post">
-        {% csrf_token %}
-        {{ form }}
-        <button>
-            Submit
-        </button>
-    </form>
-    <p id="url-preview-wrapper">
-    </p>
+    <div class="flex flex-wrap gap-4 mb-4">
+        <form method="post" class="flex-grow">
+            {% csrf_token %}
+            {{ form }}
+            <button>
+                Submit
+            </button>
+        </form>
+        <div id="url-preview-wrapper"
+             class="flex-grow p-0 rounded-lg border-2 bg-bg1 min-h-[20rem] basis-40 border-fg">
+            <div class="flex flex-col justify-center items-center h-full">
+                <p class="text-muted">
+                    URL Preview
+                </p>
+                <div>
+                    {% include "partials/spinner.html" %}
+                </div>
+            </div>
+        </div>
+    </div>
 {% endblock form %}

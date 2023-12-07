@@ -1,5 +1,3 @@
-from typing import TypedDict
-
 import extruct
 import requests
 
@@ -11,25 +9,18 @@ from w3lib.html import get_base_url
 SYTAXES = ["opengraph"]
 
 
-class SiteData(TypedDict):
-    _type: str
-    title: str
-    description: str
-    site_name: str
-    image: str
-
-
 def get_opengraph_data(data):
     for item in data:
         obj_type = item.get("@type")
         if obj_type is not None:
-            return SiteData(
-                _type=obj_type,
-                title=item.get("og:title"),
-                description=item.get("og:description"),
-                site_name=item.get("og:site_name"),
-                image=item.get("og:image"),
-            )
+            return {
+                "type": obj_type,
+                "title": item.get("og:title"),
+                "description": item.get("og:description"),
+                "site_name": item.get("og:site_name"),
+                "image_url": item.get("og:image"),
+                "image_alt": item.get("og:image:alt"),
+            }
 
 
 def get_data(data):
@@ -39,8 +30,11 @@ def get_data(data):
                 return get_opengraph_data(data[syntax])
 
 
-def scrape_metadata(url) -> SiteData | None:
-    r = requests.get(url, timeout=settings.METADATA_SCRAPER_TIMEOUT)
+def scrape_metadata(url):
+    try:
+        r = requests.get(url, timeout=settings.METADATA_SCRAPER_TIMEOUT)
+    except BaseException:
+        return None
 
     content_type = r.headers.get("Content-Type", "")
     if not content_type.startswith("text/html"):
@@ -48,7 +42,10 @@ def scrape_metadata(url) -> SiteData | None:
 
     base_url = get_base_url(r.text, r.url)
 
-    data = extruct.extract(
+    d = extruct.extract(
         r.text, base_url=base_url, syntaxes=SYTAXES, uniform=True
     )
-    return get_data(data)
+    data = get_data(d)
+    if data is not None:
+        data["url"] = base_url
+        return data

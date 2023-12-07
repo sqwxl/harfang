@@ -54,7 +54,16 @@ class Post(PointsMixin, models.Model):
     body = models.CharField(
         _("body"), blank=True, max_length=settings.POST_BODY_MAX_LENGTH
     )
-    submit_date = models.DateTimeField(default=timezone.now, editable=False)
+    image_url = models.URLField(
+        _("image"),
+        blank=True,
+        null=True,
+        max_length=settings.POST_URL_MAX_LENGTH,
+    )
+    image_alt = models.CharField(_("image alt"), blank=True, max_length=255)
+    submit_date = models.DateTimeField(
+        _("date submitted"), default=timezone.now, editable=False
+    )
     # TODO enable_comments = models.BooleanField(default=True)
 
     objects = PostQuerySet.as_manager()

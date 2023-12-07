@@ -30,7 +30,7 @@ class MetadataScraperTest(TestCase):
         self.assertEqual(data["site_name"], "test site name")
         self.assertEqual(data["description"], "test description")
         self.assertEqual(data["image"], "test image")
-        self.assertEqual(data["_type"], "test type")
+        self.assertEqual(data["type"], "test type")
 
     @patch("requests.get")
     def test_returns_none_if_not_html(self, mock_get):

@@ -27,6 +27,18 @@
         <p>
             <a href="{{ post.url }}" target="_blank">{{ post.url }}</a>
         </p>
+        {% if post.image_url %}
+            <figure class="overflow-hidden">
+                <img class="mx-auto"
+                     src="{{ post.image_url }}"
+                     alt="Image for {{ post.title }}">
+                <figcaption class="text-center">
+                    <a href="{{ post.image_url }}" target="_blank" class="no-anchor">
+                        {{ post.image_url }}
+                    </a>
+                </figcaption>
+            </figure>
+        {% endif %}
         <p>
             {{ post.body|linebreaks }}
         </p>
