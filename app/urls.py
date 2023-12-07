@@ -9,6 +9,7 @@ urlpatterns = [
     path("posts/", include("app.posts.urls")),
     path("comments/", include("app.comments.urls")),
     path("users/", include("app.users.urls")),
+    path("metadata/", include("app.metadata.urls")),
     path(
         "about/", TemplateView.as_view(template_name="about.html"), name="about"
     ),

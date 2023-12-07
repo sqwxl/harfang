@@ -25,6 +25,7 @@ INSTALLED_APPS = [
     "app",
     "app.comments",
     "app.posts",
+    "app.metadata",
     "app.users",
 ]
 
