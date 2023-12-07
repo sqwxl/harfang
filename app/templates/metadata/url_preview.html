@@ -1,0 +1,52 @@
+<article class="flex p-4 mt-4 max-w-none rounded-md border cursor-pointer border-muted prose hover:border-fg"
+         id="url_preview">
+    <div>
+        <hgroup>
+            {% if metadata.title %}
+                <h1>
+                    {{ metadata.title }}
+                </h1>
+            {% endif %}
+            {% if metadata.site_name %}
+                <p>
+                    <strong>{{ metadata.site_name }}</strong>
+                </p>
+            {% endif %}
+            <p>
+                <small>{{ url }}</small>
+            </p>
+        </hgroup>
+        {% if metadata.description %}
+            <p>
+                {{ metadata.description }}
+            </p>
+        {% endif %}
+    </div>
+    <div class="mx-4">
+        {% if metadata.image %}
+            <img src="{{ metadata.image }}" alt="{{ metadata.title }}">
+        {% endif %}
+    </div>
+</article>
+<script>
+    var titleInput = document.querySelector('input[name="title"]');
+    var bodyInput = document.querySelector('textarea[name="body"]');
+    var imgInput = document.querySelector('input[name="image"]');
+    var title = "{{ metadata.title }}";
+    var body = "{{ metadata.description }}";
+    var img = "{{ metadata.image }}";
+
+    var urlPreview = document.getElementById('url_preview');
+
+    urlPreview.addEventListener("click", function() {
+        if (titleInput.value == "") {
+            titleInput.value = title;
+        }
+        if (bodyInput.value == "") {
+            bodyInput.value = body;
+        }
+        if (imgInput?.value == "") {
+            imgInput.value = img;
+        }
+    });
+</script>

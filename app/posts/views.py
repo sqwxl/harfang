@@ -95,7 +95,7 @@ def create(request):
 
     return TemplateResponse(
         request,
-        "base_form.html",
+        "posts/submit.html",
         {
             "form": form,
             "page_title": _("Submit Post"),
