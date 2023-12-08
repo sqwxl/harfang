@@ -18,3 +18,8 @@ def can_delete_comment(user, comment):
 @register.filter(name="can_restore")
 def can_restore_comment(user, comment):
     return can_restore(user, comment)
+
+
+@register.inclusion_tag("comments/partials/comment_count.html")
+def comment_count(item):
+    return {"n": item.comments.count()}

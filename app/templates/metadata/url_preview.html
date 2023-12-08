@@ -1,40 +1,37 @@
-<article class="flex overflow-hidden flex-col rounded-lg prose prose-sm"
+<form method="post"
+      action="{% url 'posts:submit' %}"
+      class="p-2 text-center"
+      hx-confirm="{% translate 'Are you sure you want to use the information from the URL preview? This will discard any information you have entered manually.' %}">
+    {% csrf_token %}
+    <input type="hidden" name="url" value="{{ metadata.url }}">
+    <input type="hidden" name="title" value="{{ metadata.title }}">
+    <input type="hidden" name="body" value='"{{ metadata.description }}"'>
+    <input type="hidden" name="image_url" value="{{ metadata.image_url }}">
+    <input type="hidden" name="image_alt" value="{{ metadata.image_alt }}">
+    <button>
+        {% translate "Submit" %}
+    </button>
+    <button id="copy-data-btn" type="button">
+        {% translate "Copy to form" %}
+    </button>
+</form>
+<article class="flex overflow-hidden flex-col prose-sm sm:prose"
          id="url_preview">
     <header>
-        <form method="post"
-              action="{% url 'posts:submit' %}"
-              class="p-2 text-center"
-              hx-confirm="{% translate 'Are you sure you want to use the information from the URL preview? This will discard any information you have entered manually.' %}">
-            {% csrf_token %}
-            <input type="hidden" name="url" value="{{ metadata.url }}">
-            <input type="hidden" name="title" value="{{ metadata.title }}">
-            <input type="hidden" name="body" value='"{{ metadata.description }}"'>
-            <input type="hidden" name="image_url" value="{{ metadata.image_url }}">
-            <input type="hidden" name="image_alt" value="{{ metadata.image_alt }}">
-            <button>
-                {% translate "Submit" %}
-            </button>
-            <button id="copy-data-btn" type="button">
-                {% translate "Copy to form" %}
-            </button>
-        </form>
         {% if metadata.image_url %}
-            <img class="object-cover m-0 w-full aspect-video"
-                 src="{{ metadata.image_url }}"
-                 alt="{{ metadata.image_alt }}">
+            <div class="not-prose">
+                <img class="object-cover w-full aspect-video"
+                     src="{{ metadata.image_url }}"
+                     alt="{{ metadata.image_alt|default_if_none:'' }}">
+            </div>
         {% endif %}
     </header>
-    <div class="flex-grow p-2 bg-bg">
+    <div class="p-2 grow bg-bg">
         <hgroup>
             {% if metadata.title %}
                 <h1>
                     {{ metadata.title }}
                 </h1>
-            {% endif %}
-            {% if metadata.site_name %}
-                <p>
-                    <strong>{{ metadata.site_name }}</strong>
-                </p>
             {% endif %}
         </hgroup>
         {% if metadata.description %}
@@ -43,7 +40,7 @@
             </p>
         {% endif %}
         <p>
-            <a href="{{ metadata.url }}" target="_blank"><small>{{ metadata.url }}</small></a>
+            <a href="{{ metadata.url }}" target="_blank"><small>{{ metadata.site_name|default:metadata.url }}</small></a>
         </p>
     </div>
     <footer class="text-center">

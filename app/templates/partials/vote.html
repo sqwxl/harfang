@@ -27,15 +27,5 @@
     </span>
 {% endpartialdef %}
 
-{% partialdef points %}
-    <span id="{{ item|element_id }}-points">
-        {% blocktranslate trimmed count n=item.points %}
-            {{ n }} point
-        {% plural %}
-            {{ n }} points
-        {% endblocktranslate %}
-    </span>
-{% endpartialdef %}
-
 {% partial form %}
-{% partial points %}
+{% points_count item %}

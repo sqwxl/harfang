@@ -2,7 +2,7 @@
 
 <article id="{{ comment|element_id }}">
     <header class="text-sm text-muted">
-        {% include "partials/vote.html#points" with item=comment %}
+        {% points_count comment %}
         🞄
         {% include "partials/profile_link.html" with user=comment.user %}
         🞄
@@ -11,30 +11,10 @@
                 {{ age }} ago
             {% endblocktranslate %}
         </span>
-        {% if tree %}
-            {% comment %}
-        {% if comment.is_child_node %}
-            🞄 <a href="#comment-{{ comment.get_root.id }}">{% translate "root" %}{{ " " }}</a>
-            🞄 <a href="#comment-{{ comment.parent.id }}">{% translate "parent" %}{{ " " }}</a>
-        {% endif %}
-            {% endcomment %}
-            {% if not comment.is_leaf_node %}
-                <button class="font-bold bg-transparent hover:bg-transparent no-js-hide hover:text-fg"
-                    type="button"
-                    aria-label="Fold/unfold discussion"
-                    {# djlint: off #}
-_="on click toggle @hidden on <span/> in me then toggle @hidden on #{{ comment|element_id }}-children"
-                    {# djlint: on #}
-                    >
-                    <span>－</span>
-                    <span hidden>＋</span>
-                </button>
-            {% endif %}
-        {% endif %}
     </header>
     <a href="{% url 'comments:detail' comment.id %}"
        class="hover:no-underline no-anchor">
-        <p id="{{ comment|element_id }}-body" class="max-w-none prose">
+        <p id="{{ comment|element_id }}-body" class="prose-sm sm:prose">
             {% if comment.is_removed %}
                 <span class="italic text-muted">{% translate "deleted" %}</span>
             {% else %}

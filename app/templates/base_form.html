@@ -1,18 +1,15 @@
 {% extends "base_page.html" %}
 
 {% block content %}
-    <div>
 
-        {% block form %}
-            <form method="post">
-                {% csrf_token %}
-                {{ form }}
-                <button>
-                    {% translate "Save" as save %}
-                    {{ submit_text|default:save }}
-                </button>
-            </form>
-        {% endblock form %}
-
-    </div>
+    {% block form %}
+        <form method="post">
+            {% csrf_token %}
+            {{ form }}
+            <button>
+                {% translate "Save" as save %}
+                {{ submit_text|default:save }}
+            </button>
+        </form>
+    {% endblock form %}
 {% endblock content %}

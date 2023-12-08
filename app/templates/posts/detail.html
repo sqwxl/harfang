@@ -1,6 +1,7 @@
 {% extends "base_page.html" %}
 
-{% block subtitle %}
+{% block header %}
+    {{ block.super }}
     <p>
         {% include "partials/vote.html" with item=post %}
         🞄
@@ -20,10 +21,10 @@
             </a>
         {% endif %}
     </p>
-{% endblock subtitle %}
+{% endblock header %}
 
 {% block content %}
-    <article class="max-w-none prose">
+    <article class="sm:max-w-none prose-sm sm:prose">
         <p>
             <a href="{{ post.url }}" target="_blank">{{ post.url }}</a>
         </p>
@@ -47,14 +48,14 @@
 
 {% block discussion %}
     {% if form %}
-        <div class="prose">
+        <div class="prose-sm sm:prose">
             <h2 id="comment-form">
                 {% translate "Leave a Comment" %}
             </h2>
         </div>
         {% include "comments/partials/discussion_form.html" %}
     {% endif %}
-    <div class="prose">
+    <div class="prose-sm sm:prose">
         <h2>
             {% blocktranslate trimmed with n=post.comments.count %}
                 Comments ({{ n }})

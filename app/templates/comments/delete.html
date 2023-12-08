@@ -1,8 +1,9 @@
 {% extends "base_page.html" %}
 
-{% block subtitle %}
+{% block header %}
+    {{ block.super }}
     {% include "comments/partials/article.html" %}
-{% endblock subtitle %}
+{% endblock header %}
 
 {% block content %}
     <form method="post" action="{% url 'comments:delete' post.id %}">

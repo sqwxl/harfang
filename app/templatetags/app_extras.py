@@ -31,3 +31,8 @@ def hx_attrs(context):
             rv.append(f"{attr}={v}")
 
         return " ".join(rv)
+
+
+@register.inclusion_tag("partials/points_count.html")
+def points_count(item):
+    return {"item": item}

@@ -40,12 +40,12 @@
         {% endif %}
         <script defer src="{% static 'js/htmx/ext/preload.js' %}"></script>
         <title>
-            Harfang |
 
             {% block page_title %}
                 {{ page_title }}
             {% endblock page_title %}
 
+            - Harfang
         </title>
     </head>
     <body hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'
@@ -61,8 +61,8 @@
                 if (typeof window.htmx !== "undefined") {
                     htmx.on("htmx:afterSettle", function(detail) {
                         if (
-                            typeof window.djdt !== "undefined"
-                            && detail.target instanceof HTMLBodyElement
+                            typeof window.djdt !== "undefined" &&
+                            detail.target instanceof HTMLBodyElement
                         ) {
                             djdt.show_toolbar();
                         }

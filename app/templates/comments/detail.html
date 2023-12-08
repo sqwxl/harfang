@@ -2,10 +2,10 @@
 
 {% load app_extras comments_extras %}
 
-{% block title %}
-    <a href="{% url 'posts:detail' comment.post.id %}">← {% translate "Return to" %} <em>{{ comment.post.title|truncatechars:80 }}</em></a>
+{% block header %}
+    <a href="{% url 'posts:detail' comment.post.id %}">← {% translate "Return to" %} <em>{{ comment.post.titlex|truncatechars:80 }}</em></a>
     {{ block.super }}
-{% endblock title %}
+{% endblock header %}
 
 {% block content %}
     <div class="flex">
@@ -18,7 +18,7 @@
 {% endblock content %}
 
 {% block discussion %}
-    <div class="prose">
+    <div class="prose-sm sm:prose">
         <h2>
             {% blocktranslate trimmed with n=comment.get_descendant_count %}
                 Replies ({{ n }})

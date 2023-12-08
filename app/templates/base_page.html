@@ -7,16 +7,13 @@
     </header>
     <main class="overflow-x-hidden px-1 mx-auto w-full max-w-7xl sm:px-4 grow">
         <article>
-            <hgroup class="mb-4 max-w-none prose">
+            <hgroup class="mb-2 sm:mb-6 sm:max-w-none sm:text-left prose-sm sm:prose">
 
-                {% block title %}
-                    <h1>
+                {% block header %}
+                    <h1 class="text-center sm:text-left">
                         {{ page_title }}
                     </h1>
-                {% endblock title %}
-
-                {% block subtitle %}
-                {% endblock subtitle %}
+                {% endblock header %}
 
             </hgroup>
             <div id="main-content">

@@ -1,0 +1,9 @@
+{% load app_extras %}
+
+<span id="{{ item|element_id }}-points">
+    {% blocktranslate trimmed count n=item.points %}
+        {{ n }} point
+    {% plural %}
+        {{ n }} points
+    {% endblocktranslate %}
+</span>

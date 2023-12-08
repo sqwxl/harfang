@@ -1,35 +1,25 @@
-{% load app_extras %}
+{% load app_extras comments_extras %}
 
-{% partialdef title %}
-    <a href="{% url 'posts:detail' post.id %}"
-       preload="mouseover"
-       class="no-anchor">{{ post.title }}</a>
-{% endpartialdef %}
-
-<div id="{{ post|element_id }}" class="flex m-2 h-16">
+<div id="{{ post|element_id }}" class="flex my-4">
     {% include "partials/vote.html#form" with item=post %}
     <article>
         <header>
-            {% partial title %}
+            <a href="{% url 'posts:detail' post.id %}"
+               preload="mouseover"
+               class="no-anchor">{{ post.title }}</a>
         </header>
         <p class="text-sm text-muted">
-            {% include "partials/vote.html#points" with item=post %}
+            {% points_count post %}
             🞄
             {% include "partials/profile_link.html" with user=post.user %}
             🞄
-            <span>
+            <span class="whitespace-nowrap">
                 {% blocktranslate trimmed with age=post.submit_date|timesince %}
                     {{ age }} ago
                 {% endblocktranslate %}
             </span>
             🞄
-            <span>
-                {% blocktranslate trimmed count n=post.comments.count %}
-                    {{ n }} comment
-                {% plural %}
-                    {{ n }} comments
-                {% endblocktranslate %}
-            </span>
+            {% comment_count post %}
         </p>
     </article>
 </div>

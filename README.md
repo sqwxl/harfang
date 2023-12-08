@@ -19,12 +19,13 @@ Features so far:
 - Internationalization
 - Admin operations (content moderation)
 - Extensive tests
+- Rich link previews
 
 Next up:
 
 - Public API (for bot accounts)
-- Rich link previews
 - Optimized accessibility
+- Responsive design
 - Search
 - Media Posts
 - Markdown syntax for posts

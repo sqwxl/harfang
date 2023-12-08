@@ -1,25 +1,29 @@
 {% extends "base_feed.html" %}
 
-{% load static %}
+{% load app_extras comments_extras static %}
 
 {% block feed %}
-    {% for post in page_obj %}
-        <article class="mx-2 mb-6">
-            <hgroup>
-                <h1 class="text-xl">
-                    <a href="{% url 'posts:detail' post.id %}">{{ post.title }}</a>
-                </h1>
-                <p class="text-sm text-muted">
-                    {% include "partials/vote.html" with item=post %}
-                    🞄
-                    {% blocktranslate trimmed with age=post.submit_date|timesince %}
-                        {{ age }} ago
-                    {% endblocktranslate %}
-                </p>
-            </hgroup>
-            <p class="text-muted">
-                {{ post.body|truncatewords:40 }}
-            </p>
-        </article>
-    {% endfor %}
+    <ul>
+        {% for post in page_obj %}
+            <li>
+                <a href="{{ post.get_absolute_url }}"
+                   class="hover:no-underline no-anchor">
+                    <article class="p-1 mb-4 rounded sm:p-4 sm:mx-2 sm:mb-6 sm:rounded-lg bg-bg0_h">
+                        <p class="text-sm text-muted">
+                            {% points_count post %}
+                            🞄
+                            {% comment_count post %}
+                            🞄
+                            {% blocktranslate trimmed with age=post.submit_date|timesince %}
+                                {{ age }} ago
+                            {% endblocktranslate %}
+                        </p>
+                        <p>
+                            {{ post.title|truncatewords:40 }}
+                        </p>
+                    </article>
+                </a>
+            </li>
+        {% endfor %}
+    </ul>
 {% endblock feed %}

@@ -1,33 +1,35 @@
 {% load static %}
 
-<nav class="flex items-center py-2 px-4 mb-4 whitespace-nowrap sm:mb-10 full bg-bg0_h"
+<nav class="py-1 px-2 mb-4 whitespace-nowrap sm:py-2 sm:px-4 sm:mb-10 bg-bg0_h"
      preload="mouseover">
-    <a href="{% url 'home' %}" class="mr-4 w-12">
-        <img alt="white feather emoji" src="{% static 'images/feather-sm.png' %}">
-    </a>
-    <menu class="flex flex-wrap items-center grow">
-        <li class="px-4">
+    <menu class="flex flex-wrap items-center">
+        <li class="mr-2 w-8 sm:mr-4 sm:w-12">
+            <a href="{% url 'home' %}">
+                <img alt="white feather emoji" src="{% static 'images/feather-sm.png' %}">
+            </a>
+        </li>
+        <li class="mr-2 sm:mr-4">
             <a href="{% url 'posts:top' %}" class="no-anchor">{% translate "Top" %}</a>
         </li>
-        <li class="px-4">
+        <li class="mr-2 sm:mr-4">
             <a href="{% url 'posts:latest' %}" class="no-anchor">{% translate "Latest" %}</a>
         </li>
         {% if user.is_authenticated %}
-            <li class="px-4">
+            <li class="mr-2 sm:mr-4">
                 <a href="{% url 'posts:submit' %}" class="no-anchor">{% translate "Submit" %}</a>
             </li>
         {% endif %}
         <li class="grow">
         </li>
         {% if user.is_authenticated %}
-            <li class="px-4 !text-fg">
+            <li class="ml-2 sm:ml-4">
                 {% include "partials/profile_link.html" with user=user %}
             </li>
-            <li class="px-4">
+            <li class="hidden sm:block sm:ml-4">
                 <a hx-post="{% url 'logout' %}" hx-target="body" class="no-anchor">{% translate "Logout" %}</a>
             </li>
         {% else %}
-            <li class="px-4">
+            <li class="ml-2 sm:ml-4">
                 <a href="{% url 'login' %}" class="no-anchor">{% translate "Login" %}</a>
             </li>
         {% endif %}

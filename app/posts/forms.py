@@ -36,7 +36,7 @@ class PostForm(AppModelForm):
         super().__init__(*args, **kwargs)
         self.fields["url"].widget.attrs.update(
             {
-                "hx-trigger": "change, keyup delay:250ms changed",
+                "hx-trigger": "change, keyup delay:400ms changed",
                 "hx-get": reverse("metadata:scrape"),
                 "hx-target": "#url-preview-wrapper",
                 "hx-indicator": "#url-preview-wrapper",

@@ -3,25 +3,25 @@
 {% load app_extras static %}
 
 {% block feed %}
-    {% for comment in page_obj %}
-        <article class="mx-2 mb-6">
-            <hgroup>
-                <h1 class="text-xl">
-                    <a href="{% url 'posts:detail' comment.post.id %}#{{ comment|element_id }}">
-                        {{ comment.post.title }}
-                    </a>
-                </h1>
-                <p class="text-sm text-muted">
-                    {% include "partials/vote.html" with item=comment %}
-                    🞄
-                    {% blocktranslate trimmed with age=comment.submit_date|timesince %}
-                        {{ age }} ago
-                    {% endblocktranslate %}
-                </p>
-            </hgroup>
-            <p class="text-muted">
-                {{ comment.body|truncatewords:40 }}
-            </p>
-        </article>
-    {% endfor %}
+    <ul>
+        {% for comment in page_obj %}
+            <li>
+                <a href="{{ comment.get_absolute_url }}"
+                   class="hover:no-underline no-anchor">
+                    <article class="p-1 mb-4 rounded sm:p-4 sm:mx-2 sm:mb-6 sm:rounded-lg bg-bg0_h">
+                        <p class="text-sm text-muted">
+                            {% points_count comment %}
+                            🞄
+                            {% blocktranslate trimmed with age=comment.submit_date|timesince %}
+                                {{ age }} ago
+                            {% endblocktranslate %}
+                        </p>
+                        <p class="prose-sm">
+                            {{ comment.body|truncatewords:40 }}
+                        </p>
+                    </article>
+                </a>
+            </li>
+        {% endfor %}
+    </ul>
 {% endblock feed %}

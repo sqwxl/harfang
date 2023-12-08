@@ -32,4 +32,17 @@
             </a>
         {% endif %}
     {% endif %}
+    {% if not comment.is_leaf_node %}
+        <button class="bg-transparent hover:bg-transparent text-muted hover:text-fg"
+                type="button"
+                aria-label="Fold/unfold discussion"
+                _="on click toggle @hidden on my children then toggle @hidden on #{{ comment|element_id }}-children">
+            <p>
+                <span class="font-bold">－</span> hide replies
+            </p>
+            <p hidden>
+                <span class="font-bold">＋</span> show replies
+            </p>
+        </button>
+    {% endif %}
 </footer>

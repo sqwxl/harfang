@@ -2,18 +2,8 @@
 
 {% load static %}
 
-{% block page_title %}
-    {% translate "About" %}
-{% endblock page_title %}
-
-{% block title %}
-    <h1>
-        {% translate "About" %}
-    </h1>
-{% endblock title %}
-
 {% block content %}
-    <div align="center" class="prose">
+    <div align="center" class="sm:max-w-none prose-sm sm:prose">
         <figure>
             <img src="{% static 'images/harfang_emoji-md.png' alt='A snowy owl emoji' %}">
             <figcaption>

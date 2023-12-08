@@ -1,8 +1,7 @@
 from django.contrib.auth import views as auth_views
 from django.urls import include, path
-from django.views.generic import TemplateView
 
-from .views import home
+from .views import home, about
 
 urlpatterns = [
     path("", home, name="home"),
@@ -10,9 +9,7 @@ urlpatterns = [
     path("comments/", include("app.comments.urls")),
     path("users/", include("app.users.urls")),
     path("metadata/", include("app.metadata.urls")),
-    path(
-        "about/", TemplateView.as_view(template_name="about.html"), name="about"
-    ),
+    path("about/", about, name="about"),
     path(
         "login/",
         auth_views.LoginView.as_view(
