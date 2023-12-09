@@ -6,7 +6,7 @@
 
 A social media posting and discussion site with a focus on simplicity and accessibility.\
 Inspired by Hacker News and Reddit.\
-Built with Django, HTMX, Hyperscript & Tailwind CSS
+Built with Django, HTMX, Hyperscript and Tailwind CSS
 
 </div>
 
@@ -17,19 +17,19 @@ Features so far:
 - Votes and points system for posts and comments
 - User profiles
 - Internationalization
-- Admin operations (content moderation)
+- Content moderation
 - Extensive tests
 - Rich link previews
+- Responsive design
+- Markdown syntax for posts
 
 Next up:
 
 - Public API (for bot accounts)
-- Optimized accessibility
-- Responsive design
+- Optimized for accessibility
 - Search
 - Media Posts
-- Markdown syntax for posts
-- User DMs
+- DMs
 - SEO (django-meta)
 - Email system
 - Dark/Light color-schemes
@@ -50,7 +50,9 @@ just populate
 just runserver
 ```
 
-### Reproducible Dev Environment
+### Reproducible Dev Environment (optional)
 
-To ensure consistency, you can optionally use [`devenv`](https://devenv.sh/getting-started/)
-and [`direnv`](https://devenv.sh/automatic-shell-activation/).
+Use nix via [`devenv`](https://devenv.sh/getting-started/) to guarantee a
+consistent environment.\
+Combine with [`direnv`](https://devenv.sh/automatic-shell-activation/) for
+automatic shell activation.
