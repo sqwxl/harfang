@@ -1,3 +1,4 @@
+bleach==6.1.0
 Django==5.0
 django-browser-reload==1.12.1
 django-debug-toolbar==4.2.0
