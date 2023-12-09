@@ -40,9 +40,9 @@
                 </figcaption>
             </figure>
         {% endif %}
-        <p>
-            {{ post.body|linebreaks }}
-        </p>
+        <div class="mb-8 sm:mb-14">
+            {{ post.html|safe }}
+        </div>
     </article>
 {% endblock content %}
 

@@ -126,3 +126,5 @@ METADATA_SCRAPER_TIMEOUT = 5
 MARKDOWN_EXTENSIONS = ["fenced_code", "codehilite"]
 # TODO: add css for codehilite https://python-markdown.github.io/extensions/code_hilite/
 MARKDOWN_EXTENSION_CONFIGS = dict()
+
+BLEACH_ALLOWED_PROTOCOLS = ["http", "https", "mailto"]
