@@ -8,6 +8,7 @@ urlpatterns = [
     path("posts/", include("app.posts.urls")),
     path("comments/", include("app.comments.urls")),
     path("users/", include("app.users.urls")),
+    path("md/", include("app.markdown.urls")),
     path("metadata/", include("app.metadata.urls")),
     path("about/", about, name="about"),
     path(

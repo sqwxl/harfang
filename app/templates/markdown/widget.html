@@ -1,0 +1,21 @@
+{% load i18n %}
+
+<div>
+    <menu class="flex gap-4">
+        <li id="md-li"
+            class="font-bold"
+            _="on click add .font-bold to me remove .font-bold from #preview-li remove .hidden from #md add .hidden to #preview">
+            <a href="#">{% translate "Markdown" %} </a>
+        </li>
+        <li id="preview-li"
+            _="on click add .font-bold to me remove .font-bold from #md-li remove .hidden from #preview add .hidden to #md">
+            <a href="#" hx-post="{% url 'markdown:to_html' %}" hx-target="#preview">{% translate "Preview" %} </a>
+        </li>
+    </menu>
+    <div id="md">
+        {% include "django/forms/widgets/textarea.html" %}
+    </div>
+    <div id="preview"
+         class="hidden p-2 my-4 mt-2 rounded sm:p-4 sm:max-w-none prose-sm bg-fg text-bg min-h-[15rem]">
+    </div>
+</div>

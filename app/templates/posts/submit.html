@@ -2,14 +2,14 @@
 
 {% block form %}
     <div class="flex flex-wrap gap-4">
-        <form method="post" class="grow">
+        <form method="post" class="grow basis-96">
             {% csrf_token %}
             {{ form }}
             <button>
                 Submit
             </button>
         </form>
-        <div class="grow basis-40 prose-sm sm:prose">
+        <div class="grow prose-sm sm:prose">
             <h2>
                 {% translate "URL Preview" %}
             </h2>

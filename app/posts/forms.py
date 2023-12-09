@@ -4,6 +4,7 @@ from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 
 from app.forms import AppModelForm
+from app.markdown.widgets import MarkdownTextarea
 
 from .models import Post
 
@@ -27,7 +28,7 @@ class PostForm(AppModelForm):
             ),
         }
         widgets = {
-            "body": forms.Textarea(),
+            "body": MarkdownTextarea(),
             "image_url": forms.HiddenInput(),
             "image_alt": forms.HiddenInput(),
         }
