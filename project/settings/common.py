@@ -125,10 +125,12 @@ METADATA_SCRAPER_TIMEOUT = 5
 
 # https://python-markdown.github.io/extensions/
 MARKDOWN_EXTENSIONS = [
-    "fenced_code",
-    "codehilite",
     "nl2br",
+    "pymdownx.betterem",
     "pymdownx.emoji",
+    "pymdownx.highlight",
+    "pymdownx.saneheaders",
+    "pymdownx.superfences",
     "smarty",
     "tables",
 ]
