@@ -6,7 +6,6 @@ class MarkdownTextarea(forms.Textarea):
 
     def __init__(self, html=None, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        print(html)
         self.html = html
 
     def get_context(self, name, value, attrs):

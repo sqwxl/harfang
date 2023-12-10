@@ -126,19 +126,21 @@ METADATA_SCRAPER_TIMEOUT = 5
 # https://python-markdown.github.io/extensions/
 MARKDOWN_EXTENSIONS = [
     "nl2br",
+    "smarty",
+    "tables",
     "pymdownx.betterem",
     "pymdownx.emoji",
     "pymdownx.highlight",
     "pymdownx.saneheaders",
     "pymdownx.superfences",
-    "smarty",
-    "tables",
 ]
-# TODO: add css for codehilite https://python-markdown.github.io/extensions/code_hilite/
 MARKDOWN_EXTENSION_CONFIGS = {
     "pymdownx.emoji": {
         "emoji_generator": pymdownx.emoji.to_alt,
-    }
+    },
+    "pymdownx.highlight": {
+        "css_class": "not-prose rounded p-2",
+        "noclasses": True,
+        "pygments_style": "gruvbox-dark",
+    },
 }
-
-BLEACH_ALLOWED_PROTOCOLS = ["http", "https", "mailto"]
