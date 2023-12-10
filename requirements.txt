@@ -13,3 +13,4 @@ extruct==0.16.0
 factory-boy==3.3.0
 gunicorn==21.2.0
 Markdown==3.5.1
+pymdown-extensions==10.5
