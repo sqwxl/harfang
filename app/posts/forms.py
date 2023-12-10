@@ -28,7 +28,6 @@ class PostForm(AppModelForm):
             ),
         }
         widgets = {
-            "body": MarkdownTextarea(),
             "image_url": forms.HiddenInput(),
             "image_alt": forms.HiddenInput(),
         }
@@ -42,4 +41,7 @@ class PostForm(AppModelForm):
                 "hx-target": "#url-preview-wrapper",
                 "hx-indicator": "#url-preview-wrapper",
             }
+        )
+        self.fields["body"].widget = MarkdownTextarea(
+            html=getattr(self.instance, "body_html", "")
         )

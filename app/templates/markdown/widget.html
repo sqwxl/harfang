@@ -7,7 +7,9 @@
                type="checkbox"
                hx-post="{% url 'markdown:to_html' %}"
                hx-target="#preview"
-               _="on change toggle .hidden on <div/> in #editor">
+               hx-trigger="change target::checked"
+               _="on load call toggleView()
+                  on change call toggleView()">
         {# djlint: on #}
         <label for="preview-chk">
             {% translate "Preview" %}
@@ -19,6 +21,18 @@
         </div>
         <div id="preview"
              class="hidden p-2 my-4 mt-2 rounded sm:p-4 sm:max-w-none prose-sm bg-fg text-bg min-h-[15rem]">
+            {{ widget.html|safe }}
         </div>
     </div>
 </div>
+{# djlint: off #}
+<script type="text/hyperscript">
+    def toggleView()
+        if #preview-chk matches <:checked/>
+            set hiddenEl to 'md'
+        else 
+            set hiddenEl to 'preview'
+        end
+        take .hidden from <#editor>div/> for #{hiddenEl}
+    end
+</script>

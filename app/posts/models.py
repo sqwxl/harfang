@@ -55,7 +55,7 @@ class Post(PointsMixin, models.Model):
     body = models.CharField(
         _("body"), blank=True, max_length=settings.POST_BODY_MAX_LENGTH
     )
-    html = models.TextField(_("html"), blank=True, null=True)
+    body_html = models.TextField(_("html"), blank=True, null=True)
     image_url = models.URLField(
         _("image"),
         blank=True,
@@ -78,13 +78,13 @@ class Post(PointsMixin, models.Model):
             # increment user points when creating new post
             self.user.increment_points()
             # convert md to html
-            self.html = md_to_html(self.body)
+            self.body_html = md_to_html(self.body)
 
         if self.pk:
             # if the post exists, only convert md to html if needed
             og = Post.objects.get(pk=self.pk)
             if self.body != og.body:
-                self.html = md_to_html(self.body)
+                self.body_html = md_to_html(self.body)
 
         super().save(*args, **kwargs)
 
