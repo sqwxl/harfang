@@ -2,10 +2,12 @@ version: '3'
 
 services:
   app:
-    image: hn-django:latest
+    image: harfang:latest
     command: gunicorn project.wsgi --bind 0.0.0.0:8000
     volumes:
-      - .:/app:Z
+      - .:/usr/src/app:Z
+    env-file:
+      - .env
     networks:
       - backend
 
@@ -13,11 +15,11 @@ services:
     image: nginx:latest
     volumes:
       - ./nginx.conf:/etc/nginx/conf.d/default.conf:Z
-      - ./_static:/app/_static:Z
+      - ./static:/usr/src/app/static:Z
     depends_on:
       - app
     ports:
-      - "8000:80"
+      - "8000:3000"
     networks:
       - frontend
       - backend
