@@ -6,8 +6,7 @@ services:
     command: gunicorn project.wsgi --bind 0.0.0.0:8000
     volumes:
       - .:/usr/src/app:Z
-    env-file:
-      - .env
+    env_file: .env
     networks:
       - backend
 
