@@ -113,9 +113,12 @@ DEFAULT_PAGE_SIZE = 25
 
 COMMENTS_ALLOW_PROFANITIES = False
 PROFANITIES_LIST = []
-with open(BASE_DIR / "profanities.txt") as f:
-    for line in f:
-        PROFANITIES_LIST.append(line.strip())
+try:
+    with open(BASE_DIR / "profanities.txt") as f:
+        for line in f:
+            PROFANITIES_LIST.append(line.strip())
+except FileNotFoundError:
+    COMMENTS_ALLOW_PROFANITIES = True
 
 BIO_MAX_LENGTH = 500
 POST_TITLE_MAX_LENGTH = 200
