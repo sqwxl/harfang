@@ -19,7 +19,7 @@
         <div id="spinner" class="flex justify-center">
             {% include "partials/spinner.html" %}
         </div>
-        <div id="lazy-load-trigger" hx-swap-oob="true">
+        <div id="lazy-load-trigger">
             {% if page_obj.has_next %}
                 <div class="invisible"
                      hx-trigger="intersect"
@@ -27,8 +27,9 @@
                      hx-push-url="false"
                      hx-indicator="#spinner"
                      hx-target="#feed"
+                     hx-swap="beforeend"
                      hx-select="#feed"
-                     hx-swap="beforeend">
+                     hx-select-oob="#lazy-load-trigger">
                     :-)
                 </div>
             {% else %}

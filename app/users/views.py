@@ -7,7 +7,7 @@ from django.utils.translation import gettext as _
 
 from app.comments.models import Comment
 from app.posts.models import Post
-from app.utils import get_page_by_request
+from app.utils import get_page
 
 from .forms import ProfileForm, UserForm
 from .models import Profile, User
@@ -82,7 +82,7 @@ def posts(request, username):
         "users/posts.html",
         {
             "view_user": view_user,
-            "page_obj": get_page_by_request(
+            "page_obj": get_page(
                 request,
                 Post.objects.filter(user=view_user).order_by("-submit_date"),
             ),
@@ -98,7 +98,7 @@ def comments(request, username):
         "users/comments.html",
         {
             "view_user": view_user,
-            "page_obj": get_page_by_request(
+            "page_obj": get_page(
                 request,
                 Comment.objects.filter(user=view_user).order_by("-submit_date"),
             ),

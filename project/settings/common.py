@@ -109,6 +109,8 @@ STATICFILES_FINDERS = (
 STATIC_ROOT = BASE_DIR / "_static"
 MEDIA_ROOT = BASE_DIR / "_media"
 
+DEFAULT_PAGE_SIZE = 25
+
 COMMENTS_ALLOW_PROFANITIES = False
 PROFANITIES_LIST = []
 with open(BASE_DIR / "profanities.txt") as f:

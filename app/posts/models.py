@@ -3,6 +3,7 @@ from django.urls import reverse
 from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.db import models
+from django.db.models import DEFERRED
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 
@@ -26,9 +27,6 @@ class PostQuerySet(models.QuerySet):
             submit_date__gte=timezone.now() - timedelta(days=365)
         )
 
-    def latest(self):
-        return self.order_by("-submit_date")
-
     def top(self):
         return self.order_by("-points")
 
@@ -37,6 +35,8 @@ class Post(PointsMixin, models.Model):
     class Meta:
         verbose_name = _("post")
         verbose_name_plural = _("posts")
+        get_latest_by = "submit_date"
+        indexes = [models.Index(fields=["submit_date", "points"])]
 
     user = models.ForeignKey(
         settings.AUTH_USER_MODEL,
@@ -68,23 +68,31 @@ class Post(PointsMixin, models.Model):
     )
     # TODO enable_comments = models.BooleanField(default=True)
 
-    objects = PostQuerySet.as_manager()
+    objects = PostQuerySet().as_manager()
+
+    @classmethod
+    def from_db(cls, db, field_names, values):
+        instance = super().from_db(db, field_names, values)
+        instance._loaded_values = dict(
+            zip(
+                field_names,
+                (value for value in values if value is not DEFERRED),
+            )
+        )
+        return instance
 
     def __str__(self):
         return self.title
 
     def save(self, *args, **kwargs):
+        # creating a new instance
         if self._state.adding:
-            # increment user points when creating new post
             self.user.increment_points()
-            # convert md to html
             self.body_html = md_to_html(self.body)
 
-        if self.pk:
-            # if the post exists, only convert md to html if needed
-            og = Post.objects.get(pk=self.pk)
-            if self.body != og.body:
-                self.body_html = md_to_html(self.body)
+        # updating an existing instance
+        elif self.body != self._loaded_values["body"]:
+            self.body_html = md_to_html(self.body)
 
         super().save(*args, **kwargs)
 
@@ -107,7 +115,9 @@ class Post(PointsMixin, models.Model):
 
 class PostVote(Vote):
     class Meta:
-        unique_together = ("user", "post")
+        constraints = [
+            models.UniqueConstraint(fields=["user", "post"], name="unique_vote")
+        ]
 
     post = models.ForeignKey(
         Post, on_delete=models.CASCADE, related_name="votes"
@@ -120,8 +130,7 @@ class PostVote(Vote):
         if self.post.user == self.user:
             raise ValidationError("You cannot vote on your own submission")
 
-        is_new = self._state.adding
-        if is_new:
+        if self._state.adding:
             self.post.increment_points()
             self.post.user.increment_points()
         super().save(*args, **kwargs)

@@ -9,30 +9,29 @@ from django.utils.translation import gettext as _
 from django.views.decorators.http import require_POST
 
 from app.comments.forms import CommentForm
-from app.utils import get_page_by_request
+from app.utils import get_page
 
 from .forms import PostForm
 from .models import Post, PostVote
 
 
 def top(request, range="day"):
-    posts = Post.objects.all()
     if range == "day":
-        queryset = posts.day().top()
+        posts = Post.objects.day().top()
     elif range == "week":
-        queryset = posts.week().top()
+        posts = Post.objects.week().top()
     elif range == "month":
-        queryset = posts.month().top()
+        posts = Post.objects.month().top()
     elif range == "year":
-        queryset = posts.year().top()
+        posts = Post.objects.year().top()
     else:  # i.e. "all"
-        queryset = posts.top()
+        posts = Post.objects.top()
 
     return TemplateResponse(
         request,
         "posts/feed.html",
         {
-            "page_obj": get_page_by_request(request, queryset),
+            "page_obj": get_page(request, posts),
             "range": range,
             "has_menu": True,
             "page_title": _("Top Posts"),
@@ -41,12 +40,15 @@ def top(request, range="day"):
 
 
 def latest(request):
-    posts = Post.objects.all()
+    yesterday = timezone.now() - timezone.timedelta(days=1)
+    posts = Post.objects.filter(submit_date__gte=yesterday).order_by(
+        "-submit_date"
+    )
     return TemplateResponse(
         request,
         "posts/feed.html",
         {
-            "page_obj": get_page_by_request(request, posts.latest()),
+            "page_obj": get_page(request, posts),
             "page_title": _("Latest Posts"),
         },
     )
