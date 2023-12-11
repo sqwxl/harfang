@@ -22,33 +22,36 @@
         <p>
             {{ profile.bio|linebreaks }}
         </p>
-        <menu class="flex justify-around"
-              hx-target="#user-content"
-              hx-select="#main-content"
-              hx-push-url="true">
-            <li>
-                <a href="{% url 'users:posts' profile.user %}"
-                   id="posts"
-                   class="no-anchor"
-                   _="on click add .font-bold to me then remove .font-bold from #comments">
-                    {% blocktranslate trimmed with n=profile.user.posts.count %}
-                        Posts ({{ n }})
-                    {% endblocktranslate %}
-                </a>
-            </li>
-            <li>
-                <a href="{% url 'users:comments' profile.user %}"
-                   id="comments"
-                   class="no-anchor"
-                   hx-push-url="true"
-                   _="on click add .font-bold to me then remove .font-bold from #posts">
-                    {% blocktranslate trimmed with n=profile.user.comments.count %}
-                        Comments ({{ n }})
-                    {% endblocktranslate %}
-                </a>
-            </li>
-        </menu>
     </div>
-    <section id="user-content">
+    <div class="mb-4 sm:mb-6 tabs"
+        role="tablist"
+        hx-target="#tab-content"
+        hx-select="#main-content"
+        {# djlint: off #}
+        _="on htmx:afterOnLoad take .selected from <button/> in me for the event's target 
+           take [@aria-selected=true] with 'false' from <button/> in me for the event's target">
+        {# djlint: on #}
+        <button type="button"
+                role="tab"
+                aria-controls="tab-content"
+                aria-selected="false"
+                class="tab-btn"
+                hx-get="{% url 'users:posts' profile.user %}">
+            {% blocktranslate trimmed with n=profile.user.posts.count %}
+                Posts ({{ n }})
+            {% endblocktranslate %}
+        </button>
+        <button type="button"
+                role="tab"
+                aria-controls="tab-content"
+                aria-selected="false"
+                class="tab-btn"
+                hx-get="{% url 'users:comments' profile.user %}">
+            {% blocktranslate trimmed with n=profile.user.comments.count %}
+                Comments ({{ n }})
+            {% endblocktranslate %}
+        </button>
+    </div>
+    <section id="tab-content" role="tabpanel">
     </section>
 {% endblock content %}

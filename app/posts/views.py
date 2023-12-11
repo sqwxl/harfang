@@ -10,15 +10,12 @@ from django.views.decorators.http import require_POST
 
 from app.comments.forms import CommentForm
 from app.utils import get_page_by_request
-from app.utils.htmx import for_htmx
 
 from .forms import PostForm
 from .models import Post, PostVote
 
 
-@for_htmx(use_block_from_params=True)
-def top(request):
-    range = request.GET.get("range", "day")
+def top(request, range="day"):
     posts = Post.objects.all()
     if range == "day":
         queryset = posts.day().top()
@@ -43,7 +40,6 @@ def top(request):
     )
 
 
-@for_htmx(use_block_from_params=True)
 def latest(request):
     posts = Post.objects.all()
     return TemplateResponse(
@@ -123,7 +119,10 @@ def update(request, pk):
     return TemplateResponse(
         request,
         "base_form.html",
-        {"form": form, "page_title": _("Edit Post")},
+        {
+            "form": form,
+            "page_title": _("Edit Post"),
+        },
         status=status,
     )
 

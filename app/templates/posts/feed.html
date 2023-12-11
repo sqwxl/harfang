@@ -2,53 +2,66 @@
 
 {% block menu %}
     {% if has_menu %}
-        <menu class="flex justify-around py-2 sm:mb-8">
-            <li>
-                <a href="?range=day"
-                   class="no-anchor
-                          {% if range == 'day' %}
-                              font-bold
-                          {% endif %}">
-                    {% translate "24h" %}
-                </a>
-            </li>
-            <li>
-                <a href="?range=week"
-                   class="no-anchor
-                          {% if range == 'week' %}
-                              font-bold
-                          {% endif %}">
-                    {% translate "Week" %}
-                </a>
-            </li>
-            <li>
-                <a href="?range=month"
-                   class="no-anchor
-                          {% if range == 'month' %}
-                              font-bold
-                          {% endif %}">
-                    {% translate "Month" %}
-                </a>
-            </li>
-            <li>
-                <a href="?range=year"
-                   class="no-anchor
-                          {% if range == 'year' %}
-                              font-bold
-                          {% endif %}">
-                    {% translate "Year" %}
-                </a>
-            </li>
-            <li>
-                <a href="?range=all"
-                   class="no-anchor
-                          {% if range == 'all' %}
-                              font-bold
-                          {% endif %}">
-                    {% translate "All-time" %}
-                </a>
-            </li>
-        </menu>
+        <div role="tabs"
+             class="py-2 sm:mb-8 tabs"
+             hx-target="body"
+             hx-push-url="true">
+            <button type="button"
+                    role="tab"
+                    aria-controls="feed"
+                    aria-selected="false"
+                    class="tab-btn
+                           {% if range == 'day' %}
+                               selected
+                           {% endif %}"
+                    hx-get="{% url 'posts:top' 'day' %}">
+                {% translate "24h" %}
+            </button>
+            <button type="button"
+                    role="tab"
+                    aria-controls="feed"
+                    aria-selected="false"
+                    class="tab-btn
+                           {% if range == 'week' %}
+                               selected
+                           {% endif %}"
+                    hx-get="{% url 'posts:top' 'week' %}">
+                {% translate "Week" %}
+            </button>
+            <button type="button"
+                    role="tab"
+                    aria-controls="feed"
+                    aria-selected="false"
+                    class="tab-btn
+                           {% if range == 'month' %}
+                               selected
+                           {% endif %}"
+                    hx-get="{% url 'posts:top' 'month' %}">
+                {% translate "Month" %}
+            </button>
+            <button type="button"
+                    role="tab"
+                    aria-controls="feed"
+                    aria-selected="false"
+                    class="tab-btn
+                           {% if range == 'year' %}
+                               selected
+                           {% endif %}"
+                    hx-get="{% url 'posts:top' 'year' %}">
+                {% translate "Year" %}
+            </button>
+            <button type="button"
+                    role="tab"
+                    aria-controls="feed"
+                    aria-selected="false"
+                    class="tab-btn
+                           {% if range == 'all' %}
+                               selected
+                           {% endif %}"
+                    hx-get="{% url 'posts:top' 'all' %}">
+                {% translate "All-time" %}
+            </button>
+        </div>
     {% endif %}
 {% endblock menu %}
 

@@ -5,23 +5,37 @@
     {% block menu %}
     {% endblock menu %}
 
-    {% block page-and-paging-controls %}
-        {% if page_obj.paginator.count == 0 %}
-            <p>
-                {% translate "No posts available." %}
-            </p>
-        {% else %}
+    {% if page_obj.paginator.count == 0 %}
+        <p>
+            {% translate "No posts available." %}
+        </p>
+    {% else %}
+        <div id="feed">
 
             {% block feed %}
             {% endblock feed %}
 
+        </div>
+        <div id="spinner" class="flex justify-center">
+            {% include "partials/spinner.html" %}
+        </div>
+        <div id="lazy-load-trigger" hx-swap-oob="true">
             {% if page_obj.has_next %}
-                {% include "partials/paging_control.html" %}
+                <div class="invisible"
+                     hx-trigger="intersect"
+                     hx-get="?page={{ page_obj.next_page_number }}"
+                     hx-push-url="false"
+                     hx-indicator="#spinner"
+                     hx-target="#feed"
+                     hx-select="#feed"
+                     hx-swap="beforeend">
+                    :-)
+                </div>
             {% else %}
                 <p class="tracking-widest leading-10 text-center sm:text-2xl">
                     *⁎*
                 </p>
             {% endif %}
-        {% endif %}
-    {% endblock page-and-paging-controls %}
+        </div>
+    {% endif %}
 {% endblock content %}

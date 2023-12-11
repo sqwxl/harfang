@@ -1,8 +1,7 @@
-runserver:
-    python3 manage.py migrate
+run:
     python3 manage.py runserver
 
-watch-css:
+css:
     tailwindcss -i static/css/input.css -o static/css/output.css --watch
 
 run-containers:

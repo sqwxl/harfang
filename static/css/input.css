@@ -55,9 +55,19 @@
 }
 
 @layer components {
+  .tabs {
+    @apply flex items-center space-x-2;
+  }
+  .tab-btn {
+    @apply bg-bg hover:bg-bg4 active:bg-bg2 px-3 py-1 text-fg;
+  }
 }
 
 @layer utilities {
+  .selected {
+    @apply bg-bg3;
+  }
+
   .no-anchor {
     @apply text-inherit no-underline visited:text-inherit;
   }

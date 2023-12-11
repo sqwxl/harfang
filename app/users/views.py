@@ -8,7 +8,6 @@ from django.utils.translation import gettext as _
 from app.comments.models import Comment
 from app.posts.models import Post
 from app.utils import get_page_by_request
-from app.utils.htmx import for_htmx
 
 from .forms import ProfileForm, UserForm
 from .models import Profile, User
@@ -76,7 +75,6 @@ def profile_edit(request, username):
     )
 
 
-@for_htmx(use_block_from_params=True)
 def posts(request, username):
     view_user = User.objects.get(username=username)
     return TemplateResponse(
@@ -93,7 +91,6 @@ def posts(request, username):
     )
 
 
-@for_htmx(use_block_from_params=True)
 def comments(request, username):
     view_user = get_object_or_404(User, username=username)
     return TemplateResponse(
