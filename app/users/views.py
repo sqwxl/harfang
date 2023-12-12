@@ -51,7 +51,7 @@ def profile(request, username):
 
 @login_required
 def profile_edit(request, username):
-    form = ProfileForm()
+    form = ProfileForm(instance=request.user.profile)
     status = 200
 
     if request.method == "POST":

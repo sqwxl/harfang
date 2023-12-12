@@ -23,7 +23,7 @@ class ProfileForm(AppModelForm):
         model = Profile
         exclude = ["user"]
         widgets = {
-            "bio": forms.Textarea(),
+            "bio": forms.Textarea(attrs={"rows": 5}),
         }
         help_texts = {
             "bio": _("Maximum {n} characters").format(
