@@ -43,5 +43,5 @@ class PostForm(AppModelForm):
             }
         )
         self.fields["body"].widget = MarkdownTextarea(
-            html=getattr(self.instance, "body_html", "")
+            attrs={"rows": 4}, html=getattr(self.instance, "body_html", "")
         )
