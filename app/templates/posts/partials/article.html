@@ -10,15 +10,15 @@
         </header>
         <p class="text-sm text-muted">
             {% points_count post %}
-            🞄
+            •
             {% include "partials/profile_link.html" with user=post.user %}
-            🞄
+            •
             <span class="whitespace-nowrap">
                 {% blocktranslate trimmed with age=post.submit_date|timesince %}
                     {{ age }} ago
                 {% endblocktranslate %}
             </span>
-            🞄
+            •
             {% comment_count post %}
         </p>
     </article>

@@ -275,8 +275,8 @@ msgstr "Aucun post disponible."
 
 #: app/templates/users/profile.html:12
 #, python-format
-msgid "Joined %(age)s ago 🞄 Karma: %(karma)s"
-msgstr "Membre depuis %(age)s 🞄 Karma : %(karma)s"
+msgid "Joined %(age)s ago • Karma: %(karma)s"
+msgstr "Membre depuis %(age)s • Karma : %(karma)s"
 
 #: app/templates/users/profile.html:16
 msgid "Edit"

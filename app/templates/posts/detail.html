@@ -4,18 +4,18 @@
     {{ block.super }}
     <p>
         {% include "partials/vote.html" with item=post %}
-        🞄
+        •
         {% blocktranslate trimmed with age=post.submit_date|timesince %}
             Posted {{ age }} ago
         {% endblocktranslate %}
         {% translate "by" %}
         {% include "partials/profile_link.html" with user=post.user %}
         {% if user == post.user or user.is_moderator %}
-            🞄
+            •
             <a href="{% url 'posts:update' post.id %}">
                 {% translate "edit" %}
             </a>
-            🞄
+            •
             <a href="{% url 'posts:delete' post.id %}">
                 {% translate "delete" %}
             </a>

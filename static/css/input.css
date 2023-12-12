@@ -46,7 +46,14 @@
   }
 
   a[href*="http"]:after {
-    content: " ⭧";
+    content: "";
+    display: inline-block;
+    height: 1em;
+    width: 1em;
+    background-image: url("/static/images/ext-arrow.png");
+    background-size: cover;
+    vertical-align: text-top;
+    margin-left: 0.25em;
   }
 
   hr {
@@ -70,6 +77,10 @@
 
   .no-anchor {
     @apply text-inherit no-underline visited:text-inherit;
+  }
+
+  .emoji-img {
+    @apply inline-block w-[1.25em] !m-0 align-text-top;
   }
 }
 

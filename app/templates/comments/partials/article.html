@@ -3,9 +3,9 @@
 <article id="{{ comment|element_id }}">
     <header class="text-sm text-muted">
         {% points_count comment %}
-        🞄
+        •
         {% include "partials/profile_link.html" with user=comment.user %}
-        🞄
+        •
         <span>
             {% blocktranslate trimmed with age=comment.submit_date|timesince %}
                 {{ age }} ago

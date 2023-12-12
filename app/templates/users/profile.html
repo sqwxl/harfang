@@ -7,12 +7,12 @@
     {% if user == profile.user %}
         <p class="text-center sm:text-left">
             <a href="{% url 'users:profile_edit' user %}">{% translate "edit" %}</a>
-            🞄 <a href="{% url 'logout' %}">{% translate "logout" %}</a>
+            • <a href="{% url 'logout' %}">{% translate "logout" %}</a>
         </p>
     {% endif %}
     <p>
         {% blocktranslate trimmed with age=profile.user.date_joined|timesince karma=profile.user.points %}
-            Joined {{ age }} ago 🞄 Karma: {{ karma }}
+            Joined {{ age }} ago • Karma: {{ karma }}
         {% endblocktranslate %}
     </p>
 {% endblock header %}

@@ -1,12 +1,18 @@
+{% load static %}
+
 <a href="{% url 'users:profile' user %}"
    class="{% if request.user == user %}
               !text-orange
           {% endif %}">
     {{ user }}
     {% if user.is_moderator %}
-        ♛
+        <img alt="moderator indicator (watermelon)"
+             class="emoji-img"
+             src="{% static 'images/crown.png' %}">
     {% endif %}
     {% if user == comment.post.user %}
-        ✐
+        <img alt="author indicator (pencil)"
+             class="emoji-img"
+             src="{% static 'images/pencil.png' %}">
     {% endif %}
 </a>

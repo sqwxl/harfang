@@ -8,12 +8,12 @@
            hx-target="#{{ comment|element_id }}-reply-form-wrapper">{% translate "reply" %}</a>
         {% if not comment.is_removed %}
             {% if user|can_edit:comment %}
-                🞄
+                •
                 <a href="{% url 'comments:update' comment.id %}"
                    hx-target="#{{ comment|element_id }}-edit-form-wrapper">{% translate "edit" %}</a>
             {% endif %}
             {% if user|can_delete:comment %}
-                🞄
+                •
                 <a hx-post="{% url 'comments:delete' comment.id %}"
                    hx-target="#{{ comment|element_id }}-body"
                    hx-select="#{{ comment|element_id }}-body"
@@ -23,7 +23,7 @@
                 </a>
             {% endif %}
         {% elif user|can_restore:comment %}
-            🞄
+            •
             <a hx-post="{% url 'comments:restore' comment.id %}"
                hx-target="#{{ comment|element_id }}-body"
                hx-select="#{{ comment|element_id }}-body"

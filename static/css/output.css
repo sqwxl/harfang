@@ -704,7 +704,14 @@ a:hover {
 }
 
 a[href*="http"]:after {
-  content: " ⭧";
+  content: "";
+  display: inline-block;
+  height: 1em;
+  width: 1em;
+  background-image: url("/static/images/ext-arrow.png");
+  background-size: cover;
+  vertical-align: text-top;
+  margin-left: 0.25em;
 }
 
 hr {
@@ -1223,10 +1230,6 @@ hr {
   justify-content: center;
 }
 
-.gap-4 {
-  gap: 1rem;
-}
-
 .space-x-2 > :not([hidden]) ~ :not([hidden]) {
   --tw-space-x-reverse: 0;
   margin-right: calc(0.5rem * var(--tw-space-x-reverse));
@@ -1241,10 +1244,6 @@ hr {
 
 .overflow-hidden {
   overflow: hidden;
-}
-
-.overflow-x-hidden {
-  overflow-x: hidden;
 }
 
 .scroll-smooth {
@@ -1434,6 +1433,13 @@ hr {
 
 .no-anchor:visited {
   color: inherit;
+}
+
+.emoji-img {
+  margin: 0px !important;
+  display: inline-block;
+  width: 1.25em;
+  vertical-align: text-top;
 }
 
 .error {
@@ -2084,18 +2090,6 @@ hr {
 
 .hover\:no-underline:hover {
   text-decoration-line: none;
-}
-
-@media (prefers-color-scheme: dark) {
-  .dark\:bg-bg {
-    --tw-bg-opacity: 1;
-    background-color: rgb(40 40 40 / var(--tw-bg-opacity));
-  }
-
-  .dark\:text-fg {
-    --tw-text-opacity: 1;
-    color: rgb(235 219 178 / var(--tw-text-opacity));
-  }
 }
 
 @media (min-width: 640px) {
