@@ -649,6 +649,10 @@ input:not(
   --tw-shadow: var(--tw-shadow-colored);
 }
 
+select {
+  padding-right: 2rem;
+}
+
 input[type="checkbox"],
   input[type="radio"] {
   border-radius: 0.25rem;
@@ -657,6 +661,11 @@ input[type="checkbox"],
   background-color: rgb(235 219 178 / var(--tw-bg-opacity));
   --tw-text-opacity: 1;
   color: rgb(235 219 178 / var(--tw-text-opacity));
+  --tw-shadow: inset 0 2px 4px 0 rgb(0 0 0 / 0.05);
+  --tw-shadow-colored: inset 0 2px 4px 0 var(--tw-shadow-color);
+  box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
+  --tw-shadow-color: #7c6f64;
+  --tw-shadow: var(--tw-shadow-colored);
 }
 
 input[type="checkbox"]:checked {
@@ -665,10 +674,6 @@ input[type="checkbox"]:checked {
 
 textarea {
   resize: both;
-}
-
-select {
-  padding-right: 2rem;
 }
 
 [type="submit"],

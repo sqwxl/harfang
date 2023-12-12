@@ -26,9 +26,13 @@
     @apply block w-full rounded mt-2 mb-4 mr-2 px-2 py-1 bg-fg text-bg shadow-inner shadow-bg4;
   }
 
+  select {
+    @apply pr-8;
+  }
+
   input[type="checkbox"],
   input[type="radio"] {
-    @apply bg-fg border-0 text-fg rounded;
+    @apply bg-fg border-0 text-fg rounded shadow-inner shadow-bg4;
   }
 
   input[type="checkbox"]:checked {
@@ -37,10 +41,6 @@
 
   textarea {
     resize: both;
-  }
-
-  select {
-    @apply pr-8;
   }
 
   [type="submit"],
