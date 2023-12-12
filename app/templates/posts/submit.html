@@ -1,7 +1,7 @@
 {% extends "base_form.html" %}
 
 {% block form %}
-    <div class="flex flex-wrap gap-4">
+    <div class="flex flex-wrap space-x-4">
         <form method="post" class="grow basis-96">
             {% csrf_token %}
             {{ form }}

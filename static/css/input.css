@@ -7,23 +7,14 @@
     @apply font-sans antialiased;
   }
 
-  input:not(
-      [type="submit"],
-      [type="button"],
-      [type="checkbox"],
-      [type="color"],
-      [type="date"],
-      [type="datetime-local"],
-      [type="file"],
-      [type="hidden"],
-      [type="image"],
-      [type="radio"],
-      [type="range"],
-      [type="time"]
-    ),
-  textarea,
-  select {
-    @apply block w-full rounded mt-2 mb-4 mr-2 px-2 py-1 bg-fg text-bg shadow-inner shadow-bg4;
+  input[type="email"],
+  input[type="number"],
+  input[type="password"],
+  input[type="search"],
+  input[type="text"],
+  input[type="url"],
+  textarea {
+    @apply block w-full my-2 px-2 py-1 bg-fg text-bg rounded shadow-inner shadow-bg4;
   }
 
   select {

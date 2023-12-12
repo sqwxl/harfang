@@ -612,25 +612,15 @@ html {
   -moz-osx-font-smoothing: grayscale;
 }
 
-input:not(
-      [type="submit"],
-      [type="button"],
-      [type="checkbox"],
-      [type="color"],
-      [type="date"],
-      [type="datetime-local"],
-      [type="file"],
-      [type="hidden"],
-      [type="image"],
-      [type="radio"],
-      [type="range"],
-      [type="time"]
-    ),
-  textarea,
-  select {
+input[type="email"],
+  input[type="number"],
+  input[type="password"],
+  input[type="search"],
+  input[type="text"],
+  input[type="url"],
+  textarea {
   margin-top: 0.5rem;
-  margin-bottom: 1rem;
-  margin-right: 0.5rem;
+  margin-bottom: 0.5rem;
   display: block;
   width: 100%;
   border-radius: 0.25rem;
@@ -1241,6 +1231,12 @@ hr {
   --tw-space-x-reverse: 0;
   margin-right: calc(0.5rem * var(--tw-space-x-reverse));
   margin-left: calc(0.5rem * calc(1 - var(--tw-space-x-reverse)));
+}
+
+.space-x-4 > :not([hidden]) ~ :not([hidden]) {
+  --tw-space-x-reverse: 0;
+  margin-right: calc(1rem * var(--tw-space-x-reverse));
+  margin-left: calc(1rem * calc(1 - var(--tw-space-x-reverse)));
 }
 
 .overflow-hidden {
@@ -2090,6 +2086,18 @@ hr {
   text-decoration-line: none;
 }
 
+@media (prefers-color-scheme: dark) {
+  .dark\:bg-bg {
+    --tw-bg-opacity: 1;
+    background-color: rgb(40 40 40 / var(--tw-bg-opacity));
+  }
+
+  .dark\:text-fg {
+    --tw-text-opacity: 1;
+    color: rgb(235 219 178 / var(--tw-text-opacity));
+  }
+}
+
 @media (min-width: 640px) {
   .sm\:mx-2 {
     margin-left: 0.5rem;
@@ -2123,10 +2131,6 @@ hr {
 
   .sm\:w-12 {
     width: 3rem;
-  }
-
-  .sm\:max-w-none {
-    max-width: none;
   }
 
   .sm\:space-x-4 > :not([hidden]) ~ :not([hidden]) {
