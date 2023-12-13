@@ -8,15 +8,15 @@
             <li>
                 <a href="{{ comment.get_absolute_url }}"
                    class="hover:no-underline no-anchor">
-                    <article class="p-1 mb-4 rounded sm:p-4 sm:mx-2 sm:mb-6 sm:rounded-lg bg-bg0_h">
-                        <p class="text-sm text-muted">
+                    <article class="p-1 mb-4 rounded sm:p-4 sm:mx-2 sm:mb-6 sm:rounded-lg bg-slate-300 dark:bg-gruv-950">
+                        <p class="text-sm muted">
                             {% points_count comment %}
                             •
                             {% blocktranslate trimmed with age=comment.submit_date|timesince %}
                                 {{ age }} ago
                             {% endblocktranslate %}
                         </p>
-                        <p class="prose-sm">
+                        <p class="prose-sm dark:prose-invert">
                             {{ comment.body|truncatewords:40 }}
                         </p>
                     </article>

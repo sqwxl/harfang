@@ -1,6 +1,6 @@
 {% load static %}
 
-<nav class="py-1 px-2 mb-4 whitespace-nowrap sm:py-2 sm:px-4 sm:mb-10 bg-bg0_h"
+<nav class="py-1 px-2 mb-4 whitespace-nowrap sm:py-2 sm:px-4 sm:mb-10 bg-slate-300 dark:bg-gruv-950"
      preload="mouseover">
     <menu class="flex flex-wrap items-center space-x-2 sm:space-x-4">
         <li class="w-8 sm:w-12">
@@ -8,28 +8,31 @@
                 <img alt="white feather emoji" src="{% static 'images/feather-sm.png' %}">
             </a>
         </li>
-        <li class="">
+        <li>
             <a href="{% url 'posts:index' %}" class="no-anchor">{% translate "Top" %}</a>
         </li>
-        <li class="">
+        <li>
             <a href="{% url 'posts:latest' %}" class="no-anchor">{% translate "Latest" %}</a>
         </li>
         {% if user.is_authenticated %}
-            <li class="">
+            <li>
                 <a href="{% url 'posts:submit' %}" class="no-anchor">{% translate "Submit" %}</a>
             </li>
         {% endif %}
         <li class="grow">
         </li>
+        <li>
+            {% include "partials/theme_toggle.html" %}
+        </li>
         {% if user.is_authenticated %}
-            <li class="">
+            <li>
                 {% include "partials/profile_link.html" with user=user %}
             </li>
             <li class="hidden sm:block">
                 <a hx-post="{% url 'logout' %}" hx-target="body" class="no-anchor">{% translate "Logout" %}</a>
             </li>
         {% else %}
-            <li class="">
+            <li>
                 <a href="{% url 'login' %}" class="no-anchor">{% translate "Login" %}</a>
             </li>
         {% endif %}

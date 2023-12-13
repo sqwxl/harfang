@@ -2,6 +2,7 @@
 module.exports = {
   plugins: [require("@tailwindcss/forms"), require("@tailwindcss/typography")],
   content: ["./**/templates/**/*.html"],
+  darkMode: "class",
   theme: {
     extend: {
       colors: {
@@ -21,32 +22,27 @@ module.exports = {
         blue_d: "#458588",
         purple_d: "#b16286",
 
-        bg0_h: "#1d2021",
-        bg0: "#282828",
+        gruv: {
+          50: "#fbf1c7",
+          100: "#ebdbb2",
+          200: "#d5c4a1",
+          300: "#bdae93",
+          400: "#a89984",
+          500: "#7c6f64",
+          600: "#665c54",
+          700: "#504945",
+          800: "#3c3836",
+          850: "#32302f",
+          900: "#282828",
+          950: "#1d2021",
+        },
+
         bg: "#282828",
-        bg0_s: "#32302f",
-        bg1: "#3c3836",
-        bg2: "#504945",
-        bg3: "#665c54",
-        bg4: "#7c6f64",
-
-        grey: "#928374",
-        fg4: "#a89984",
-        fg3: "#bdae93",
-        fg2: "#d5c4a1",
-        fg1: "#ebdbb2",
-        fg0: "#fbf1c7",
         fg: "#ebdbb2",
-
-        muted: "#a89984",
       },
       typography: (theme) => ({
         DEFAULT: {
           css: {
-            "--tw-prose-headings": theme("colors.fg"),
-            "--tw-prose-captions": theme("colors.muted"),
-            color: theme("colors.fg"),
-            strong: theme("colors.fg"),
             a: {
               color: theme("colors.blue"),
               textDecoration: "none",

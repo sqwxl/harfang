@@ -1,7 +1,7 @@
 {% load app_extras comments_extras %}
 
 <footer id="{{ comment|element_id }}-footer"
-        class="text-sm text-muted"
+        class="text-sm muted"
         hx-push-url="false">
     {% if user.is_authenticated %}
         <a href="{% url 'comments:reply' comment.id %}"
@@ -33,7 +33,7 @@
         {% endif %}
     {% endif %}
     {% if not comment.is_leaf_node %}
-        <button class="bg-transparent hover:bg-transparent text-muted hover:text-fg"
+        <button class="bg-transparent hover:bg-transparent muted hover:text-fg"
                 type="button"
                 aria-label="Fold/unfold discussion"
                 _="on click toggle @hidden on my children then toggle @hidden on #{{ comment|element_id }}-children">

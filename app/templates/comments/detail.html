@@ -18,7 +18,7 @@
 {% endblock content %}
 
 {% block discussion %}
-    <div class="prose-sm sm:prose">
+    <div class="prose-sm sm:prose dark:prose-invert">
         <h2>
             {% blocktranslate trimmed with n=comment.get_descendant_count %}
                 Replies ({{ n }})

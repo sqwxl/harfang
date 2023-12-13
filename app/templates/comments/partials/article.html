@@ -1,10 +1,10 @@
 {% load app_extras comments_extras %}
 
 <article id="{{ comment|element_id }}">
-    <header class="text-sm text-muted">
+    <header class="text-sm muted">
         {% points_count comment %}
         •
-        {% include "partials/profile_link.html" with user=comment.user %}
+        {% include "partials/profile_link.html" with user=comment.user post_author=comment.post.user %}
         •
         <span>
             {% blocktranslate trimmed with age=comment.submit_date|timesince %}
@@ -14,13 +14,14 @@
     </header>
     <a href="{% url 'comments:detail' comment.id %}"
        class="hover:no-underline no-anchor">
-        <p id="{{ comment|element_id }}-body" class="prose-sm sm:prose">
+        <p id="{{ comment|element_id }}-body"
+           class="prose-sm sm:prose dark:prose-invert">
             {% if comment.is_removed %}
-                <span class="italic text-muted">{% translate "deleted" %}</span>
+                <span class="italic muted">{% translate "deleted" %}</span>
             {% else %}
                 {{ comment.body }}
                 {% if comment.is_edited %}
-                    <em class="italic text-muted">{% translate "edited" %}</em>
+                    <em class="italic muted">{% translate "edited" %}</em>
                 {% endif %}
             {% endif %}
         </p>

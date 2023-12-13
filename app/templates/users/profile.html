@@ -18,7 +18,7 @@
 {% endblock header %}
 
 {% block content %}
-    <div class="prose-sm sm:prose">
+    <div class="prose-sm sm:prose dark:prose-invert">
         <p>
             {{ profile.bio|linebreaks }}
         </p>
@@ -28,8 +28,9 @@
         hx-target="#tab-content"
         hx-select="#main-content"
         {# djlint: off #}
-        _="on htmx:afterOnLoad take .selected from <button/> in me for the event's target 
-           take [@aria-selected=true] with 'false' from <button/> in me for the event's target">
+        _="on htmx:afterOnLoad
+             take .selected from <button/> in me for the event's target 
+             take [@aria-selected=true] with 'false' from <button/> in me for the event's target">
         {# djlint: on #}
         <button type="button"
                 role="tab"

@@ -15,7 +15,7 @@
         {% translate "Copy to form" %}
     </button>
 </form>
-<article class="flex overflow-hidden flex-col prose-sm sm:prose"
+<article class="flex overflow-hidden flex-col prose-sm sm:prose dark:prose-invert"
          id="url_preview">
     <header>
         {% if metadata.image_url %}
@@ -26,7 +26,7 @@
             </div>
         {% endif %}
     </header>
-    <div class="p-2 grow bg-bg">
+    <div class="p-2 grow">
         <hgroup>
             {% if metadata.title %}
                 <h1>
@@ -44,7 +44,7 @@
         </p>
     </div>
     <footer class="text-center">
-        <small class="text-muted">
+        <small class="muted">
             {% translate "URL Preview" %}
         </small>
     </footer>

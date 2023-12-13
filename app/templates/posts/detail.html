@@ -24,7 +24,7 @@
 {% endblock header %}
 
 {% block content %}
-    <article class="prose-sm sm:prose">
+    <article class="prose-sm sm:prose dark:prose-invert">
         <p>
             <a href="{{ post.url }}" target="_blank">{{ post.url }}</a>
         </p>
@@ -40,7 +40,7 @@
                 </figcaption>
             </figure>
         {% endif %}
-        <div class="mb-8 max-w-prose sm:mx-auto sm:mb-14">
+        <div class="mb-8 max-w-prose sm:mx-auto sm:mb-14 dark:prose-invert">
             {{ post.body_html|safe }}
         </div>
     </article>
@@ -48,14 +48,14 @@
 
 {% block discussion %}
     {% if form %}
-        <div class="prose-sm sm:prose">
+        <div class="prose-sm sm:prose dark:prose-invert">
             <h2 id="comment-form">
                 {% translate "Leave a Comment" %}
             </h2>
         </div>
         {% include "comments/partials/discussion_form.html" %}
     {% endif %}
-    <div class="prose-sm sm:prose">
+    <div class="prose-sm sm:prose dark:prose-invert">
         <h2>
             {% blocktranslate trimmed with n=post.comments.count %}
                 Comments ({{ n }})
