@@ -6,23 +6,42 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        red: "#fb4934",
-        orange: "#fe8019",
-        yellow: "#fabd2f",
-        green: "#b8bb26",
-        aqua: "#8ec07c",
-        blue: "#83a598",
-        purple: "#d3869b",
-
-        red_d: "#cc241d",
-        orange_d: "#d65d0e",
-        yellow_d: "#d79921",
-        green_d: "#98971a",
-        aqua_d: "#689d6a",
-        blue_d: "#458588",
-        purple_d: "#b16286",
-
         gruv: {
+          red: {
+            50: "#fb4934",
+            100: "#cc241d",
+            200: "#9d0006",
+          },
+          orange: {
+            50: "#fe8019",
+            100: "#d65d0e",
+            200: "#af3a03",
+          },
+          yellow: {
+            50: "#fabd2f",
+            100: "#d79921",
+            200: "#b57614",
+          },
+          green: {
+            50: "#b8bb26",
+            100: "#98971a",
+            200: "#79740e",
+          },
+          aqua: {
+            50: "#8ec07c",
+            100: "#689d6a",
+            200: "#427b58",
+          },
+          blue: {
+            50: "#83a598",
+            100: "#458588",
+            200: "#076678",
+          },
+          purple: {
+            50: "#d3869b",
+            100: "#b16286",
+            200: "#8f3f71",
+          },
           50: "#fbf1c7",
           100: "#ebdbb2",
           200: "#d5c4a1",
@@ -35,10 +54,10 @@ module.exports = {
           850: "#32302f",
           900: "#282828",
           950: "#1d2021",
-        },
 
-        bg: "#282828",
-        fg: "#ebdbb2",
+          bg: "#282828",
+          fg: "#ebdbb2",
+        },
       },
       typography: (theme) => ({
         DEFAULT: {

@@ -14,7 +14,7 @@
                     disabled
                 {% endif %}>
             <svg class="{% if item|voted_on_by:user %}
-                            fill-green stroke-green
+                            fill-green-600 stroke-green-600 dark:fill-gruv-green-50 dark:stroke-gruv-green-50
                         {% elif item.user == user or not user.is_authenticated %}
                             fill-slate-300 stroke-slate-300
                         {% else %}

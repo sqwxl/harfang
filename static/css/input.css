@@ -14,7 +14,10 @@
   input[type="text"],
   input[type="url"],
   textarea {
-    @apply block w-full my-2 px-2 py-1 bg-slate-50 dark:bg-gruv-100 dark:text-gruv-900 rounded shadow-inner shadow-slate-400;
+    @apply block my-2 px-2 py-1 w-full;
+    @apply bg-slate-50; 
+    @apply dark:bg-gruv-100 dark:text-gruv-900;
+    @apply rounded shadow-inner shadow-slate-400;
   }
 
   select {
@@ -38,11 +41,12 @@
   [type="button"],
   [type="reset"],
   button {
-    @apply bg-blue_d hover:bg-slate-700 active:bg-slate-900 py-1 px-2 sm:px-3 rounded;
+    @apply bg-slate-200 hover:bg-slate-700 active:bg-slate-900 py-1 px-2 sm:px-3 rounded;
+    @apply dark:bg-gruv-red-100 hover:bg-gruv-red-100 active:bg-gruv-red-200;
   }
 
   a {
-    @apply text-blue_d visited:text-blue_d dark:text-blue dark:visited:text-blue;
+    @apply text-sky-500 visited:text-sky-700 dark:text-gruv-blue-100 dark:visited:text-gruv-blue-200;
     @apply underline hover:underline;
     cursor: pointer;
   }
@@ -64,7 +68,7 @@
   }
 
   hr {
-    @apply border-fg;
+    @apply dark:border-gruv-fg;
   }
 }
 
@@ -83,6 +87,7 @@
 
   .no-anchor {
     @apply no-underline text-inherit visited:text-inherit;
+    @apply dark:text-inherit dark:visited:text-inherit;
   }
 
   .emoji-img {
@@ -95,7 +100,7 @@
 }
 
 .error {
-  @apply text-red;
+  @apply text-red-500;
 }
 
 .helptext {
@@ -103,7 +108,7 @@
 }
 
 .errorlist {
-  @apply text-red text-sm;
+  @apply text-red-500 text-sm;
 }
 
 @media (scripting: none) {

@@ -33,7 +33,7 @@
         {% endif %}
     {% endif %}
     {% if not comment.is_leaf_node %}
-        <button class="bg-transparent hover:bg-transparent muted hover:text-fg"
+        <button class="bg-transparent hover:bg-transparent muted"
                 type="button"
                 aria-label="Fold/unfold discussion"
                 _="on click toggle @hidden on my children then toggle @hidden on #{{ comment|element_id }}-children">
