@@ -14,14 +14,11 @@ from .models import Profile, User
 
 
 def create(request):
-    status = 200
     if request.method == "POST":
         form = UserForm(request.POST)
         if form.is_valid():
             form.save()
             return HttpResponseRedirect(reverse("login"))
-        else:
-            status = 422
     else:
         form = UserForm()
 
@@ -33,7 +30,6 @@ def create(request):
             "page_title": _("Register"),
             "submit_text": _("Register"),
         },
-        status=status,
     )
 
 
@@ -52,7 +48,6 @@ def profile(request, username):
 @login_required
 def profile_edit(request, username):
     form = ProfileForm(instance=request.user.profile)
-    status = 200
 
     if request.method == "POST":
         form = ProfileForm(request.POST, instance=request.user.profile)
@@ -61,8 +56,6 @@ def profile_edit(request, username):
             return HttpResponseRedirect(
                 reverse("users:profile", kwargs={"username": username})
             )
-        else:
-            status = 422
 
     return TemplateResponse(
         request,
@@ -71,7 +64,6 @@ def profile_edit(request, username):
             "form": form,
             "page_title": _("Edit Profile"),
         },
-        status=status,
     )
 
 

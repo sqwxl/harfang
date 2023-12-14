@@ -54,7 +54,6 @@ def create(request):
                     request,
                     "comments/form.html#fields",
                     {"form": form},
-                    status=422,
                 ),
                 f"#{request.htmx.trigger}>#fields",
             ),

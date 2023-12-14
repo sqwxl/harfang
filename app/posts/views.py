@@ -78,7 +78,6 @@ def detail(request, pk):
 
 @login_required
 def create(request):
-    status = 200
     if request.method == "POST":
         form = PostForm(request.POST)
         if form.is_valid():
@@ -86,8 +85,6 @@ def create(request):
             post.user = request.user
             post.save()
             return HttpResponseRedirect(post.get_absolute_url())
-        else:
-            status = 422
     else:
         form = PostForm()
 
@@ -99,22 +96,18 @@ def create(request):
             "page_title": _("Submit Post"),
             "submit_text": _("Submit"),
         },
-        status=status,
     )
 
 
 @login_required
 def update(request, pk):
     post = get_object_or_404(Post, pk=pk)
-    status = 200
 
     if request.method == "POST":
         form = PostForm(request.POST, instance=post)
         if form.is_valid():
             form.save()
             return HttpResponseRedirect(post.get_absolute_url())
-        else:
-            status = 422
     else:
         form = PostForm(instance=post)
 
@@ -125,7 +118,6 @@ def update(request, pk):
             "form": form,
             "page_title": _("Edit Post"),
         },
-        status=status,
     )
 
 
