@@ -40,7 +40,6 @@
         <script defer src="{% static 'js/htmx/ext/preload.js' %}"></script>
         <script>
             function updateTheme() {
-                console.debug(`current theme: ${localStorage.theme ?? 'system'}`);
                 if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
                     document.documentElement.classList.add('dark')
                 } else {

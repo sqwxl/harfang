@@ -67,13 +67,27 @@
 {# djlint:off #}
 <script type="text/hyperscript">
     def nextTheme()
-        get localStorage.theme
-        if no result
-            return "dark"
-        else if it is "dark"
-            return "light"
-        else if it is "light"
-            return null
+        set currentTheme to localStorage.theme
+        set prefersDark to window.matchMedia("(prefers-color-scheme: dark)").matches
+
+        if prefersDark
+            -- auto(dark) -> light -> dark
+            if no currentTheme
+                return "light"
+            else if currentTheme is "light"
+                return "dark"
+            else
+                return null
+            end
+        else
+            -- auto(light) -> dark -> light
+            if no currentTheme
+                return "dark"
+            else if currentTheme is "dark"
+                return "light"
+            else
+                return null
+            end
         end
     end
 
@@ -84,13 +98,14 @@
         take .block from <#theme-toggle-btn>span/> for #{id}
     end
 
-    def updateToggleTitle(theme)
+    def updateToggleTitle()
+        set theme to nextTheme()
         if no theme
-            set title to "Switch to dark theme"
+            set title to "{% translate 'Switch to system theme' %}"
         else if theme is "dark"
-            set title to "Switch to light theme"
+            set title to "{% translate 'Switch to dark theme' %}"
         else if theme is "light"
-            set title to "Follow system theme"
+            set title to "{% translate 'Switch to light theme' %}"
         end
         set #theme-toggle-btn.title to title
     end
@@ -102,12 +117,12 @@
         else
             set localStorage.theme to theme
         end
-        call updateToggleTitle(theme)
         call updateIcon(theme)
+        call updateToggleTitle()
         call window.updateTheme()
     end
 
-    on load call updateToggleTitle(localStorage.theme)
+    on load call updateToggleTitle()
     on load call updateIcon(localStorage.theme)
 </script>
 {# djlint:on #}
