@@ -3,7 +3,7 @@
 {% partialdef form %}
     <span>
         <button id="{{ item|element_id }}-upvote-btn"
-                class="p-2 m-0 w-8 bg-transparent hover:bg-slate-100 active:bg-slate-200"
+                class="p-2 m-0 w-8 bg-transparent dark:bg-transparent hover:bg-transparent active:bg-transparent dark:active:bg-transparent dark:hover:bg-transparent"
                 aria-label="Upvote"
                 type="button"
                 hx-post="{{ item.get_vote_url }}"
@@ -16,9 +16,9 @@
             <svg class="{% if item|voted_on_by:user %}
                             fill-green-600 stroke-green-600 dark:fill-gruv-green-50 dark:stroke-gruv-green-50
                         {% elif item.user == user or not user.is_authenticated %}
-                            fill-slate-300 stroke-slate-300
+                            fill-slate-300 stroke-slate-300 dark:fill-gruv-700 dark:stroke-gruv-700
                         {% else %}
-                            fill-slate-500 stroke-slate-500
+                            fill-slate-500 stroke-slate-500 dark:fill-gruv-500 dark:stroke-gruv-500
                         {% endif %}"
                  viewBox="0 0 38 34">
                 <polygon stroke-linejoin="round" stroke-width="4" points="19,4 34,30 4,30" />

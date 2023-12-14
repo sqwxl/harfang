@@ -666,7 +666,6 @@ select {
 input[type="checkbox"],
   input[type="radio"] {
   border-radius: 0.25rem;
-  border-width: 0px;
   --tw-bg-opacity: 1;
   background-color: rgb(248 250 252 / var(--tw-bg-opacity));
   --tw-text-opacity: 1;
@@ -760,11 +759,11 @@ a:visited {
 
 :is(.dark a) {
   --tw-text-opacity: 1;
-  color: rgb(69 133 136 / var(--tw-text-opacity));
+  color: rgb(131 165 152 / var(--tw-text-opacity));
 }
 
 :is(.dark a:visited) {
-  color: rgb(7 102 120 );
+  color: rgb(69 133 136 );
 }
 
 a {
@@ -791,7 +790,7 @@ a[href*="http"]:after {
   width: 1em;
   background-image: url("/static/images/ext-arrow.png");
   background-size: cover;
-  vertical-align: text-top;
+  vertical-align: middle;
   margin-left: 0.25em;
 }
 
@@ -1558,21 +1557,8 @@ a[href*="http"]:after {
     margin-bottom: 1.2em;
   }
 
-  .sm\:prose :where(a):not(:where([class~="not-prose"] *)) color {
-    50: #eff6ff;
-    100: #dbeafe;
-    200: #bfdbfe;
-    300: #93c5fd;
-    400: #60a5fa;
-    500: #3b82f6;
-    600: #2563eb;
-    700: #1d4ed8;
-    800: #1e40af;
-    900: #1e3a8a;
-    950: #172554;
-  }
-
   .sm\:prose :where(a):not(:where([class~="not-prose"] *)) {
+    color: var(--tw-prose-links);
     text-decoration: none;
     font-weight: 500;
   }
@@ -1581,18 +1567,7 @@ a[href*="http"]:after {
     text-decoration: underline;
   }
 
-  .sm\:prose :where(a):not(:where([class~="not-prose"] *)):visited color {
-    50: #eff6ff;
-    100: #dbeafe;
-    200: #bfdbfe;
-    300: #93c5fd;
-    400: #60a5fa;
-    500: #3b82f6;
-    600: #2563eb;
-    700: #1d4ed8;
-    800: #1e40af;
-    900: #1e3a8a;
-    950: #172554;
+  .sm\:prose :where(a):not(:where([class~="not-prose"] *)):visited {
   }
 
   .sm\:prose :where(strong):not(:where([class~="not-prose"] *)) {
@@ -2180,11 +2155,6 @@ a[href*="http"]:after {
   }
 }
 
-.hover\:bg-slate-100:hover {
-  --tw-bg-opacity: 1;
-  background-color: rgb(241 245 249 / var(--tw-bg-opacity));
-}
-
 .hover\:bg-transparent:hover {
   background-color: transparent;
 }
@@ -2193,9 +2163,8 @@ a[href*="http"]:after {
   text-decoration-line: none;
 }
 
-.active\:bg-slate-200:active {
-  --tw-bg-opacity: 1;
-  background-color: rgb(226 232 240 / var(--tw-bg-opacity));
+.active\:bg-transparent:active {
+  background-color: transparent;
 }
 
 :is(.dark .dark\:bg-gruv-800) {
@@ -2217,8 +2186,24 @@ a[href*="http"]:after {
   background-color: transparent;
 }
 
+:is(.dark .dark\:fill-gruv-500) {
+  fill: #7c6f64;
+}
+
+:is(.dark .dark\:fill-gruv-700) {
+  fill: #504945;
+}
+
 :is(.dark .dark\:fill-gruv-green-50) {
   fill: #b8bb26;
+}
+
+:is(.dark .dark\:stroke-gruv-500) {
+  stroke: #7c6f64;
+}
+
+:is(.dark .dark\:stroke-gruv-700) {
+  stroke: #504945;
 }
 
 :is(.dark .dark\:stroke-gruv-green-50) {
@@ -2236,6 +2221,10 @@ a[href*="http"]:after {
 }
 
 :is(.dark .dark\:hover\:bg-transparent:hover) {
+  background-color: transparent;
+}
+
+:is(.dark .dark\:active\:bg-transparent:active) {
   background-color: transparent;
 }
 

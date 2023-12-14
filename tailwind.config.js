@@ -63,14 +63,11 @@ module.exports = {
         DEFAULT: {
           css: {
             a: {
-              color: theme("colors.blue"),
               textDecoration: "none",
               "&:hover": {
                 textDecoration: "underline",
               },
-              "&:visited": {
-                color: theme("colors.blue"),
-              },
+              "&:visited": {},
             },
           },
         },
