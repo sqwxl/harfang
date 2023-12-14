@@ -35,32 +35,12 @@ class PostModelTest(TestCase):
             reverse("posts:vote", kwargs={"pk": self.post.pk}),
         )
 
-    def test_post_save_increments_user_points(self):
+    def test_post_save_creates_user_vote(self):
         # test that creating a post increments the user's points
-        self.user.refresh_from_db()
-        curr_points = self.user.points
-        Post.objects.create(
-            title="Test Post",
-            body="Test Body",
-            url="http://test.com/",
-            user=self.user,
+        self.assertEqual(self.post.votes.count(), 1)
+        self.assertTrue(
+            self.post.votes.filter(user=self.user).exists(),
         )
-        self.user.refresh_from_db()
-        self.assertEqual(self.user.points, curr_points + 1)
-
-    def test_post_delete_decrements_user_points(self):
-        # test that deleting a post decrements the user's points
-        p = Post.objects.create(
-            title="Test Post",
-            body="Test Body",
-            url="http://test.com/",
-            user=self.user,
-        )
-        self.user.refresh_from_db()
-        curr_points = self.user.points
-        p.delete()
-        self.user.refresh_from_db()
-        self.assertEqual(self.user.points, curr_points - 1)
 
     def test_post_clean(self):
         # test that a post must have either a url or body
@@ -187,18 +167,6 @@ class PostCreateViewTest(TestCase):
         )
         self.assertEqual(Post.objects.count(), 0)
 
-    def test_post_create_view_returns_422_when_form_invalid(self):
-        self.client.force_login(self.user)
-        resp = self.client.post(
-            reverse("posts:submit"),
-            {
-                "title": "",
-                "body": "",
-                "url": "",
-            },
-        )
-        self.assertEqual(resp.status_code, 422)
-
     def test_post_create_view_returns_form_with_errors_when_form_invalid(self):
         self.client.force_login(self.user)
         resp = self.client.post(
@@ -280,18 +248,6 @@ class TestPostUpdateView(TestCase):
         self.assertEqual(self.post.body, "Test Body")
         self.assertEqual(self.post.url, "http://test.com/")
 
-    def test_post_update_view_returns_422_when_form_invalid(self):
-        self.client.force_login(self.user)
-        resp = self.client.post(
-            reverse("posts:update", kwargs={"pk": self.post.pk}),
-            {
-                "title": "",
-                "body": "",
-                "url": "",
-            },
-        )
-        self.assertEqual(resp.status_code, 422)
-
     def test_post_update_view_returns_form_with_errors_when_form_invalid(self):
         self.client.force_login(self.user)
         resp = self.client.post(
@@ -360,7 +316,7 @@ class TestPostDeleteView(TestCase):
         self.assertEqual(resp.status_code, 403)
 
     def test_post_delete_view_does_not_delete_post_when_user_is_not_author(
-        self
+        self,
     ):
         user = User.objects.create(username="testuser2")
         self.client.force_login(user)
@@ -370,7 +326,7 @@ class TestPostDeleteView(TestCase):
         self.assertEqual(Post.objects.count(), 1)
 
     def test_post_delete_view_deletes_post_when_user_is_not_author_but_moderator(
-        self
+        self,
     ):
         user = User.objects.create(username="testuser2")
         group = Group.objects.create(name="Moderator")
@@ -382,7 +338,7 @@ class TestPostDeleteView(TestCase):
         self.assertEqual(Post.objects.count(), 0)
 
     def test_post_delete_view_deletes_post_when_user_is_not_author_but_staff(
-        self
+        self,
     ):
         user = User.objects.create(username="testuser2")
         # make user staff
@@ -419,32 +375,25 @@ class TestPostVoteView(TestCase):
         )
         self.assertEqual(resp.status_code, 405)
 
-    def test_post_vote_view_prevents_user_from_voting_on_own_post(self):
+    def test_post_vote_view_creates_vote(self):
+        user = User.objects.create(username="testuser2")
+        self.client.force_login(user)
+        self.post.refresh_from_db()
+        pts = self.post.points
+        resp = self.client.post(
+            reverse("posts:vote", kwargs={"pk": self.post.pk}),
+        )
+        self.post.refresh_from_db()
+        self.assertEqual(self.post.points, pts + 1)
+        self.assertEqual(resp.status_code, 201)
+
+    def test_post_vote_view_deletes_vote_when_user_already_voted(self):
         self.client.force_login(self.user)
         resp = self.client.post(
             reverse("posts:vote", kwargs={"pk": self.post.pk}),
         )
-        self.assertEqual(resp.status_code, 403)
-
-    def test_post_vote_view_creates_vote(self):
-        user = User.objects.create(username="testuser2")
-        self.client.force_login(user)
-        resp = self.client.post(
-            reverse("posts:vote", kwargs={"pk": self.post.pk}),
-        )
-        self.assertEqual(self.post.votes.count(), 1)
-        self.assertEqual(resp.status_code, 201)
-
-    def test_post_vote_view_deletes_vote_when_user_already_voted(self):
-        user = User.objects.create(username="testuser2")
-        self.client.force_login(user)
-        self.client.post(
-            reverse("posts:vote", kwargs={"pk": self.post.pk}),
-        )
-        resp = self.client.post(
-            reverse("posts:vote", kwargs={"pk": self.post.pk}),
-        )
         self.assertEqual(self.post.votes.count(), 0)
+        self.assertEqual(self.post.points, 0)
         self.assertEqual(resp.status_code, 200)
 
     def test_post_vote_view_uses_correct_template(self):

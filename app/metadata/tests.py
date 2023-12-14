@@ -16,7 +16,8 @@ class MetadataScraperTest(TestCase):
                 <meta property="og:title" content="test title">
                 <meta property="og:description" content="test description">
                 <meta property="og:site_name" content="test site name">
-                <meta property="og:image" content="test image">
+                <meta property="og:image" content="test image url">
+                <meta property="og:image:alt" content="test image alt">
             </head>
             <body></body>
         </html>
@@ -29,7 +30,8 @@ class MetadataScraperTest(TestCase):
         self.assertEqual(data["title"], "test title")
         self.assertEqual(data["site_name"], "test site name")
         self.assertEqual(data["description"], "test description")
-        self.assertEqual(data["image"], "test image")
+        self.assertEqual(data["image_url"], "test image url")
+        self.assertEqual(data["image_alt"], "test image alt")
         self.assertEqual(data["type"], "test type")
 
     @patch("requests.get")

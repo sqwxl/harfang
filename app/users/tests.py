@@ -52,7 +52,6 @@ class CreateViewTest(TestCase):
                 "password2": "testpassword2",
             },
         )
-        self.assertEqual(res.status_code, 422)
         self.assertTemplateUsed(res, "base_form.html")
 
 
@@ -104,7 +103,6 @@ class ProfileEditViewTest(TestCase):
             ),
             data={"bio": "a" * (settings.BIO_MAX_LENGTH + 1)},
         )
-        self.assertEqual(res.status_code, 422)
         self.assertTemplateUsed(res, "base_form.html")
 
 

@@ -1,9 +1,12 @@
 from datetime import timedelta
-from django.urls import reverse
+
 from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.db import models
 from django.db.models import DEFERRED
+from django.db.models.signals import post_delete, post_save
+from django.dispatch import receiver
+from django.urls import reverse
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 
@@ -68,7 +71,7 @@ class Post(PointsMixin, models.Model):
     )
     # TODO enable_comments = models.BooleanField(default=True)
 
-    objects = PostQuerySet().as_manager()
+    objects = PostQuerySet.as_manager()
 
     @classmethod
     def from_db(cls, db, field_names, values):
@@ -85,20 +88,12 @@ class Post(PointsMixin, models.Model):
         return self.title
 
     def save(self, *args, **kwargs):
-        # creating a new instance
         if self._state.adding:
-            self.user.increment_points()
             self.body_html = md_to_html(self.body)
-
-        # updating an existing instance
         elif self.body != self._loaded_values["body"]:
+            # updating an existing instance
             self.body_html = md_to_html(self.body)
-
         super().save(*args, **kwargs)
-
-    def delete(self, *args, **kwargs):
-        self.user.decrement_points()
-        super().delete(*args, **kwargs)
 
     def clean(self):
         if not self.url and not self.body:
@@ -127,9 +122,6 @@ class PostVote(Vote):
         return f"{self.user} voted on {self.post}"
 
     def save(self, *args, **kwargs):
-        if self.post.user == self.user:
-            raise ValidationError("You cannot vote on your own submission")
-
         if self._state.adding:
             self.post.increment_points()
             self.post.user.increment_points()
@@ -139,3 +131,15 @@ class PostVote(Vote):
         self.post.decrement_points()
         self.post.user.decrement_points()
         super().delete(*args, **kwargs)
+
+
+@receiver(post_save, sender=Post)
+def create_post_vote_on_post_create(sender, instance, created, **kwargs):
+    if created:
+        PostVote.objects.create(user=instance.user, post=instance)
+
+
+@receiver(post_delete, sender=Post)
+def delete_post_vote_on_post_delete(sender, instance, **kwargs):
+    # PostVote.objects.filter(user=instance.user, post=instance).delete()
+    pass  # handled at db level (CASCADE)
