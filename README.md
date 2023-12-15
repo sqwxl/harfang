@@ -22,6 +22,8 @@ Features so far:
 - Rich link previews
 - Responsive design
 - Markdown syntax for posts
+- Dark/Light color-schemes
+- Site identity (icons, logos, etc)
 
 Next up:
 
@@ -32,8 +34,6 @@ Next up:
 - DMs
 - SEO (django-meta)
 - Email system
-- Dark/Light color-schemes
-- Site identity (icons, logos, etc)
 - Cookiecutter version
 
 ## Dev Quick Start
