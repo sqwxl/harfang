@@ -6,7 +6,7 @@
 
 A social content posting and discussion site with a focus on simplicity and accessibility.\
 Inspired by Hacker News and Reddit.\
-Built with Django, HTMX, Hyperscript and Tailwind CSS
+Built with Django, HTMX, Alpine.js and Tailwind CSS
 
 </div>
 
